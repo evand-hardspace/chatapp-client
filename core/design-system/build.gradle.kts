@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
+
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
     alias(libs.plugins.android.kotlin.multiplatform.library)
@@ -9,6 +11,13 @@ kotlin {
     // Target declarations - add or remove as needed below. These define
     // which platforms this KMP module supports.
     // See: https://kotlinlang.org/docs/multiplatform-discover-project.html#targets
+    jvm()
+
+    js()
+
+    @OptIn(ExperimentalWasmDsl::class)
+    wasmJs()
+
     androidLibrary {
         namespace = "com.evandhardspace.core.designsystem"
         compileSdk = 36

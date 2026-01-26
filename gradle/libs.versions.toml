@@ -48,7 +48,7 @@ moko = "0.20.1"
 buildkonfig = "0.17.1"
 
 projectVersionName = "1.0"
-projectMinSdk = "26"
+projectMinSdk = "28"
 projectTargetSdk = "36"
 projectCompileSdk = "36"
 projectVersionCode = "1"
