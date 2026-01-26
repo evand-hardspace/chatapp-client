@@ -1,6 +1,8 @@
 package com.evandhardspace.chatapp.convention
 
 import com.android.build.api.dsl.CommonExtension
+import com.evandhardspace.chatapp.convention.extension.coreLibraryDesugaring
+import com.evandhardspace.chatapp.convention.extension.libs
 import org.gradle.api.JavaVersion
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.dependencies
@@ -24,7 +26,7 @@ internal fun Project.configureKotlinAndroid(
     configureKotlin()
 
     dependencies {
-        "coreLibraryDesugaring"(libs.findLibrary("android-desugarJdkLibs").get())
+        coreLibraryDesugaring(libs.findLibrary("android-desugarJdkLibs").get())
     }
 }
 

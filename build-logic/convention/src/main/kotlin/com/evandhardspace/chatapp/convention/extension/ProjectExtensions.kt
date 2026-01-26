@@ -1,4 +1,4 @@
-package com.evandhardspace.chatapp.convention
+package com.evandhardspace.chatapp.convention.extension
 
 import org.gradle.api.Project
 import org.gradle.api.artifacts.VersionCatalog

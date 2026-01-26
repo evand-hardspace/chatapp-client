@@ -34,8 +34,13 @@ tasks {
 gradlePlugin {
     plugins {
         register("androidApplication") {
-            id = "com.evandhardspace.convention.android.application"
+            id = libs.plugins.convention.androidApplication.get().pluginId
             implementationClass = "AndroidApplicationConventionPlugin"
+        }
+
+        register("androidApplicationCompose") {
+            id = libs.plugins.convention.androidApplicationCompose.get().pluginId
+            implementationClass = "AndroidApplicationComposeConventionPlugin"
         }
     }
 }
