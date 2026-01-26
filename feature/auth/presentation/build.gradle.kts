@@ -16,7 +16,9 @@ kotlin {
     js()
 
     @OptIn(ExperimentalWasmDsl::class)
-    wasmJs()
+    wasmJs {
+        browser()
+    }
 
     androidLibrary {
         namespace = "com.evandhardspace.auth.presentation"

@@ -4,7 +4,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
-    alias(libs.plugins.android.application)
+    alias(libs.plugins.convention.androidApplication)
     alias(libs.plugins.compose.multiplatform)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.compose.hotReload)
@@ -81,28 +81,9 @@ kotlin {
 
 android {
     namespace = "com.evandhardspace.chatapp"
-    compileSdk = libs.versions.projectCompileSdk.get().toInt()
 
     defaultConfig {
         applicationId = "com.evandhardspace.chatapp"
-        minSdk = libs.versions.projectMinSdk.get().toInt()
-        targetSdk = libs.versions.projectTargetSdk.get().toInt()
-        versionCode = libs.versions.projectVersionCode.get().toInt()
-        versionName = libs.versions.projectVersionName.get()
-    }
-    packaging {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
-    }
-    buildTypes {
-        getByName("release") {
-            isMinifyEnabled = false
-        }
-    }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
     }
 }
 
