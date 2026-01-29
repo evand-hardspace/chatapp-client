@@ -11,6 +11,10 @@ dependencies {
     compileOnly(libs.android.tools.common)
     compileOnly(libs.kotlin.gradlePlugin)
     compileOnly(libs.compose.gradlePlugin)
+    compileOnly(libs.ksp.gradlePlugin)
+    compileOnly(libs.androidx.room.gradle.plugin)
+    implementation(libs.buildkonfig.gradlePlugin)
+    implementation(libs.buildkonfig.compiler)
 }
 
 java {
@@ -41,6 +45,36 @@ gradlePlugin {
         register("androidApplicationCompose") {
             id = libs.plugins.convention.androidApplicationCompose.get().pluginId
             implementationClass = "AndroidApplicationComposeConventionPlugin"
+        }
+
+        register("cmpApplication") {
+            id = libs.plugins.convention.cmpApplication.get().pluginId
+            implementationClass = "CmpApplicationConventionPlugin"
+        }
+
+        register("kmpLibrary") {
+            id = libs.plugins.convention.kmpLibrary.get().pluginId
+            implementationClass = "KmpLibraryConventionPlugin"
+        }
+
+        register("cmpLibrary") {
+            id = libs.plugins.convention.cmpLibrary.get().pluginId
+            implementationClass = "CmpLibraryConventionPlugin"
+        }
+
+        register("cmpFeature") {
+            id = libs.plugins.convention.cmpFeature.get().pluginId
+            implementationClass = "CmpFeatureConventionPlugin"
+        }
+
+        register("buildConfig") {
+            id = libs.plugins.convention.buildConfig.get().pluginId
+            implementationClass = "BuildConfigConventionPlugin"
+        }
+
+        register("room") {
+            id = libs.plugins.convention.room.get().pluginId
+            implementationClass = "RoomConventionPlugin"
         }
     }
 }

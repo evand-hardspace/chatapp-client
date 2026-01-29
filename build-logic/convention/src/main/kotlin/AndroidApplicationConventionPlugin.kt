@@ -1,5 +1,6 @@
 import com.android.build.api.dsl.ApplicationExtension
 import com.evandhardspace.chatapp.convention.configureKotlinAndroid
+import com.evandhardspace.chatapp.convention.extension.findPluginId
 import com.evandhardspace.chatapp.convention.extension.libs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -10,7 +11,7 @@ class AndroidApplicationConventionPlugin: Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
             with(pluginManager) {
-                apply(libs.findPlugin("android-application").get().get().pluginId)
+                apply(libs.findPluginId("android-application"))
             }
 
             extensions.configure<ApplicationExtension> {

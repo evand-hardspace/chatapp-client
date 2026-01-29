@@ -17,6 +17,7 @@ composeMultiplatform = "1.10.0"
 compose-lifecycle = "2.9.1"
 navigation-compose = "2.9.1"
 jetbrains-core-bundle = "1.0.1"
+material-icons = "1.7.3"
 
 # AndroidX
 androidx-activity = "1.12.2"
@@ -100,6 +101,8 @@ jetbrains-lifecycle-viewmodel-compose = { module = "org.jetbrains.androidx.lifec
 jetbrains-lifecycle-viewmodel-savedstate = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-savedstate", version.ref = "compose-lifecycle" }
 jetbrains-savedstate = { module = "org.jetbrains.androidx.savedstate:savedstate", version.ref = "jetbrains-savedstate" }
 jetbrains-bundle = { module = "org.jetbrains.androidx.core:core-bundle", version.ref = "jetbrains-core-bundle" }
+jetbrains-compose-material-icons-core = { module = "org.jetbrains.compose.material:material-icons-core", version.ref = "material-icons"}
+jetbrains-compose-material-icons-extended = { module = "org.jetbrains.compose.material:material-icons-extended", version.ref = "material-icons"}
 
 # Koin
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
@@ -145,6 +148,9 @@ moko-permissions = { module = "dev.icerock.moko:permissions", version.ref = "mok
 moko-permissions-compose = { module = "dev.icerock.moko:permissions-compose", version.ref = "moko" }
 moko-permissions-notifications = { module = "dev.icerock.moko:permissions-notifications", version.ref = "moko" }
 
+buildkonfig-gradlePlugin = { group = "com.codingfeline.buildkonfig", name = "buildkonfig-gradle-plugin", version.ref = "buildkonfig" }
+buildkonfig-compiler = { group = "com.codingfeline.buildkonfig", name = "buildkonfig-compiler", version.ref = "buildkonfig" }
+
 android-desugarJdkLibs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "androidDesugarJdkLibs" }
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
 android-tools-common = { group = "com.android.tools", name = "common", version.ref = "androidTools" }
@@ -164,6 +170,12 @@ androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "j
 # Conventions
 convention-androidApplication = { id = "com.evandhardspace.convention.android.application", version = "unspecified" }
 convention-androidApplicationCompose = { id = "com.evandhardspace.convention.androidApplicationCompose", version = "unspecified" }
+convention-cmpApplication = { id = "com.evandhardspace.convention.cmpApplication", version = "unspecified" }
+convention-kmpLibrary = { id = "com.evandhardspace.convention.kmpLibrary", version = "unspecified" }
+convention-cmpLibrary = { id = "com.evandhardspace.convention.cmpLibrary", version = "unspecified" }
+convention-cmpFeature = { id = "com.evandhardspace.convention.cmpFeature", version = "unspecified" }
+convention-buildConfig = { id = "com.evandhardspace.convention.buildConfig", version = "unspecified" }
+convention-room = { id = "com.evandhardspace.convention.room", version = "unspecified" }
 
 # Android
 android-application = { id = "com.android.application", version.ref = "agp" }
