@@ -6,14 +6,15 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
+                implementation(projects.core.domain)
                 implementation(libs.kotlin.stdlib)
+
+                implementation(libs.jetbrains.compose.components.resources)
             }
         }
 
         commonTest {
             dependencies {
-                implementation(projects.core.domain)
-
                 implementation(libs.kotlin.test)
             }
         }
