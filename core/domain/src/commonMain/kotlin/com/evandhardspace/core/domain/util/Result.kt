@@ -1,8 +1,8 @@
 package com.evandhardspace.core.domain.util
 
 sealed interface Result<out E : DomainError, out S> {
-    value class Success<out S>(val data: S) : Result<Nothing, S>
-    value class Failure<out E : DomainError>(val error: E) : Result<E, Nothing>
+    data class Success<out S>(val data: S) : Result<Nothing, S>
+    data class Failure<out E : DomainError>(val error: E) : Result<E, Nothing>
 }
 
 interface DomainError

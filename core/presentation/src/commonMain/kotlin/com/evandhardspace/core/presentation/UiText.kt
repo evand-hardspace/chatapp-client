@@ -6,7 +6,7 @@ import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
 
 sealed interface UiText {
-    value class StringText(val value: String): UiText
+    data class StringText(val value: String): UiText
     class ResourceText(
         val id: StringResource,
         val args: Array<out Any> = arrayOf()

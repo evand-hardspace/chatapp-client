@@ -18,11 +18,12 @@ import org.jetbrains.compose.resources.painterResource
 
 import chatapp.composeapp.generated.resources.Res
 import chatapp.composeapp.generated.resources.compose_multiplatform
+import com.evandhardspace.core.designsystem.theme.ChatAppTheme
 
 @Composable
 @Preview
 fun App() {
-    MaterialTheme {
+    ChatAppTheme {
         var showContent by remember { mutableStateOf(false) }
         Column(
             modifier = Modifier

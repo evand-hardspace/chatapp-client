@@ -7,6 +7,7 @@ kotlin {
         commonMain {
             dependencies {
                 implementation(libs.kotlin.stdlib)
+                implementation(libs.jetbrains.compose.components.resources)
             }
         }
 
