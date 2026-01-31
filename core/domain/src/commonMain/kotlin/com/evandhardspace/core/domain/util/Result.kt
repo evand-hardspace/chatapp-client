@@ -12,7 +12,7 @@ internal class ErrorThrowable(val error: DomainError) : Throwable()
 
 inline fun <T, E : DomainError, R> Result<E, T>.map(map: (T) -> R): Result<E, R> = when (this) {
     is Result.Failure -> Result.Failure(error)
-    is Result.Success -> Result.Success(map(this.data))
+    is Result.Success -> Result.Success(map(data))
 }
 
 inline fun <T, E : DomainError> Result<E, T>.onSuccess(action: (T) -> Unit): Result<E, T> =
