@@ -38,6 +38,7 @@ fun <E : DomainError, T> E.asFailure(): Result<E, T> = Result.Failure(this)
 fun <E : DomainError, T> T.asSuccess(): Result<E, T> = Result.Success(this)
 
 typealias EmptyResult<E> = Result<E, Unit>
+typealias ErrorResult<E> = Result<E, Nothing>
 
 // Experimental
 @Suppress("UNCHECKED_CAST")
@@ -50,10 +51,24 @@ inline fun <E : DomainError, T> result(body: ResultScope<E, T>.() -> T): Result<
 inline fun <E : DomainError> emptyResult(body: ResultScope<E, Unit>.() -> Unit): EmptyResult<E> =
     result(body)
 
+@Suppress("UNCHECKED_CAST")
+inline fun <E : DomainError> errorResult(body: ResultScope<E, Nothing>.() -> Nothing): ErrorResult<E> = try {
+    body(ResultScope())
+} catch (t: ErrorThrowable) {
+    Result.Failure(t.error as E)
+}
+
 
 class ResultScope<E : DomainError, T>
 
 context(_: ResultScope<E, T>)
-fun <E : DomainError, T> E.raise(): Nothing =
+inline fun <E : DomainError, T> E.raise(): Nothing =
     throw ErrorThrowable(this)
+
+context(_: ResultScope<E, T>)
+fun <E : DomainError, T> Result<E, T>.ensure(): T =
+    when(this) {
+        is Result.Failure<E> -> error.raise()
+        is Result.Success<T> -> data
+    }
 
