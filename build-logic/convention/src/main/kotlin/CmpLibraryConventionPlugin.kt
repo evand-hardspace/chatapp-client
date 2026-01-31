@@ -1,4 +1,5 @@
 import com.evandhardspace.chatapp.convention.extension.commonMainImplementation
+import com.evandhardspace.chatapp.convention.extension.debugImplementation
 import com.evandhardspace.chatapp.convention.extension.findPluginId
 import com.evandhardspace.chatapp.convention.extension.libs
 import org.gradle.api.Plugin
@@ -20,6 +21,8 @@ class CmpLibraryConventionPlugin: Plugin<Project> {
                 commonMainImplementation(libs.findLibrary("jetbrains-compose-foundation").get())
                 commonMainImplementation(libs.findLibrary("jetbrains-compose-material3").get())
                 commonMainImplementation(libs.findLibrary("jetbrains-compose-material-icons-core").get())
+
+                debugImplementation(libs.findLibrary("androidx-compose-uiTooling").get())
             }
         }
     }

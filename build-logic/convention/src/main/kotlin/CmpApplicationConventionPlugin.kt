@@ -26,7 +26,7 @@ class CmpApplicationConventionPlugin : Plugin<Project> {
 //            configureWasmJsTarget()
 
             dependencies {
-                debugImplementation(libs.findLibrary("androidx-compose-ui-tooling").get())
+                debugImplementation(libs.findLibrary("androidx-compose-uiTooling").get())
             }
         }
     }
