@@ -47,6 +47,7 @@ coil = "3.3.0"
 coil-network = "3.3.0"
 moko = "0.20.1"
 buildkonfig = "0.17.1"
+kermit = "2.0.8"
 
 projectVersionName = "1.0"
 projectMinSdk = "28"
@@ -143,13 +144,17 @@ firebase-messaging = { module = "com.google.firebase:firebase-messaging" }
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
 coil-network-ktor = { module = "io.coil-kt.coil3:coil-network-ktor3", version.ref = "coil-network" }
 
-#Permission handling
+# Permission handling
 moko-permissions = { module = "dev.icerock.moko:permissions", version.ref = "moko" }
 moko-permissions-compose = { module = "dev.icerock.moko:permissions-compose", version.ref = "moko" }
 moko-permissions-notifications = { module = "dev.icerock.moko:permissions-notifications", version.ref = "moko" }
 
+# Build Config
 buildkonfig-gradlePlugin = { group = "com.codingfeline.buildkonfig", name = "buildkonfig-gradle-plugin", version.ref = "buildkonfig" }
 buildkonfig-compiler = { group = "com.codingfeline.buildkonfig", name = "buildkonfig-compiler", version.ref = "buildkonfig" }
+
+# Logging
+touchlab-kermit = { module = "co.touchlab:kermit", version.ref = "kermit" }
 
 android-desugarJdkLibs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "androidDesugarJdkLibs" }
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
@@ -212,4 +217,5 @@ ktor-common = [
     "ktor-client-content-negotiation",
     "ktor-serialization-kotlinx-json",
     "ktor-client-auth",
+    "ktor-client-logging",
 ]
