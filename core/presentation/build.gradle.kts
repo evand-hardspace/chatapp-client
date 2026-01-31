@@ -10,6 +10,7 @@ kotlin {
                 implementation(libs.kotlin.stdlib)
 
                 implementation(libs.jetbrains.compose.components.resources)
+                implementation(libs.material3.adaptive)
             }
         }
 

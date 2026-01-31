@@ -1,4 +1,4 @@
-package com.evandhardspace.core.presentation
+package com.evandhardspace.core.presentation.util
 
 import androidx.compose.runtime.Composable
 import org.jetbrains.compose.resources.StringResource
