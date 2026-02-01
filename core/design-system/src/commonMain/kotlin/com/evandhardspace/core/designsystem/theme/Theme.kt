@@ -212,7 +212,7 @@ val DarkColorScheme = darkColorScheme(
     tertiaryContainer = ChatAppBrand900,
     onTertiaryContainer = ChatAppBrand500,
 
-    error = ChatAppRed500,
+    error = ChatAppRed200,
     onError = ChatAppBase0,
     errorContainer = ChatAppRed600,
     onErrorContainer = ChatAppRed200,

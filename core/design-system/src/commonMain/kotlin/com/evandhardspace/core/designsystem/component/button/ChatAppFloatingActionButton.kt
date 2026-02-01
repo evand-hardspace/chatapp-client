@@ -11,7 +11,7 @@ import com.evandhardspace.core.designsystem.annotations.ThemedPreview
 import com.evandhardspace.core.designsystem.theme.ChatAppPreview
 
 @Composable
-fun ChirpFloatingActionButton(
+fun ChatAppFloatingActionButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit,
@@ -28,9 +28,9 @@ fun ChirpFloatingActionButton(
 
 @ThemedPreview
 @Composable
-fun ChirpFloatingActionButtonPreview() {
+fun ChatAppFloatingActionButtonPreview() {
     ChatAppPreview {
-        ChirpFloatingActionButton(
+        ChatAppFloatingActionButton(
             onClick = {},
         ) {
             Icon(
