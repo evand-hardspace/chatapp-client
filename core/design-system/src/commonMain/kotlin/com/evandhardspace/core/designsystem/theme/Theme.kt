@@ -1,6 +1,8 @@
 package com.evandhardspace.core.designsystem.theme
 
 import androidx.compose.material3.ColorScheme
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Typography
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
@@ -15,6 +17,11 @@ val ColorScheme.extended: ExtendedColors
     @ReadOnlyComposable
     @Composable
     get() = LocalExtendedColors.current
+
+val MaterialTheme.paddings: ChatAppPaddings
+    @Composable
+    @ReadOnlyComposable
+    get() = LocalChatAppPaddings.current
 
 @Immutable
 data class ExtendedColors(
