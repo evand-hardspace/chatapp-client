@@ -45,27 +45,14 @@ fun ChatAppTextField(
     keyboardType: KeyboardType = KeyboardType.Text,
     onFocusChanged: (Boolean) -> Unit = {},
 ) {
-    val interactionSource = remember {
-        MutableInteractionSource()
-    }
-    val isFocused by interactionSource.collectIsFocusedAsState()
-
-    LaunchedEffect(isFocused) {
-        onFocusChanged(isFocused)
-    }
-
-    Column(
+    ChatAppTextFieldLayout(
+        title = title,
+        isError = isError,
+        supportingText = supportingText,
+        enabled = enabled,
+        onFocusChanged = onFocusChanged,
         modifier = modifier
-    ) {
-        if(title != null) {
-            Text(
-                text = title,
-                style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.extended.textSecondary,
-            )
-            Spacer(modifier = Modifier.height(MaterialTheme.paddings.half))
-        }
-
+    ) { styleModifier, interactionSource ->
         BasicTextField(
             state = state,
             enabled = enabled,
@@ -84,26 +71,7 @@ fun ChatAppTextField(
             ),
             cursorBrush = SolidColor(MaterialTheme.colorScheme.onSurface),
             interactionSource = interactionSource,
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(
-                    color = when {
-                        isFocused -> MaterialTheme.colorScheme.primary.copy(alpha = 0.05f)
-                        enabled -> MaterialTheme.colorScheme.surface
-                        else -> MaterialTheme.colorScheme.extended.secondaryFill
-                    },
-                    shape = MaterialTheme.shapes.small,
-                )
-                .border(
-                    width = 1.dp,
-                    color = when {
-                        isError -> MaterialTheme.colorScheme.error
-                        isFocused -> MaterialTheme.colorScheme.primary
-                        else -> MaterialTheme.colorScheme.outline
-                    },
-                    shape = MaterialTheme.shapes.small,
-                )
-                .padding(MaterialTheme.paddings.threeQuarters),
+            modifier = styleModifier,
             decorator = { innerBox ->
                 Box(
                     modifier = Modifier
@@ -121,19 +89,6 @@ fun ChatAppTextField(
                 }
             }
         )
-
-        if(supportingText != null) {
-            Spacer(modifier = Modifier.height(MaterialTheme.paddings.quarter))
-            Text(
-                text = supportingText,
-                color = if(isError) {
-                    MaterialTheme.colorScheme.error
-                } else {
-                    MaterialTheme.colorScheme.extended.textTertiary
-                },
-                style = MaterialTheme.typography.bodySmall,
-            )
-        }
     }
 }
 

@@ -1,4 +1,4 @@
-package com.evandhardspace.core.data
+package com.evandhardspace.core.data.networking
 
 import com.evandhardspace.core.domain.util.DataError
 import com.evandhardspace.core.domain.util.ErrorResult
