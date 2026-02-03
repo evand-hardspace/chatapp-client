@@ -77,7 +77,7 @@ fun ChatAppButton(
     }
 
     val defaultBorderStroke = BorderStroke(
-        width = 1.dp,
+        width = 1.5.dp,
         color = MaterialTheme.colorScheme.outline, // TODO(3): check if not MaterialTheme.colorScheme.extended.disabledOutline
     )
     val border = when {
@@ -91,7 +91,7 @@ fun ChatAppButton(
                 MaterialTheme.colorScheme.outline // TODO(3): MaterialTheme.colorScheme.extended.disabledOutline
             }
             BorderStroke(
-                width = 1.dp,
+                width = 1.5.dp,
                 color = borderColor,
             )
         }
