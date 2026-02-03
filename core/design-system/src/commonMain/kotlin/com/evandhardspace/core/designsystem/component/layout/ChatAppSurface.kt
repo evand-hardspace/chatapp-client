@@ -21,7 +21,7 @@ import com.evandhardspace.core.designsystem.theme.ChatAppPreview
 import org.jetbrains.compose.resources.vectorResource
 
 @Composable
-fun ChatappSurface(
+fun ChatAppSurface(
     modifier: Modifier = Modifier,
     header: @Composable ColumnScope.() -> Unit = {},
     content: @Composable ColumnScope.() -> Unit
@@ -58,9 +58,9 @@ fun ChatappSurface(
 
 @ThemedPreview
 @Composable
-fun ChatappSurfacePreview() {
+fun ChatAppSurfacePreview() {
     ChatAppPreview {
-        ChatappSurface(
+        ChatAppSurface(
             modifier = Modifier
                 .fillMaxSize(),
             header = {

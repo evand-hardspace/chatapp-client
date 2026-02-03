@@ -9,7 +9,7 @@ data class ChatAppPaddings(
     val half: Dp = 8.dp,
     val threeQuarters: Dp = 12.dp,
     val default: Dp = 16.dp,
-    val fiveQuarters: Dp = 16.dp,
+    val fiveQuarters: Dp = 24.dp,
     val double: Dp = 32.dp,
 )
 
