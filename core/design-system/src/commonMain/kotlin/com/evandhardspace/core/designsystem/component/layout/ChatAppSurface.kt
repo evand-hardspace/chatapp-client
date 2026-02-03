@@ -49,6 +49,7 @@ fun ChatAppSurface(
                 Column(
                     modifier = Modifier
                         .fillMaxSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
                     content = content,
                 )
             }
