@@ -30,6 +30,7 @@ import com.evandhardspace.core.designsystem.component.brand.ChatAppBrandLogo
 import com.evandhardspace.core.designsystem.theme.ChatAppPreview
 import com.evandhardspace.core.designsystem.theme.extended
 import com.evandhardspace.core.designsystem.theme.paddings
+import com.evandhardspace.core.presentation.util.DesktopMaxWidth
 import com.evandhardspace.core.presentation.util.DeviceConfiguration
 import com.evandhardspace.core.presentation.util.currentDeviceConfiguration
 
@@ -111,7 +112,9 @@ fun ChatAppAdaptiveFormLayout(
                 logo()
                 Column(
                     modifier = Modifier
-                        .widthIn(max = 480.dp)
+                        .widthIn(
+                            max = DesktopMaxWidth,
+                        )
                         .fillMaxWidth()
                         .clip(MaterialTheme.shapes.extraLarge)
                         .background(MaterialTheme.colorScheme.surface)

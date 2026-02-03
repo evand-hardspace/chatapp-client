@@ -2,6 +2,7 @@ package com.evandhardspace.core.presentation.util
 
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.unit.dp
 import androidx.window.core.layout.WindowSizeClass
 import androidx.window.core.layout.WindowSizeClass.Companion.HEIGHT_DP_EXPANDED_LOWER_BOUND
 import androidx.window.core.layout.WindowSizeClass.Companion.HEIGHT_DP_MEDIUM_LOWER_BOUND
@@ -42,3 +43,5 @@ enum class DeviceConfiguration {
             }
     }
 }
+
+val DesktopMaxWidth = 480.dp

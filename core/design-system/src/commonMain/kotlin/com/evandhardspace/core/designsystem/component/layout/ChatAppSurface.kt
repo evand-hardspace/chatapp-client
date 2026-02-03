@@ -15,9 +15,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import chatapp.core.design_system.generated.resources.Res
+import chatapp.core.design_system.generated.resources.a11y_chatapp_logo
 import chatapp.core.design_system.generated.resources.logo_chatapp
 import com.evandhardspace.core.designsystem.annotations.ThemedPreview
 import com.evandhardspace.core.designsystem.theme.ChatAppPreview
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
 
 @Composable
@@ -67,7 +69,7 @@ fun ChatAppSurfacePreview() {
             header = {
                 Icon(
                     imageVector = vectorResource(Res.drawable.logo_chatapp),
-                    contentDescription = null,
+                    contentDescription = stringResource(Res.string.a11y_chatapp_logo),
                     tint = MaterialTheme.colorScheme.primary,
                     modifier = Modifier
                         .padding(vertical = 32.dp)

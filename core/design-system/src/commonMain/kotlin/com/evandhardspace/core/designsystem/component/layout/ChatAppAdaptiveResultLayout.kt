@@ -19,11 +19,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.unit.dp
 import com.evandhardspace.core.designsystem.annotations.ThemedPreview
 import com.evandhardspace.core.designsystem.component.brand.ChatAppBrandLogo
 import com.evandhardspace.core.designsystem.theme.ChatAppPreview
 import com.evandhardspace.core.designsystem.theme.paddings
+import com.evandhardspace.core.presentation.util.DesktopMaxWidth
 import com.evandhardspace.core.presentation.util.DeviceConfiguration
 import com.evandhardspace.core.presentation.util.currentDeviceConfiguration
 
@@ -37,7 +37,7 @@ fun ChatAppAdaptiveResultLayout(
     Scaffold(
         modifier = modifier
     ) { innerPadding ->
-        if(configuration == DeviceConfiguration.MobilePortrait) {
+        if (configuration == DeviceConfiguration.MobilePortrait) {
             ChatAppSurface(
                 modifier = Modifier
                     .padding(innerPadding),
@@ -58,12 +58,14 @@ fun ChatAppAdaptiveResultLayout(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(MaterialTheme.paddings.double)
             ) {
-                if(configuration != DeviceConfiguration.MobileLandscape) {
+                if (configuration != DeviceConfiguration.MobileLandscape) {
                     ChatAppBrandLogo()
                 }
                 Column(
                     modifier = Modifier
-                        .widthIn(max = 480.dp)
+                        .widthIn(
+                            max = DesktopMaxWidth,
+                        )
                         .fillMaxWidth()
                         .clip(MaterialTheme.shapes.large)
                         .background(MaterialTheme.colorScheme.surface)
