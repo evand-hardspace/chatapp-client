@@ -14,6 +14,7 @@ class CmpFeatureConventionPlugin: Plugin<Project> {
             }
 
             dependencies {
+                commonMainImplementation(project(":core:common"))
                 commonMainImplementation(project(":core:presentation"))
                 commonMainImplementation(project(":core:design-system"))
 
