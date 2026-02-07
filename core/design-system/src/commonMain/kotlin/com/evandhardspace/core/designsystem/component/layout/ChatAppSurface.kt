@@ -19,6 +19,7 @@ import chatapp.core.design_system.generated.resources.a11y_chatapp_logo
 import chatapp.core.design_system.generated.resources.logo_chatapp
 import com.evandhardspace.core.designsystem.annotations.ThemedPreview
 import com.evandhardspace.core.designsystem.theme.ChatAppPreview
+import com.evandhardspace.core.designsystem.theme.paddings
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
 
@@ -26,11 +27,11 @@ import org.jetbrains.compose.resources.vectorResource
 fun ChatAppSurface(
     modifier: Modifier = Modifier,
     header: @Composable ColumnScope.() -> Unit = {},
-    content: @Composable ColumnScope.() -> Unit
+    content: @Composable ColumnScope.() -> Unit,
 ) {
     Surface(
         color = MaterialTheme.colorScheme.background,
-        modifier = modifier
+        modifier = modifier,
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -50,6 +51,7 @@ fun ChatAppSurface(
             ) {
                 Column(
                     modifier = Modifier
+                        .padding(horizontal = MaterialTheme.paddings.default)
                         .fillMaxSize(),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     content = content,
@@ -72,7 +74,7 @@ fun ChatAppSurfacePreview() {
                     contentDescription = stringResource(Res.string.a11y_chatapp_logo),
                     tint = MaterialTheme.colorScheme.primary,
                     modifier = Modifier
-                        .padding(vertical = 32.dp)
+                        .padding(vertical = 32.dp),
                 )
             },
             content = {

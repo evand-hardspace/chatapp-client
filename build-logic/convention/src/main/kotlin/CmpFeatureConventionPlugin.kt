@@ -34,6 +34,8 @@ class CmpFeatureConventionPlugin: Plugin<Project> {
                 commonMainImplementation(libs.findLibrary("jetbrains-bundle").get())
                 commonMainImplementation(libs.findLibrary("jetbrains-compose-navigation").get())
 
+                commonMainImplementation(libs.findLibrary("jetbrains-compose-components-resources").get())
+
                 androidMainImplementation(libs.findLibrary("koin-android").get())
                 androidMainImplementation(libs.findLibrary("koin-androidx-compose").get())
                 androidMainImplementation(libs.findLibrary("koin-androidx-navigation").get())

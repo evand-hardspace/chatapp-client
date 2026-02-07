@@ -30,11 +30,16 @@ fun ChatAppTheme(
 
 @Composable
 fun ChatAppPreview(
+    paddings: Boolean = true,
     content: @Composable () -> Unit,
 ) {
     ChatAppTheme {
         Box(
-            modifier = Modifier.padding(4.dp),
+            modifier = Modifier
+                .run {
+                    if (paddings) padding(4.dp)
+                    else this
+                },
             contentAlignment = Alignment.Center,
         ) {
             content()

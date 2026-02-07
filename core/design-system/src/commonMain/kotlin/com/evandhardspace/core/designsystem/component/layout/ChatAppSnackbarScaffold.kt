@@ -9,15 +9,15 @@ import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.union
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.evandhardspace.core.designsystem.component.snackbar.ChatAppSnackbarHost
+import com.evandhardspace.core.designsystem.component.snackbar.ChatAppSnackbarHostState
 import com.evandhardspace.core.designsystem.theme.paddings
 
 @Composable
 fun ChatAppSnackbarScaffold(
-    snackbarHostState: SnackbarHostState,
+    snackbarHostState: ChatAppSnackbarHostState,
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit,
 ) {
@@ -27,8 +27,8 @@ fun ChatAppSnackbarScaffold(
             .union(WindowInsets.displayCutout)
             .union(WindowInsets.ime),
         snackbarHost = {
-            SnackbarHost(
-                hostState = snackbarHostState,
+            ChatAppSnackbarHost(
+                snackbarHostState = snackbarHostState,
                 modifier = Modifier
                     .padding(bottom = MaterialTheme.paddings.fiveQuarters),
             )

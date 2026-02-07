@@ -7,10 +7,29 @@ import org.jetbrains.compose.resources.stringResource
 
 sealed interface UiText {
     data class StringText(val value: String): UiText
-    class ResourceText(
+    data class ResourceText(
         val id: StringResource,
         val args: Array<out Any> = arrayOf()
-    ): UiText
+    ): UiText {
+        override fun equals(other: Any?): Boolean {
+            if (this === other) return true
+            if (other == null || this::class != other::class) return false
+
+            other as ResourceText
+
+            if (id != other.id) return false
+            if (!args.contentEquals(other.args)) return false
+
+            return true
+        }
+
+        override fun hashCode(): Int {
+            var result = id.hashCode()
+            result = 31 * result + args.contentHashCode()
+            return result
+        }
+    }
+
 
     @Composable
     fun asComposableString(): String {

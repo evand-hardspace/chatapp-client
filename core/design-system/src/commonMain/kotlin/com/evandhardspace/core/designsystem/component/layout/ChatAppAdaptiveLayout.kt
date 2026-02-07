@@ -39,8 +39,8 @@ fun ChatAppAdaptiveFormLayout(
     headerText: String,
     errorText: String? = null,
     logo: @Composable () -> Unit,
-    formContent: @Composable ColumnScope.() -> Unit,
     modifier: Modifier = Modifier,
+    formContent: @Composable ColumnScope.() -> Unit,
 ) {
     val configuration = currentDeviceConfiguration()
     val headerColor = if(configuration == DeviceConfiguration.MobileLandscape) {
@@ -94,8 +94,11 @@ fun ChatAppAdaptiveFormLayout(
                 ChatAppSurface(
                     modifier = Modifier
                         .weight(1f),
-                    content = formContent,
-                )
+                ) {
+                    Spacer(modifier = Modifier.height(MaterialTheme.paddings.default))
+                    formContent()
+                    Spacer(modifier = Modifier.height(MaterialTheme.paddings.default))
+                }
             }
         }
         DeviceConfiguration.TabletPortrait,
