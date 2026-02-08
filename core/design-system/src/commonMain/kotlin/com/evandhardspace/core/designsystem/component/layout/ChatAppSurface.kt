@@ -5,7 +5,9 @@ import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CornerSize
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -51,8 +53,9 @@ fun ChatAppSurface(
             ) {
                 Column(
                     modifier = Modifier
+                        .fillMaxSize()
                         .padding(horizontal = MaterialTheme.paddings.default)
-                        .fillMaxSize(),
+                        .verticalScroll(rememberScrollState()),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     content = content,
                 )

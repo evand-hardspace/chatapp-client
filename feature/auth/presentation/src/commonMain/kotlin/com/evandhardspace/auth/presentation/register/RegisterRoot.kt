@@ -113,13 +113,12 @@ fun RegisterContent(
         Spacer(modifier = Modifier.height(MaterialTheme.paddings.half))
         ChatAppButton(
             text = stringResource(Res.string.login),
-            onClick = {
-                onAction(RegisterAction.OnLoginClick)
-            },
+            onClick = { onAction(RegisterAction.OnLoginClick) },
             style = ChatAppButtonStyle.Secondary,
             modifier = Modifier
                 .fillMaxWidth(),
         )
+        Spacer(modifier = Modifier.height(MaterialTheme.paddings.half))
     }
 }
 

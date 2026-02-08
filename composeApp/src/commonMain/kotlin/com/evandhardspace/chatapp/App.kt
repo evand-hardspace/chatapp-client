@@ -1,10 +1,12 @@
 package com.evandhardspace.chatapp
 
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.evandhardspace.auth.presentation.register.RegisterRoot
 import com.evandhardspace.core.designsystem.component.layout.ChatAppSnackbarScaffold
@@ -28,7 +30,9 @@ fun App(): Unit = ChatAppTheme {
         ChatAppSnackbarScaffold(
             snackbarHostState = snackbarHostState,
         ) {
-            RegisterRoot()
+            RegisterRoot(
+                modifier = Modifier.fillMaxSize(),
+            )
         }
     }
 }
