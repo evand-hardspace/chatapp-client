@@ -30,8 +30,8 @@ suspend inline fun <reified T> safeCall(
 
 suspend inline fun <reified Request, reified Response: Any> HttpClient.post(
     route: String,
-    queryParams: Map<String, Any> = mapOf(),
     body: Request,
+    queryParams: Map<String, Any> = mapOf(),
     crossinline builder: HttpRequestBuilder.() -> Unit = {},
 ): Result<DataError.Remote, Response> {
     return safeCall {
