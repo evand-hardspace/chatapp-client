@@ -13,15 +13,13 @@ internal class KtorAuthService(
     override suspend fun register(
         email: String,
         username: String,
-        password: String
-    ): EmptyResult<DataError.Remote> {
-        return client.post(
-            route = "/auth/register",
-            body = RegisterRequest(
-                email = email,
-                username = username,
-                password = password,
-            ),
-        )
-    }
+        password: String,
+    ): EmptyResult<DataError.Remote> = client.post(
+        route = "/auth/register",
+        body = RegisterRequest(
+            email = email,
+            username = username,
+            password = password,
+        ),
+    )
 }

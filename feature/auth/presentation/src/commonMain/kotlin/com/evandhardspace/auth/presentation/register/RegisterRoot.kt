@@ -30,15 +30,23 @@ import com.evandhardspace.core.designsystem.component.textfield.ChatAppPasswordT
 import com.evandhardspace.core.designsystem.component.textfield.ChatAppTextField
 import com.evandhardspace.core.designsystem.theme.ChatAppPreview
 import com.evandhardspace.core.designsystem.theme.paddings
+import com.evandhardspace.core.presentation.util.ObserveAsEffect
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun RegisterRoot(
+    onRegisterSuccess: (String) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: RegisterViewModel = viewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val snackbarHostState = LocalSnackbarHostState.current
+
+    ObserveAsEffect(viewModel.events) { event ->
+        when (event) {
+            is RegisterEffect.Success -> onRegisterSuccess(event.email)
+        }
+    }
 
     RegisterContent(
         modifier = modifier,
