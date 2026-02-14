@@ -132,6 +132,7 @@ class RegisterViewModel(
                 }
         }
     }
+
     private fun login() {
         // TODO: implement login
     }

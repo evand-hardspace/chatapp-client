@@ -116,6 +116,7 @@ suspend inline fun <reified T> responseToResult(response: HttpResponse): Result<
             403 -> DataError.Remote.Forbidden.raise()
             404 -> DataError.Remote.NotFound.raise()
             408 -> DataError.Remote.RequestTimeout.raise()
+            409 -> DataError.Remote.Conflict.raise()
             413 -> DataError.Remote.PayloadTooLarge.raise()
             429 -> DataError.Remote.TooManyRequests.raise()
             500 -> DataError.Remote.ServerError.raise()
