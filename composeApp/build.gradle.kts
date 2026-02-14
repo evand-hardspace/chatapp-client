@@ -10,6 +10,8 @@ kotlin {
         androidMain.dependencies {
             implementation(libs.jetbrains.compose.uiToolingPreview)
             implementation(libs.androidx.activity.compose)
+
+            implementation(libs.koin.android)
         }
         commonMain.dependencies {
             implementation(projects.core.data)

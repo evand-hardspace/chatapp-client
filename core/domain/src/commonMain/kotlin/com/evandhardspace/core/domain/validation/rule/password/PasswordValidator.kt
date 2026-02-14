@@ -1,7 +1,5 @@
 package com.evandhardspace.core.domain.validation.rule.password
 
-import com.evandhardspace.core.domain.validation.rule.and
-
 interface PasswordValidator {
     fun validate(password: CharSequence): Boolean
 }

@@ -32,6 +32,7 @@ fun App(): Unit = ChatAppTheme {
         ) {
             RegisterRoot(
                 modifier = Modifier.fillMaxSize(),
+                onRegisterSuccess = { },
             )
         }
     }

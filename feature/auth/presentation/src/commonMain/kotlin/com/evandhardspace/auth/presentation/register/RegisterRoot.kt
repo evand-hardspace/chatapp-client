@@ -32,12 +32,13 @@ import com.evandhardspace.core.designsystem.theme.ChatAppPreview
 import com.evandhardspace.core.designsystem.theme.paddings
 import com.evandhardspace.core.presentation.util.ObserveAsEffect
 import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun RegisterRoot(
     onRegisterSuccess: (String) -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: RegisterViewModel = viewModel(),
+    viewModel: RegisterViewModel = koinViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val snackbarHostState = LocalSnackbarHostState.current
@@ -121,6 +122,7 @@ fun RegisterContent(
         Spacer(modifier = Modifier.height(MaterialTheme.paddings.half))
         ChatAppButton(
             text = stringResource(Res.string.login),
+            enabled = state.canLogin,
             onClick = { onAction(RegisterAction.OnLoginClick) },
             style = ChatAppButtonStyle.Secondary,
             modifier = Modifier

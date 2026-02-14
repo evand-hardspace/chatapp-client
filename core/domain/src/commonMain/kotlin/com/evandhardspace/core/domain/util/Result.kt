@@ -90,7 +90,7 @@ inline fun <E : DomainError> errorResult(
 }
 
 context(_: ResultScope<E, T>)
-inline fun <E : DomainError, T> E.raise(): Nothing = throw ErrorThrowable(this)
+fun <E : DomainError, T> E.raise(): Nothing = throw ErrorThrowable(this)
 
 context(_: ResultScope<E, T>)
 fun <E : DomainError, T> Result<E, T>.ensure(): T = when (this) {
