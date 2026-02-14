@@ -8,14 +8,17 @@ import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.consumeWindowInsets
-import androidx.compose.foundation.layout.displayCutout
+import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
@@ -44,18 +47,12 @@ fun ChatAppAdaptiveFormLayout(
     formContent: @Composable ColumnScope.() -> Unit,
 ) {
     val configuration = currentDeviceConfiguration()
-    val headerColor = if(configuration == DeviceConfiguration.MobileLandscape) {
-        MaterialTheme.colorScheme.onBackground
-    } else {
-        MaterialTheme.colorScheme.extended.textPrimary
-    }
+    val headerColor = MaterialTheme.colorScheme.extended.textPrimary
 
-    when(configuration) {
+    when (configuration) {
         DeviceConfiguration.MobilePortrait -> {
             ChatAppSurface(
-                modifier = modifier
-                    .consumeWindowInsets(WindowInsets.navigationBars)
-                    .consumeWindowInsets(WindowInsets.displayCutout),
+                modifier = modifier.statusBarsPadding(),
                 header = {
                     Spacer(modifier = Modifier.height(MaterialTheme.paddings.double))
                     logo()
@@ -77,12 +74,11 @@ fun ChatAppAdaptiveFormLayout(
                 horizontalArrangement = Arrangement.spacedBy(MaterialTheme.paddings.default),
                 modifier = modifier
                     .fillMaxSize()
-                    .padding(horizontal = MaterialTheme.paddings.default)
-                    .consumeWindowInsets(WindowInsets.navigationBars)
-                    .consumeWindowInsets(WindowInsets.displayCutout),
+                    .padding(horizontal = MaterialTheme.paddings.default),
             ) {
                 Column(
                     modifier = Modifier
+                        .systemBarsPadding()
                         .weight(1f),
                     verticalArrangement = Arrangement.spacedBy(MaterialTheme.paddings.fiveQuarters),
                     horizontalAlignment = Alignment.CenterHorizontally,
@@ -99,9 +95,12 @@ fun ChatAppAdaptiveFormLayout(
                     modifier = Modifier
                         .weight(1f),
                 ) {
-                    Spacer(modifier = Modifier.height(MaterialTheme.paddings.default))
-                    formContent()
-                    Spacer(modifier = Modifier.height(MaterialTheme.paddings.default))
+                    Spacer(modifier = Modifier.height(MaterialTheme.paddings.half))
+                    Column(
+                        modifier = Modifier.windowInsetsPadding(WindowInsets.systemBars.only(WindowInsetsSides.End)),
+                        content = formContent,
+                    )
+                    Spacer(modifier = Modifier.height(MaterialTheme.paddings.half))
                 }
             }
         }
@@ -111,6 +110,7 @@ fun ChatAppAdaptiveFormLayout(
             Column(
                 modifier = modifier
                     .fillMaxSize()
+                    .statusBarsPadding() // TODO check
                     .verticalScroll(rememberScrollState())
                     .background(MaterialTheme.colorScheme.background)
                     .padding(vertical = MaterialTheme.paddings.double),
@@ -124,7 +124,10 @@ fun ChatAppAdaptiveFormLayout(
                         .fillMaxWidth()
                         .clip(MaterialTheme.shapes.extraLarge)
                         .background(MaterialTheme.colorScheme.surface)
-                        .padding(horizontal = MaterialTheme.paddings.fiveQuarters, vertical = MaterialTheme.paddings.double),
+                        .padding(
+                            horizontal = MaterialTheme.paddings.fiveQuarters,
+                            vertical = MaterialTheme.paddings.double,
+                        ),
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     AuthHeaderSection(
@@ -155,7 +158,7 @@ fun ColumnScope.AuthHeaderSection(
     AnimatedVisibility(
         visible = errorText != null,
     ) {
-        if(errorText != null) {
+        if (errorText != null) {
             Text(
                 text = errorText,
                 style = MaterialTheme.typography.labelSmall,
@@ -171,7 +174,7 @@ fun ColumnScope.AuthHeaderSection(
 @ThemedPreview
 @Composable
 fun ChatAppAdaptiveFormLayoutDarkPreview() {
-    ChatAppPreview {
+    ChatAppPreview(paddings = false) {
         ChatAppAdaptiveFormLayout(
             headerText = "Welcome to ChatApp!",
             errorText = "Login failed!",

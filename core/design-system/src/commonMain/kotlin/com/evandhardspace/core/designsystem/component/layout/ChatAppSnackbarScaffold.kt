@@ -23,9 +23,7 @@ fun ChatAppSnackbarScaffold(
 ) {
     Scaffold(
         modifier = modifier,
-        contentWindowInsets = WindowInsets.statusBars
-            .union(WindowInsets.displayCutout)
-            .union(WindowInsets.ime),
+        contentWindowInsets = WindowInsets(),
         snackbarHost = {
             ChatAppSnackbarHost(
                 snackbarHostState = snackbarHostState,

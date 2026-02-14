@@ -5,10 +5,15 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -35,11 +40,16 @@ fun ChatAppAdaptiveResultLayout(
     val configuration = currentDeviceConfiguration()
 
     Scaffold(
-        modifier = modifier
+        modifier = modifier,
+        contentWindowInsets = WindowInsets(),
     ) { innerPadding ->
         if (configuration == DeviceConfiguration.MobilePortrait) {
             ChatAppSurface(
                 modifier = Modifier
+                    .statusBarsPadding()
+                    .consumeWindowInsets(
+                        WindowInsets.statusBars
+                    )
                     .padding(innerPadding),
                 header = {
                     Spacer(modifier = Modifier.height(MaterialTheme.paddings.double))
@@ -53,6 +63,7 @@ fun ChatAppAdaptiveResultLayout(
                 modifier = Modifier
                     .padding(innerPadding)
                     .fillMaxSize()
+                    .systemBarsPadding()
                     .background(MaterialTheme.colorScheme.background)
                     .padding(top = MaterialTheme.paddings.double),
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -83,7 +94,7 @@ fun ChatAppAdaptiveResultLayout(
 @ThemedPreview
 @Composable
 fun ChatAppAdaptiveResultLayoutPreview() {
-    ChatAppPreview {
+    ChatAppPreview(paddings = false) {
         ChatAppAdaptiveResultLayout(
             modifier = Modifier
                 .fillMaxSize(),

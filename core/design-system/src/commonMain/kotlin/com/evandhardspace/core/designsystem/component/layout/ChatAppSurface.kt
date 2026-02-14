@@ -2,13 +2,17 @@ package com.evandhardspace.core.designsystem.component.layout
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.windowInsetsBottomHeight
+import androidx.compose.foundation.layout.windowInsetsTopHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -16,14 +20,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import chatapp.core.design_system.generated.resources.Res
-import chatapp.core.design_system.generated.resources.a11y_chatapp_logo
-import chatapp.core.design_system.generated.resources.logo_chatapp
 import com.evandhardspace.core.designsystem.annotations.ThemedPreview
+import com.evandhardspace.core.designsystem.component.brand.ChatAppBrandLogo
 import com.evandhardspace.core.designsystem.theme.ChatAppPreview
 import com.evandhardspace.core.designsystem.theme.paddings
-import org.jetbrains.compose.resources.stringResource
-import org.jetbrains.compose.resources.vectorResource
 
 @Composable
 fun ChatAppSurface(
@@ -57,8 +57,11 @@ fun ChatAppSurface(
                         .padding(horizontal = MaterialTheme.paddings.default)
                         .verticalScroll(rememberScrollState()),
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    content = content,
-                )
+                ) {
+                    Spacer(Modifier.windowInsetsTopHeight(WindowInsets.systemBars))
+                    content()
+                    Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.systemBars))
+                }
             }
         }
     }
@@ -67,15 +70,12 @@ fun ChatAppSurface(
 @ThemedPreview
 @Composable
 fun ChatAppSurfacePreview() {
-    ChatAppPreview {
+    ChatAppPreview(paddings = false) {
         ChatAppSurface(
             modifier = Modifier
                 .fillMaxSize(),
             header = {
-                Icon(
-                    imageVector = vectorResource(Res.drawable.logo_chatapp),
-                    contentDescription = stringResource(Res.string.a11y_chatapp_logo),
-                    tint = MaterialTheme.colorScheme.primary,
+                ChatAppBrandLogo(
                     modifier = Modifier
                         .padding(vertical = 32.dp),
                 )

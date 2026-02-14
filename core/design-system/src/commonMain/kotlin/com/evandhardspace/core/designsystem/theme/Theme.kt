@@ -185,7 +185,7 @@ val LightColorScheme = lightColorScheme(
     errorContainer = ChatAppRed200,
     onErrorContainer = ChatAppRed600,
 
-    background = ChatAppBrand1000,
+    background = ChatAppBrand100,
     onBackground = ChatAppBase0,
     surface = ChatAppBase0,
     onSurface = ChatAppBase1000,
