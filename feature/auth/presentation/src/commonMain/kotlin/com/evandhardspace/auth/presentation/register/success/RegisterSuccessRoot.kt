@@ -1,5 +1,6 @@
 package com.evandhardspace.auth.presentation.register.success
 
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -21,8 +22,8 @@ import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
-fun RegisterSuccessRoot(
-    modifier: Modifier = Modifier,
+fun RegisterSuccessScreen(
+    modifier: Modifier = Modifier.fillMaxSize(),
     viewModel: RegisterSuccessViewModel = koinViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()

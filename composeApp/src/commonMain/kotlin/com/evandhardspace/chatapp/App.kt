@@ -6,9 +6,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.evandhardspace.auth.presentation.register.RegisterRoot
+import com.evandhardspace.chatapp.navigation.NavigationRoot
 import com.evandhardspace.core.designsystem.component.layout.ChatAppSnackbarScaffold
 import com.evandhardspace.core.designsystem.component.snackbar.ChatAppSnackbarHostState
 import com.evandhardspace.core.designsystem.component.snackbar.LocalSnackbarHostState
@@ -30,10 +29,7 @@ fun App(): Unit = ChatAppTheme {
         ChatAppSnackbarScaffold(
             snackbarHostState = snackbarHostState,
         ) {
-            RegisterRoot(
-                modifier = Modifier.fillMaxSize(),
-                onRegisterSuccess = { },
-            )
+            NavigationRoot()
         }
     }
 }
