@@ -3,37 +3,37 @@ package com.evandhardspace.auth.presentation.navigation
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-sealed interface AuthGraphRoute {
+sealed interface AuthNavGraphRoute {
     @Serializable
-    data object Root : AuthGraphRoute
+    data object Root : AuthNavGraphRoute
 
     @Serializable
-    data object Login : AuthGraphRoute
+    data object Login : AuthNavGraphRoute
 
     @Serializable
-    data object Register : AuthGraphRoute
+    data object Register : AuthNavGraphRoute
 
     @Serializable
     data class RegisterSuccess(
         @SerialName(EMAIL_ARG_KEY)
         val email: String,
-    ) : AuthGraphRoute {
+    ) : AuthNavGraphRoute {
         companion object {
             const val EMAIL_ARG_KEY = "email"
         }
     }
 
     @Serializable
-    data object ResetPassword : AuthGraphRoute
+    data object ResetPassword : AuthNavGraphRoute
 
     @Serializable
-    data object ForgotPassword : AuthGraphRoute
+    data object ForgotPassword : AuthNavGraphRoute
 
     @Serializable
     data class EmailVerification(
         @SerialName(TOKEN_ARG_KEY)
         val token: String,
-    ) : AuthGraphRoute {
+    ) : AuthNavGraphRoute {
         companion object {
             const val TOKEN_ARG_KEY = "token"
         }

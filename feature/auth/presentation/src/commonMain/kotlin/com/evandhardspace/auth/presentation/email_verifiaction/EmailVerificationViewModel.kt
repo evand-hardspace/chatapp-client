@@ -4,7 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.evandhardspace.auth.presentation.email_verifiaction.EmailVerificationState.VerificationState
-import com.evandhardspace.auth.presentation.navigation.AuthGraphRoute.EmailVerification
+import com.evandhardspace.auth.presentation.navigation.AuthNavGraphRoute.EmailVerification
 import com.evandhardspace.core.domain.auth.AuthService
 import com.evandhardspace.core.domain.util.onFailure
 import com.evandhardspace.core.domain.util.onSuccess

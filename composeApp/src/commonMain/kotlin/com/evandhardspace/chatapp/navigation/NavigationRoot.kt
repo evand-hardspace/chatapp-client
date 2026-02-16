@@ -4,9 +4,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import com.evandhardspace.auth.presentation.navigation.AuthGraphRoute
-import com.evandhardspace.auth.presentation.navigation.authGraph
-import com.evandhardspace.core.data.logging.KermitLogger
+import com.evandhardspace.auth.presentation.navigation.AuthNavGraphRoute
+import com.evandhardspace.auth.presentation.navigation.authNavGraph
+import com.evandhardspace.chat.presentation.navigation.ChatNavGraphRoute
+import com.evandhardspace.chat.presentation.navigation.chatNavGraph
 
 @Composable
 fun NavigationRoot(
@@ -16,11 +17,18 @@ fun NavigationRoot(
     NavHost(
         modifier = modifier,
         navController = navController,
-        startDestination = AuthGraphRoute.Root,
+        startDestination = AuthNavGraphRoute.Root,
     ) {
-        authGraph(
+        authNavGraph(
             navController,
-            onLoginSuccess = { },
+            onLoginSuccess = {
+                navController.navigate(ChatNavGraphRoute.ChatListRoute) {
+                    popUpTo(AuthNavGraphRoute.Root) {
+                        inclusive = true
+                    }
+                }
+            },
         )
+        chatNavGraph()
     }
 }

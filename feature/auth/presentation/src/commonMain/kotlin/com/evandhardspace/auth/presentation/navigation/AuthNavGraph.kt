@@ -12,21 +12,21 @@ import com.evandhardspace.auth.presentation.login.LoginScreen
 import com.evandhardspace.auth.presentation.register.RegisterScreen
 import com.evandhardspace.auth.presentation.register_success.RegisterSuccessScreen
 
-fun NavGraphBuilder.authGraph(
+fun NavGraphBuilder.authNavGraph(
     navController: NavController,
     onLoginSuccess: () -> Unit,
 ) {
-    navigation<AuthGraphRoute.Root>(
-        startDestination = AuthGraphRoute.Login,
+    navigation<AuthNavGraphRoute.Root>(
+        startDestination = AuthNavGraphRoute.Login,
     ) {
-        composable<AuthGraphRoute.Login> {
+        composable<AuthNavGraphRoute.Login> {
             LoginScreen(
                 onLoginSuccess = onLoginSuccess,
                 onForgotPasswordClick = {
-                    navController.navigate(AuthGraphRoute.ForgotPassword)
+                    navController.navigate(AuthNavGraphRoute.ForgotPassword)
                 },
                 onCreateAccountClick = {
-                    navController.navigate(AuthGraphRoute.Register) {
+                    navController.navigate(AuthNavGraphRoute.Register) {
                         restoreState = true
                         launchSingleTop = true
                     }
@@ -34,16 +34,16 @@ fun NavGraphBuilder.authGraph(
             )
         }
 
-        composable<AuthGraphRoute.Register> {
+        composable<AuthNavGraphRoute.Register> {
             RegisterScreen(
                 onRegisterSuccess = { email ->
                     navController.navigate(
-                        route = AuthGraphRoute.RegisterSuccess(email),
+                        route = AuthNavGraphRoute.RegisterSuccess(email),
                     )
                 },
                 onLogin = {
-                    navController.navigate(AuthGraphRoute.Login) {
-                        popUpTo(AuthGraphRoute.Register) {
+                    navController.navigate(AuthNavGraphRoute.Login) {
+                        popUpTo(AuthNavGraphRoute.Register) {
                             inclusive = true
                             saveState = true
                         }
@@ -54,11 +54,11 @@ fun NavGraphBuilder.authGraph(
             )
         }
 
-        composable<AuthGraphRoute.RegisterSuccess> {
+        composable<AuthNavGraphRoute.RegisterSuccess> {
             RegisterSuccessScreen()
         }
 
-        composable<AuthGraphRoute.EmailVerification>(
+        composable<AuthNavGraphRoute.EmailVerification>(
             deepLinks = listOf(
                 navDeepLink {
                     this.uriPattern = emailVerificationDeeplinkPatternHttpsScheme
@@ -71,7 +71,7 @@ fun NavGraphBuilder.authGraph(
             EmailVerificationScreen()
         }
 
-        composable<AuthGraphRoute.ForgotPassword> {
+        composable<AuthNavGraphRoute.ForgotPassword> {
         }
     }
 }
