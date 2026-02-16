@@ -55,7 +55,15 @@ fun NavGraphBuilder.authNavGraph(
         }
 
         composable<AuthNavGraphRoute.RegisterSuccess> {
-            RegisterSuccessScreen()
+            RegisterSuccessScreen(
+                onLogin = {
+                    navController.navigate(AuthNavGraphRoute.Login) {
+                        popUpTo<AuthNavGraphRoute.RegisterSuccess> {
+                            inclusive = true
+                        }
+                    }
+                }
+            )
         }
 
         composable<AuthNavGraphRoute.EmailVerification>(
@@ -68,7 +76,22 @@ fun NavGraphBuilder.authNavGraph(
                 }
             )
         ) {
-            EmailVerificationScreen()
+            EmailVerificationScreen(
+                onLogin = {
+                    navController.navigate(AuthNavGraphRoute.Login) {
+                        popUpTo<AuthNavGraphRoute.EmailVerification> {
+                            inclusive = true
+                        }
+                    }
+                },
+                onClose = {
+                    navController.navigate(AuthNavGraphRoute.Login) {
+                        popUpTo<AuthNavGraphRoute.EmailVerification> {
+                            inclusive = true
+                        }
+                    }
+                }
+            )
         }
 
         composable<AuthNavGraphRoute.ForgotPassword> {

@@ -29,13 +29,6 @@ internal class EmailVerificationViewModel(
         }
     }
 
-    fun onAction(action: EmailVerificationAction) {
-        when (action) {
-            EmailVerificationAction.OnClose -> Unit
-            EmailVerificationAction.OnLogin -> Unit
-        }
-    }
-
     private fun verifyEmail() {
         viewModelScope.launch {
             _state.update {

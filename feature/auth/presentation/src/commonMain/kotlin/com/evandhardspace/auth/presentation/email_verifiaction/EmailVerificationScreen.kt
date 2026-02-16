@@ -17,7 +17,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import chatapp.feature.auth.presentation.generated.resources.Res
 import chatapp.feature.auth.presentation.generated.resources.close
 import chatapp.feature.auth.presentation.generated.resources.email_verified_failed
@@ -43,19 +42,23 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 internal fun EmailVerificationScreen(
     viewModel: EmailVerificationViewModel = koinViewModel(),
+    onLogin: () -> Unit,
+    onClose: () -> Unit,
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     EmailVerificationContent(
         state = state,
-        onAction = viewModel::onAction
+        onLogin = onLogin,
+        onClose = onClose,
     )
 }
 
 @Composable
 internal fun EmailVerificationContent(
     state: EmailVerificationState,
-    onAction: (EmailVerificationAction) -> Unit,
+    onLogin: () -> Unit,
+    onClose: () -> Unit,
 ) {
     ChatAppAdaptiveResultLayout {
         when (state.verification) {
@@ -74,9 +77,7 @@ internal fun EmailVerificationContent(
                     primaryButton = {
                         ChatAppButton(
                             text = stringResource(Res.string.login),
-                            onClick = {
-                                onAction(EmailVerificationAction.OnLogin)
-                            },
+                            onClick = onLogin,
                             modifier = Modifier.fillMaxWidth()
                         )
                     }
@@ -98,9 +99,7 @@ internal fun EmailVerificationContent(
                     primaryButton = {
                         ChatAppButton(
                             text = stringResource(Res.string.close),
-                            onClick = {
-                                onAction(EmailVerificationAction.OnClose)
-                            },
+                            onClick = onClose,
                             modifier = Modifier.fillMaxWidth(),
                             style = ChatAppButtonStyle.Secondary,
                         )
@@ -144,7 +143,8 @@ private fun EmailVerificationErrorPreview() {
             state = EmailVerificationState(
                 verification = VerificationState.Error,
             ),
-            onAction = {},
+            onLogin = {},
+            onClose = {},
         )
     }
 }
@@ -157,7 +157,8 @@ private fun EmailVerificationVerifyingPreview() {
             state = EmailVerificationState(
                 verification = VerificationState.Verifying,
             ),
-            onAction = {},
+            onLogin = {},
+            onClose = {},
         )
     }
 }
@@ -170,7 +171,8 @@ private fun EmailVerificationSuccessPreview() {
             state = EmailVerificationState(
                 verification = VerificationState.Verified,
             ),
-            onAction = {},
+            onLogin = {},
+            onClose = {},
         )
     }
 }

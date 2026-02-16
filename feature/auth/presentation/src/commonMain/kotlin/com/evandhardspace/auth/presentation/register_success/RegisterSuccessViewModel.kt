@@ -33,7 +33,6 @@ internal class RegisterSuccessViewModel(
 
     fun onAction(action: RegisterSuccessAction) {
         when (action) {
-            is RegisterSuccessAction.OnLogin -> Unit // TODO
             is RegisterSuccessAction.OnResendVerificationEmail -> resendVerification()
         }
     }

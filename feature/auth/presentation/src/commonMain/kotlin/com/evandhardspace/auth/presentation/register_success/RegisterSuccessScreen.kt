@@ -27,6 +27,7 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 internal fun RegisterSuccessScreen(
+    onLogin: () -> Unit,
     modifier: Modifier = Modifier.fillMaxSize(),
     viewModel: RegisterSuccessViewModel = koinViewModel(),
 ) {
@@ -47,6 +48,7 @@ internal fun RegisterSuccessScreen(
         modifier = modifier,
         state = state,
         onAction = viewModel::onAction,
+        onLogin = onLogin,
     )
 }
 
@@ -54,6 +56,7 @@ internal fun RegisterSuccessScreen(
 internal fun RegisterSuccessContent(
     state: RegisterSuccessState,
     onAction: (RegisterSuccessAction) -> Unit,
+    onLogin: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     ChatAppAdaptiveResultLayout(modifier) {
@@ -67,7 +70,7 @@ internal fun RegisterSuccessContent(
             primaryButton = {
                 ChatAppButton(
                     text = stringResource(Res.string.login),
-                    onClick = { onAction(RegisterSuccessAction.OnLogin) },
+                    onClick = onLogin,
                     modifier = Modifier
                         .fillMaxWidth(),
                 )
@@ -97,6 +100,7 @@ private fun Preview() {
                 registeredEmail = "test@preview.com"
             ),
             onAction = {},
+            onLogin = {},
         )
     }
 }
