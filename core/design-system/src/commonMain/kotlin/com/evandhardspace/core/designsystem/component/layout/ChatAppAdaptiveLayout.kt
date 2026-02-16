@@ -174,7 +174,7 @@ fun ColumnScope.AuthHeaderSection(
 @ThemedPreview
 @Composable
 fun ChatAppAdaptiveFormLayoutDarkPreview() {
-    ChatAppPreview(paddings = false) {
+    ChatAppPreview {
         ChatAppAdaptiveFormLayout(
             headerText = "Welcome to ChatApp!",
             errorText = "Login failed!",

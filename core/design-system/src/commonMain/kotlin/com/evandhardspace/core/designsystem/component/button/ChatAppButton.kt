@@ -142,7 +142,7 @@ fun ChatAppButton(
 @ThemedPreview
 @Composable
 fun ChatAppPrimaryButtonPreview() {
-    ChatAppPreview {
+    ChatAppPreview(paddings = true) {
         ChatAppButton(
             text = "Primary Button",
             onClick = {},
@@ -154,7 +154,7 @@ fun ChatAppPrimaryButtonPreview() {
 @ThemedPreview
 @Composable
 fun ChatAppSecondaryButtonPreview() {
-    ChatAppPreview {
+    ChatAppPreview(paddings = true) {
         ChatAppButton(
             text = "Secondary Button",
             onClick = {},
@@ -166,7 +166,7 @@ fun ChatAppSecondaryButtonPreview() {
 @ThemedPreview
 @Composable
 fun ChatAppDestructivePrimaryButtonPreview() {
-    ChatAppPreview {
+    ChatAppPreview(paddings = true) {
         ChatAppButton(
             text = "Destructive Primary",
             onClick = {},
@@ -178,7 +178,7 @@ fun ChatAppDestructivePrimaryButtonPreview() {
 @ThemedPreview
 @Composable
 fun ChatAppDestructiveSecondaryButtonPreview() {
-    ChatAppPreview {
+    ChatAppPreview(paddings = true) {
         ChatAppButton(
             text = "Destructive Secondary",
             onClick = {},
@@ -190,7 +190,7 @@ fun ChatAppDestructiveSecondaryButtonPreview() {
 @ThemedPreview
 @Composable
 fun ChatAppTextButtonPreview() {
-    ChatAppPreview {
+    ChatAppPreview(paddings = true) {
         ChatAppButton(
             text = "Text Button",
             onClick = {},

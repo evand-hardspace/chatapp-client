@@ -127,7 +127,7 @@ fun ChatAppPasswordTextField(
 @ThemedPreview
 @Composable
 fun ChatAppPasswordTextFieldEmptyPreview() {
-    ChatAppPreview {
+    ChatAppPreview(paddings = true) {
         ChatAppPasswordTextField(
             state = rememberTextFieldState(),
             isPasswordVisible = true,
@@ -144,7 +144,7 @@ fun ChatAppPasswordTextFieldEmptyPreview() {
 @ThemedPreview
 @Composable
 fun ChatAppPasswordTextFieldFilledPreview() {
-    ChatAppPreview {
+    ChatAppPreview(paddings = true) {
         ChatAppPasswordTextField(
             state = rememberTextFieldState("password123"),
             isPasswordVisible = false,
@@ -161,7 +161,7 @@ fun ChatAppPasswordTextFieldFilledPreview() {
 @ThemedPreview
 @Composable
 fun ChatAppPasswordTextFieldErrorPreview() {
-    ChatAppPreview {
+    ChatAppPreview(paddings = true) {
         ChatAppPasswordTextField(
             state = rememberTextFieldState("password123"),
             isPasswordVisible = true,

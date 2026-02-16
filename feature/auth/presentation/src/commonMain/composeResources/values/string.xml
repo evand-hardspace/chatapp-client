@@ -24,4 +24,8 @@
     <string name="email_verified_failed_description">Unable to verify your email. Maybe the link is invalid or has expired.</string>
     <string name="email_verified_successfully">Email verified successfully!</string>
     <string name="email_verified_successfully_description">Your email has been verified. You can now log in with your credentials.</string>
+    <string name="welcome_back">Welcome back!</string>
+    <string name="forgot_password">Forgot password?</string>
+    <string name="create_account">Create account</string>
+    <string name="already_have_account">Already have an account?</string>
 </resources>

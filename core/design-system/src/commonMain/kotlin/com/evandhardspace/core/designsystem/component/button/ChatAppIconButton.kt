@@ -42,7 +42,7 @@ fun ChatAppIconButton(
 @ThemedPreview
 @Composable
 fun ChatAppButtonPreview() {
-    ChatAppPreview {
+    ChatAppPreview(paddings = true) {
         ChatAppIconButton(
             onClick = {}
         ) {

@@ -70,7 +70,7 @@ fun ChatAppSurface(
 @ThemedPreview
 @Composable
 fun ChatAppSurfacePreview() {
-    ChatAppPreview(paddings = false) {
+    ChatAppPreview {
         ChatAppSurface(
             modifier = Modifier
                 .fillMaxSize(),

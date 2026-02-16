@@ -94,7 +94,7 @@ fun ChatAppAdaptiveResultLayout(
 @ThemedPreview
 @Composable
 fun ChatAppAdaptiveResultLayoutPreview() {
-    ChatAppPreview(paddings = false) {
+    ChatAppPreview {
         ChatAppAdaptiveResultLayout(
             modifier = Modifier
                 .fillMaxSize(),

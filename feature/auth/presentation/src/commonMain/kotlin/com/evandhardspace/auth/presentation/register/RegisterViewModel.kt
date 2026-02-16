@@ -82,10 +82,9 @@ internal class RegisterViewModel(
 
     fun onAction(action: RegisterAction) {
         when (action) {
-            is RegisterAction.OnLoginClick -> login()
-            is RegisterAction.OnRegisterClick -> register()
+            is RegisterAction.OnRegister -> register()
             is RegisterAction.OnInputTextFocusGain -> Unit
-            is RegisterAction.OnTogglePasswordVisibilityClick -> _state.update {
+            is RegisterAction.OnTogglePasswordVisibility -> _state.update {
                 it.copy(
                     isPasswordVisible = it.isPasswordVisible.not(),
                 )
@@ -132,9 +131,5 @@ internal class RegisterViewModel(
                     }
                 }
         }
-    }
-
-    private fun login() {
-        // TODO: implement login
     }
 }

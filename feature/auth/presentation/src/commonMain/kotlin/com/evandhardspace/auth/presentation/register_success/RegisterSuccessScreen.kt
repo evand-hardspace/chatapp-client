@@ -91,7 +91,7 @@ internal fun RegisterSuccessContent(
 @ThemedPreview
 @Composable
 private fun Preview() {
-    ChatAppPreview(paddings = false) {
+    ChatAppPreview {
         RegisterSuccessContent(
             state = RegisterSuccessState(
                 registeredEmail = "test@preview.com"

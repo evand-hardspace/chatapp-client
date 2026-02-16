@@ -30,7 +30,7 @@ fun ChatAppTheme(
 
 @Composable
 fun ChatAppPreview(
-    paddings: Boolean = true,
+    paddings: Boolean = false,
     content: @Composable () -> Unit,
 ) {
     ChatAppTheme {

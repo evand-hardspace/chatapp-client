@@ -87,7 +87,7 @@ fun ChatAppTextField(
 @ThemedPreview
 @Composable
 fun ChatAppTextFieldEmptyPreview() {
-    ChatAppPreview {
+    ChatAppPreview(paddings = true) {
         ChatAppTextField(
             state = rememberTextFieldState(),
             modifier = Modifier
@@ -102,7 +102,7 @@ fun ChatAppTextFieldEmptyPreview() {
 @ThemedPreview
 @Composable
 fun ChatAppTextFieldFilledPreview() {
-    ChatAppPreview {
+    ChatAppPreview(paddings = true) {
         ChatAppTextField(
             state = rememberTextFieldState(
                 initialText = "test@test.com"
@@ -119,7 +119,7 @@ fun ChatAppTextFieldFilledPreview() {
 @ThemedPreview
 @Composable
 fun ChatAppTextFieldDisabledPreview() {
-    ChatAppPreview {
+    ChatAppPreview(paddings = true) {
         ChatAppTextField(
             state = rememberTextFieldState(),
             modifier = Modifier
@@ -135,7 +135,7 @@ fun ChatAppTextFieldDisabledPreview() {
 @ThemedPreview
 @Composable
 fun ChatAppTextFieldErrorPreview() {
-    ChatAppPreview {
+    ChatAppPreview(paddings = true) {
         ChatAppTextField(
             state = rememberTextFieldState(),
             modifier = Modifier

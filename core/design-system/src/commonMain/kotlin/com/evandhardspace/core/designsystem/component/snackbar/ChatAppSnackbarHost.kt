@@ -39,7 +39,7 @@ fun ChatAppSnackbar(
 @ThemedPreview
 @Composable
 fun ChatAppSnackbarPreview() {
-    ChatAppPreview {
+    ChatAppPreview(paddings = true) {
         ChatAppSnackbar(
             snackbarData = object : SnackbarData {
                 override val visuals: SnackbarVisuals = object : SnackbarVisuals {

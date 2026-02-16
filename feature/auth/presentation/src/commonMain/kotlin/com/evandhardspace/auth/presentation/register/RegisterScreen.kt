@@ -10,9 +10,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import chatapp.feature.auth.presentation.generated.resources.Res
+import chatapp.feature.auth.presentation.generated.resources.already_have_account
 import chatapp.feature.auth.presentation.generated.resources.email
 import chatapp.feature.auth.presentation.generated.resources.email_placeholder
-import chatapp.feature.auth.presentation.generated.resources.login
 import chatapp.feature.auth.presentation.generated.resources.password
 import chatapp.feature.auth.presentation.generated.resources.password_hint
 import chatapp.feature.auth.presentation.generated.resources.register
@@ -37,6 +37,7 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 internal fun RegisterScreen(
     onRegisterSuccess: (String) -> Unit,
+    onLogin: () -> Unit,
     modifier: Modifier = Modifier.fillMaxSize(),
     viewModel: RegisterViewModel = koinViewModel(),
 ) {
@@ -53,6 +54,7 @@ internal fun RegisterScreen(
         modifier = modifier,
         state = state,
         onAction = viewModel::onAction,
+        onLogin = onLogin,
     )
 }
 
@@ -60,6 +62,7 @@ internal fun RegisterScreen(
 internal fun RegisterContent(
     state: RegisterState,
     onAction: (RegisterAction) -> Unit,
+    onLogin: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     ChatAppAdaptiveFormLayout(
@@ -102,7 +105,7 @@ internal fun RegisterContent(
                 onAction(RegisterAction.OnInputTextFocusGain)
             },
             onToggleVisibilityClick = {
-                onAction(RegisterAction.OnTogglePasswordVisibilityClick)
+                onAction(RegisterAction.OnTogglePasswordVisibility)
             },
             isPasswordVisible = state.isPasswordVisible
         )
@@ -111,7 +114,7 @@ internal fun RegisterContent(
         ChatAppButton(
             text = stringResource(Res.string.register),
             onClick = {
-                onAction(RegisterAction.OnRegisterClick)
+                onAction(RegisterAction.OnRegister)
             },
             enabled = state.canRegister,
             isLoading = state.isRegistering,
@@ -121,10 +124,9 @@ internal fun RegisterContent(
 
         Spacer(modifier = Modifier.height(MaterialTheme.paddings.half))
         ChatAppButton(
-            text = stringResource(Res.string.login),
-            enabled = state.canLogin,
-            onClick = { onAction(RegisterAction.OnLoginClick) },
-            style = ChatAppButtonStyle.Secondary,
+            text = stringResource(Res.string.already_have_account),
+            onClick = onLogin,
+            style = ChatAppButtonStyle.Text,
             modifier = Modifier
                 .fillMaxWidth(),
         )
@@ -135,10 +137,11 @@ internal fun RegisterContent(
 @ThemedPreview
 @Composable
 private fun Preview() {
-    ChatAppPreview(paddings = false) {
+    ChatAppPreview {
         RegisterContent(
             state = RegisterState(),
             onAction = {},
+            onLogin = {},
         )
     }
 }

@@ -74,3 +74,15 @@ Learn more about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-mu
 
 We would appreciate your feedback on Compose/Web and Kotlin/Wasm in the public Slack channel [#compose-web](https://slack-chats.kotlinlang.org/c/compose-web).
 If you face any issues, please report them on [YouTrack](https://youtrack.jetbrains.com/newIssue?project=CMP).
+
+### Test Deeplinks:
+
+* Android:
+```shell
+adb shell am start -W -a android.intent.action.VIEW -d "<deeplink>" com.evandhardspace.chatapp
+```
+
+* iOS:
+```shell
+xcrun simctl openurl booted "<deeplink>"
+```

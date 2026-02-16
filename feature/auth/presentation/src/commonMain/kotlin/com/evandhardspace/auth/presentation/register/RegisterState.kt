@@ -22,5 +22,4 @@ internal data class RegisterState(
             && isPasswordValid
             && isUsernameValid
 
-    val canLogin: Boolean = canRegister
 }

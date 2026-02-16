@@ -139,7 +139,7 @@ private fun VerifyingContent(modifier: Modifier = Modifier) {
 @ThemedPreview
 @Composable
 private fun EmailVerificationErrorPreview() {
-    ChatAppPreview(paddings = false) {
+    ChatAppPreview {
         EmailVerificationContent(
             state = EmailVerificationState(
                 verification = VerificationState.Error,
@@ -152,7 +152,7 @@ private fun EmailVerificationErrorPreview() {
 @ThemedPreview
 @Composable
 private fun EmailVerificationVerifyingPreview() {
-    ChatAppPreview(paddings = false) {
+    ChatAppPreview {
         EmailVerificationContent(
             state = EmailVerificationState(
                 verification = VerificationState.Verifying,
@@ -165,7 +165,7 @@ private fun EmailVerificationVerifyingPreview() {
 @ThemedPreview
 @Composable
 private fun EmailVerificationSuccessPreview() {
-    ChatAppPreview(paddings = false) {
+    ChatAppPreview {
         EmailVerificationContent(
             state = EmailVerificationState(
                 verification = VerificationState.Verified,

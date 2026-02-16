@@ -29,7 +29,7 @@ fun ChatAppFloatingActionButton(
 @ThemedPreview
 @Composable
 fun ChatAppFloatingActionButtonPreview() {
-    ChatAppPreview {
+    ChatAppPreview(paddings = true) {
         ChatAppFloatingActionButton(
             onClick = {},
         ) {

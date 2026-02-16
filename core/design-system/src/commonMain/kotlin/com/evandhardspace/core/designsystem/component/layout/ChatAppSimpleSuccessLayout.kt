@@ -83,7 +83,7 @@ fun ChatAppSimpleResultLayout(
 @ThemedPreview
 @Composable
 fun ChatAppSimpleResultLayoutPreview() {
-    ChatAppPreview(paddings = false) {
+    ChatAppPreview {
         ChatAppSimpleResultLayout(
             title = "Hello world!",
             description = "Test description",
