@@ -27,7 +27,7 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class RegisterViewModel(
+internal class RegisterViewModel(
     private val emailValidator: EmailValidator,
     private val passwordValidator: PasswordValidator,
     private val usernameValidator: UsernameValidator,

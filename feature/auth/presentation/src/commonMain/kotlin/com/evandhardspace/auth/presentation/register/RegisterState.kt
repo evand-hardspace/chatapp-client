@@ -3,7 +3,7 @@ package com.evandhardspace.auth.presentation.register
 import androidx.compose.foundation.text.input.TextFieldState
 import com.evandhardspace.core.presentation.util.UiText
 
-data class RegisterState(
+internal data class RegisterState(
     val emailTextState: TextFieldState = TextFieldState(),
     val emailError: UiText? = null,
     val passwordTextState: TextFieldState = TextFieldState(),

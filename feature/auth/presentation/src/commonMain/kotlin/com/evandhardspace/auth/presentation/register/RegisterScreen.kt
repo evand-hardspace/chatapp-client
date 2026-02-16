@@ -35,7 +35,7 @@ import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
-fun RegisterScreen(
+internal fun RegisterScreen(
     onRegisterSuccess: (String) -> Unit,
     modifier: Modifier = Modifier.fillMaxSize(),
     viewModel: RegisterViewModel = koinViewModel(),
@@ -57,7 +57,7 @@ fun RegisterScreen(
 }
 
 @Composable
-fun RegisterContent(
+internal fun RegisterContent(
     state: RegisterState,
     onAction: (RegisterAction) -> Unit,
     modifier: Modifier = Modifier,

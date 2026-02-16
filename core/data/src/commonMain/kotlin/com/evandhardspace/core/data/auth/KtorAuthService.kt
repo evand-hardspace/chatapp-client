@@ -2,6 +2,7 @@ package com.evandhardspace.core.data.auth
 
 import com.evandhardspace.core.data.auth.dto.request.EmailRequest
 import com.evandhardspace.core.data.auth.dto.request.RegisterRequest
+import com.evandhardspace.core.data.networking.get
 import com.evandhardspace.core.data.networking.post
 import com.evandhardspace.core.domain.auth.AuthService
 import com.evandhardspace.core.domain.util.DataError
@@ -28,6 +29,13 @@ internal class KtorAuthService(
         return client.post(
             route = "/auth/resend-verification",
             body = EmailRequest(email),
+        )
+    }
+
+    override suspend fun verifyEmail(token: String): EmptyResult<DataError.Remote> {
+        return client.get(
+            route = "/auth/verify",
+            queryParams = mapOf("token" to token),
         )
     }
 }

@@ -1,4 +1,4 @@
-package com.evandhardspace.auth.presentation.register.success
+package com.evandhardspace.auth.presentation.register_success
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,7 +17,7 @@ import com.evandhardspace.core.designsystem.component.brand.ChatAppSuccessIcon
 import com.evandhardspace.core.designsystem.component.button.ChatAppButton
 import com.evandhardspace.core.designsystem.component.button.ChatAppButtonStyle
 import com.evandhardspace.core.designsystem.component.layout.ChatAppAdaptiveResultLayout
-import com.evandhardspace.core.designsystem.component.layout.ChatAppSimpleSuccessLayout
+import com.evandhardspace.core.designsystem.component.layout.ChatAppSimpleResultLayout
 import com.evandhardspace.core.designsystem.component.snackbar.LocalSnackbarHostState
 import com.evandhardspace.core.designsystem.theme.ChatAppPreview
 import com.evandhardspace.core.presentation.util.ObserveAsEffect
@@ -26,7 +26,7 @@ import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
-fun RegisterSuccessScreen(
+internal fun RegisterSuccessScreen(
     modifier: Modifier = Modifier.fillMaxSize(),
     viewModel: RegisterSuccessViewModel = koinViewModel(),
 ) {
@@ -51,13 +51,13 @@ fun RegisterSuccessScreen(
 }
 
 @Composable
-fun RegisterSuccessContent(
+internal fun RegisterSuccessContent(
     state: RegisterSuccessState,
     onAction: (RegisterSuccessAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     ChatAppAdaptiveResultLayout(modifier) {
-        ChatAppSimpleSuccessLayout(
+        ChatAppSimpleResultLayout(
             title = stringResource(Res.string.account_successfully_created),
             description = stringResource(
                 Res.string.verification_email_sent_to_x,
@@ -67,7 +67,7 @@ fun RegisterSuccessContent(
             primaryButton = {
                 ChatAppButton(
                     text = stringResource(Res.string.login),
-                    onClick = { onAction(RegisterSuccessAction.OnLoginClick) },
+                    onClick = { onAction(RegisterSuccessAction.OnLogin) },
                     modifier = Modifier
                         .fillMaxWidth(),
                 )
@@ -75,7 +75,7 @@ fun RegisterSuccessContent(
             secondaryButton = {
                 ChatAppButton(
                     text = stringResource(Res.string.resend_verification_email),
-                    onClick = { onAction(RegisterSuccessAction.OnResendVerificationEmailClick) },
+                    onClick = { onAction(RegisterSuccessAction.OnResendVerificationEmail) },
                     modifier = Modifier
                         .fillMaxWidth(),
                     enabled = !state.isResendingVerificationEmail,

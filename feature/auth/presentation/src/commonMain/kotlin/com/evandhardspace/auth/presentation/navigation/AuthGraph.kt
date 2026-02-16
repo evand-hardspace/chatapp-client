@@ -5,7 +5,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.evandhardspace.auth.presentation.register.RegisterScreen
-import com.evandhardspace.auth.presentation.register.success.RegisterSuccessScreen
+import com.evandhardspace.auth.presentation.register_success.RegisterSuccessScreen
 
 fun NavGraphBuilder.authGraph(
     navController: NavController,

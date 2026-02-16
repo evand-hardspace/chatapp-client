@@ -1,4 +1,4 @@
-package com.evandhardspace.auth.presentation.register.success
+package com.evandhardspace.auth.presentation.register_success
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -15,12 +15,12 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class RegisterSuccessViewModel(
+internal class RegisterSuccessViewModel(
     private val authService: AuthService,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
-    private val email: String = requireNotNull(savedStateHandle.get<String>(EMAIL_ARG_KEY))
+    private val email: String = requireNotNull(savedStateHandle[EMAIL_ARG_KEY])
 
     private val _effects = Channel<RegisterSuccessEffect>()
     val effects = _effects.receiveAsFlow()
@@ -33,8 +33,8 @@ class RegisterSuccessViewModel(
 
     fun onAction(action: RegisterSuccessAction) {
         when (action) {
-            is RegisterSuccessAction.OnLoginClick -> Unit // TODO
-            is RegisterSuccessAction.OnResendVerificationEmailClick -> resendVerification()
+            is RegisterSuccessAction.OnLogin -> Unit // TODO
+            is RegisterSuccessAction.OnResendVerificationEmail -> resendVerification()
         }
     }
 

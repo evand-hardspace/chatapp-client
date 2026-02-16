@@ -22,7 +22,7 @@ import com.evandhardspace.core.designsystem.theme.extended
 import com.evandhardspace.core.designsystem.theme.paddings
 
 @Composable
-fun ChatAppSimpleSuccessLayout(
+fun ChatAppSimpleResultLayout(
     title: String,
     description: String,
     icon: @Composable () -> Unit,
@@ -82,9 +82,9 @@ fun ChatAppSimpleSuccessLayout(
 
 @ThemedPreview
 @Composable
-fun ChatAppSimpleSuccessLayoutPreview() {
+fun ChatAppSimpleResultLayoutPreview() {
     ChatAppPreview(paddings = false) {
-        ChatAppSimpleSuccessLayout(
+        ChatAppSimpleResultLayout(
             title = "Hello world!",
             description = "Test description",
             icon = {
