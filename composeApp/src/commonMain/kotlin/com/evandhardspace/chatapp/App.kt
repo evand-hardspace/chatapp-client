@@ -1,12 +1,13 @@
 package com.evandhardspace.chatapp
 
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.rememberNavController
+import com.evandhardspace.chatapp.navigation.DeeplinkListener
 import com.evandhardspace.chatapp.navigation.NavigationRoot
 import com.evandhardspace.core.designsystem.component.layout.ChatAppSnackbarScaffold
 import com.evandhardspace.core.designsystem.component.snackbar.ChatAppSnackbarHostState
@@ -23,13 +24,17 @@ fun App(): Unit = ChatAppTheme {
             scope = coroutineScope,
         )
     }
+
+    val navController = rememberNavController()
+    DeeplinkListener(navController)
+
     CompositionLocalProvider(
         LocalSnackbarHostState provides snackbarHostState,
     ) {
         ChatAppSnackbarScaffold(
             snackbarHostState = snackbarHostState,
         ) {
-            NavigationRoot()
+            NavigationRoot(navController)
         }
     }
 }

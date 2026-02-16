@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.evandhardspace.auth.presentation.email_verifiaction.EmailVerificationState.VerificationState
+import com.evandhardspace.auth.presentation.navigation.AuthGraphRoute.EmailVerification
 import com.evandhardspace.core.domain.auth.AuthService
 import com.evandhardspace.core.domain.util.onFailure
 import com.evandhardspace.core.domain.util.onSuccess
@@ -17,7 +18,7 @@ internal class EmailVerificationViewModel(
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
-    private val token: String? = savedStateHandle["token"] // todo: replace key
+    private val token: String? = savedStateHandle[EmailVerification.TOKEN_ARG_KEY]
 
     private val _state = MutableStateFlow(EmailVerificationState())
     val state = _state.asStateFlow()

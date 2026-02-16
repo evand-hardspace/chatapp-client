@@ -2,3 +2,4 @@
 2. Substitute dev baseurl with localhost.
 3. Check material colors.
 4. Fix multiple pasting on iOS
+5. Change deeplink values

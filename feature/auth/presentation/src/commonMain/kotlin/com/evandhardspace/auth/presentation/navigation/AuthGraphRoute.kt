@@ -16,7 +16,7 @@ sealed interface AuthGraphRoute {
     @Serializable
     data class RegisterSuccess(
         @SerialName(EMAIL_ARG_KEY)
-        val email: String
+        val email: String,
     ): AuthGraphRoute {
         companion object {
             const val EMAIL_ARG_KEY = "email"
@@ -27,5 +27,12 @@ sealed interface AuthGraphRoute {
     data object ResetPassword: AuthGraphRoute
 
     @Serializable
-    data class EmailVerification(val token: String): AuthGraphRoute
+    data class EmailVerification(
+        @SerialName(TOKEN_ARG_KEY)
+        val token: String,
+    ): AuthGraphRoute {
+        companion object {
+            const val TOKEN_ARG_KEY = "token"
+        }
+    }
 }
