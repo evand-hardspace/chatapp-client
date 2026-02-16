@@ -2,8 +2,15 @@ package com.evandhardspace.core.domain.auth
 
 import com.evandhardspace.core.domain.util.DataError
 import com.evandhardspace.core.domain.util.EmptyResult
+import com.evandhardspace.core.domain.util.Result
 
 interface AuthService {
+
+    suspend fun login(
+        email: String,
+        password: String,
+    ): Result<DataError.Remote, AuthInfo>
+
     suspend fun register(
         email: String,
         username: String,

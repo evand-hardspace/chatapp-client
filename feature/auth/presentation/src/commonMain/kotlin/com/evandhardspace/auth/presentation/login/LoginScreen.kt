@@ -35,6 +35,7 @@ import com.evandhardspace.core.designsystem.component.textfield.ChatAppPasswordT
 import com.evandhardspace.core.designsystem.component.textfield.ChatAppTextField
 import com.evandhardspace.core.designsystem.theme.ChatAppPreview
 import com.evandhardspace.core.designsystem.theme.paddings
+import com.evandhardspace.core.presentation.util.ObserveAsEffect
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -46,6 +47,12 @@ internal fun LoginScreen(
     onCreateAccountClick: () -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+
+    ObserveAsEffect(viewModel.effects) { effect ->
+        when(effect) {
+            LoginEffect.Success -> onLoginSuccess()
+        }
+    }
 
     LoginContent(
         state = state,
@@ -77,6 +84,8 @@ internal fun LoginContent(
                 .fillMaxWidth(),
             state = state.emailTextFieldState,
             placeholder = stringResource(Res.string.email_placeholder),
+            supportingText = state.emailError?.asComposableString(),
+            isError = state.isEmailValid.not(),
             keyboardType = KeyboardType.Email,
             singleLine = true,
             title = stringResource(Res.string.email),
@@ -109,11 +118,9 @@ internal fun LoginContent(
 
         ChatAppButton(
             text = stringResource(Res.string.login),
-            onClick = {
-                onAction(LoginAction.OnLogin)
-            },
+            onClick = { onAction(LoginAction.OnLogin) },
             enabled = state.canLogin,
-            isLoading = state.isLoggingIn,
+            isLoading = state.isLoading,
             modifier = Modifier
                 .fillMaxWidth()
         )

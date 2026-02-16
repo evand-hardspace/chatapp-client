@@ -1,4 +1,4 @@
-package com.evandhardspace.core.data.auth.dto.request
+package com.evandhardspace.core.data.dto.request
 
 import kotlinx.serialization.Serializable
 

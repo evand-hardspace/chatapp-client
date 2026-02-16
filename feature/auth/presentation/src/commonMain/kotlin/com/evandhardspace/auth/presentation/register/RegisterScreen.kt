@@ -77,7 +77,7 @@ internal fun RegisterContent(
             title = stringResource(Res.string.username),
             supportingText = state.usernameError?.asComposableString()
                 ?: stringResource(Res.string.username_hint),
-            isError = state.usernameError != null,
+            isError = state.isUsernameValid.not(),
             onFocusChanged = { isFocused ->
                 onAction(RegisterAction.OnInputTextFocusGain)
             }
@@ -88,7 +88,7 @@ internal fun RegisterContent(
             placeholder = stringResource(Res.string.email_placeholder),
             title = stringResource(Res.string.email),
             supportingText = state.emailError?.asComposableString(),
-            isError = state.emailError != null,
+            isError = state.isEmailValid.not(),
             onFocusChanged = { isFocused ->
                 onAction(RegisterAction.OnInputTextFocusGain)
             }
@@ -100,7 +100,7 @@ internal fun RegisterContent(
             title = stringResource(Res.string.password),
             supportingText = state.passwordError?.asComposableString()
                 ?: stringResource(Res.string.password_hint),
-            isError = state.passwordError != null,
+            isError = state.isPasswordValid.not(),
             onFocusChanged = { isFocused ->
                 onAction(RegisterAction.OnInputTextFocusGain)
             },

@@ -19,7 +19,7 @@ internal val authDomainModule = module {
 val authPresentationModule = module {
     includes(authDomainModule)
     viewModelOf(::RegisterViewModel)
+    viewModelOf(::LoginViewModel)
     viewModelOf(::RegisterSuccessViewModel)
     viewModelOf(::EmailVerificationViewModel)
-    viewModelOf(::LoginViewModel)
 }

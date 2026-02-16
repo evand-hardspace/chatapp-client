@@ -1,7 +1,7 @@
 package com.evandhardspace.core.domain.validation.rule.password
 
 interface PasswordValidator {
-    fun validate(password: CharSequence): Boolean
+    fun validate(password: String): Boolean
 }
 
 fun PasswordValidator(): PasswordValidator =
@@ -10,6 +10,6 @@ fun PasswordValidator(): PasswordValidator =
 internal class DefaultPasswordValidator : PasswordValidator {
     private val rule = defaultPasswordValidationRule()
 
-    override fun validate(password: CharSequence): Boolean =
+    override fun validate(password: String): Boolean =
         rule.validate(password)
 }
