@@ -6,6 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.evandhardspace.auth.presentation.navigation.AuthGraphRoute
 import com.evandhardspace.auth.presentation.navigation.authGraph
+import com.evandhardspace.core.data.logging.KermitLogger
 
 @Composable
 fun NavigationRoot(

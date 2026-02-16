@@ -8,5 +8,5 @@ data class UserResource(
     val email: String,
     val username: String,
     val hasVerifiedEmail: Boolean,
-    val profilePictureUrl: String?,
+    val profilePictureUrl: String? = null,
 )
