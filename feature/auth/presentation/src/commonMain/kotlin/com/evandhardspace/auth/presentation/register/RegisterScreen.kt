@@ -43,9 +43,9 @@ fun RegisterScreen(
     val state by viewModel.state.collectAsStateWithLifecycle()
     val snackbarHostState = LocalSnackbarHostState.current
 
-    ObserveAsEffect(viewModel.events) { event ->
-        when (event) {
-            is RegisterEffect.Success -> onRegisterSuccess(event.email)
+    ObserveAsEffect(viewModel.effects) { effect ->
+        when (effect) {
+            is RegisterEffect.Success -> onRegisterSuccess(effect.email)
         }
     }
 

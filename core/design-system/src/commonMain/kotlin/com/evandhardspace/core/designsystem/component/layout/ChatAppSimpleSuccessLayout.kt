@@ -28,6 +28,7 @@ fun ChatAppSimpleSuccessLayout(
     icon: @Composable () -> Unit,
     primaryButton: @Composable () -> Unit,
     secondaryButton: @Composable (() -> Unit)? = null,
+    secondaryError: String? = null,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -62,6 +63,16 @@ fun ChatAppSimpleSuccessLayout(
             if(secondaryButton != null) {
                 Spacer(modifier = Modifier.height(MaterialTheme.paddings.half))
                 secondaryButton()
+                if(secondaryError != null) {
+                    Spacer(modifier = Modifier.height(MaterialTheme.paddings.quarter))
+                    Text(
+                        text = secondaryError,
+                        modifier = Modifier.fillMaxWidth(),
+                        textAlign = TextAlign.Center,
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.error,
+                    )
+                }
             }
 
             Spacer(modifier = Modifier.height(MaterialTheme.paddings.half))

@@ -14,7 +14,7 @@ fun <T> ObserveAsEffect(
     flow: Flow<T>,
     key1: Any? = null,
     key2: Any? = null,
-    onEffect: (T) -> Unit
+    onEffect: suspend (T) -> Unit,
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
     LaunchedEffect(lifecycleOwner, key1, key2) {

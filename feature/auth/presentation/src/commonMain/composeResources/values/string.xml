@@ -15,6 +15,7 @@
     <string name="error_invalid_email">This is not a valid email</string>
     <string name="error_invalid_username">The username must be between 3 and 20 characters</string>
     <string name="resend_verification_email">Resend verification email</string>
+    <string name="successfully_resent_verification_email">Successfully resent verification email</string>
     <string name="account_successfully_created">Chatapp account successfully created!</string>
     <string name="verification_email_sent_to_x">We've sent a verification email to %1$s</string>
 </resources>

@@ -10,6 +10,7 @@ import chatapp.feature.auth.presentation.generated.resources.Res
 import chatapp.feature.auth.presentation.generated.resources.account_successfully_created
 import chatapp.feature.auth.presentation.generated.resources.login
 import chatapp.feature.auth.presentation.generated.resources.resend_verification_email
+import chatapp.feature.auth.presentation.generated.resources.successfully_resent_verification_email
 import chatapp.feature.auth.presentation.generated.resources.verification_email_sent_to_x
 import com.evandhardspace.core.designsystem.annotations.ThemedPreview
 import com.evandhardspace.core.designsystem.component.brand.ChatAppSuccessIcon
@@ -17,7 +18,10 @@ import com.evandhardspace.core.designsystem.component.button.ChatAppButton
 import com.evandhardspace.core.designsystem.component.button.ChatAppButtonStyle
 import com.evandhardspace.core.designsystem.component.layout.ChatAppAdaptiveResultLayout
 import com.evandhardspace.core.designsystem.component.layout.ChatAppSimpleSuccessLayout
+import com.evandhardspace.core.designsystem.component.snackbar.LocalSnackbarHostState
 import com.evandhardspace.core.designsystem.theme.ChatAppPreview
+import com.evandhardspace.core.presentation.util.ObserveAsEffect
+import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -27,6 +31,17 @@ fun RegisterSuccessScreen(
     viewModel: RegisterSuccessViewModel = koinViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val snackbarHostState = LocalSnackbarHostState.current
+
+    ObserveAsEffect(viewModel.effects) { effect ->
+        when (effect) {
+            is RegisterSuccessEffect.ResendVerificationEmailSuccess -> {
+                snackbarHostState.show(
+                    message = getString(Res.string.successfully_resent_verification_email),
+                )
+            }
+        }
+    }
 
     RegisterSuccessContent(
         modifier = modifier,
@@ -67,7 +82,8 @@ fun RegisterSuccessContent(
                     isLoading = state.isResendingVerificationEmail,
                     style = ChatAppButtonStyle.Secondary,
                 )
-            }
+            },
+            secondaryError = state.resendVerificationError?.asComposableString(),
         )
     }
 }

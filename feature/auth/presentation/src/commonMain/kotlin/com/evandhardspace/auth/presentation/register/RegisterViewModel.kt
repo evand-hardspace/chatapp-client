@@ -34,8 +34,8 @@ class RegisterViewModel(
     private val authService: AuthService,
 ) : ViewModel() {
 
-    private val _events = Channel<RegisterEffect>()
-    val events = _events.receiveAsFlow()
+    private val _effects = Channel<RegisterEffect>()
+    val effects = _effects.receiveAsFlow()
 
     private val _state = MutableStateFlow(RegisterState())
     val state = _state.asStateFlow()
@@ -117,7 +117,7 @@ class RegisterViewModel(
                             isRegistering = false
                         )
                     }
-                    _events.send(RegisterEffect.Success(email))
+                    _effects.send(RegisterEffect.Success(email))
                 }
                 .onFailure { error ->
                     val registrationError = when (error) {
