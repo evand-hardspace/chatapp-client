@@ -1,6 +1,6 @@
 package com.evandhardspace.core.data.auth
 
-import com.evandhardspace.core.data.dto.AuthInfoResource
+import com.evandhardspace.core.data.dto.AuthInfoDto
 import com.evandhardspace.core.data.dto.request.EmailRequest
 import com.evandhardspace.core.data.dto.request.LoginRequest
 import com.evandhardspace.core.data.dto.request.RegisterRequest
@@ -50,11 +50,11 @@ internal class KtorAuthService(
     override suspend fun login(
         email: String,
         password: String,
-    ): Result<DataError.Remote, AuthInfo> = client.post<LoginRequest, AuthInfoResource>(
+    ): Result<DataError.Remote, AuthInfo> = client.post<LoginRequest, AuthInfoDto>(
         route = "/auth/login",
         body = LoginRequest(
             email = email,
             password = password,
         ),
-    ).map(AuthInfoResource::toDomain)
+    ).map(AuthInfoDto::toDomain)
 }

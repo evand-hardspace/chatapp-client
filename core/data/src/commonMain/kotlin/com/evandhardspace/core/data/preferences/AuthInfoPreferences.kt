@@ -1,10 +1,10 @@
-package com.evandhardspace.core.data.dto
+package com.evandhardspace.core.data.preferences
 
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class AuthInfoResource(
+data class AuthInfoPreferences(
     val accessToken: String,
     val refreshToken: String,
-    val user: UserResource,
+    val user: UserPreferences,
 )

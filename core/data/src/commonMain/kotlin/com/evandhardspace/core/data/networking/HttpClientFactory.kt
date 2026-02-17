@@ -19,13 +19,12 @@ import kotlinx.serialization.json.Json
 
 class HttpClientFactory(
     private val appLogger: ChatAppLogger,
+    private val json: Json,
 ) {
     fun create(engine: HttpClientEngine): HttpClient = HttpClient(engine) {
         install(ContentNegotiation) {
             json(
-                json = Json {
-                    ignoreUnknownKeys = true
-                }
+                json = json,
             )
         }
         install(HttpTimeout) {
