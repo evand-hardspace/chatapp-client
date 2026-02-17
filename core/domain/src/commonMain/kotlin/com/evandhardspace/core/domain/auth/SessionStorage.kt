@@ -7,6 +7,6 @@ interface SessionStorage {
 }
 
 interface MutableSessionStorage: SessionStorage {
-    suspend fun saveAuthInfo(info: AuthInfo)
+    suspend fun saveAuthInfo(info: AuthInfo): AuthInfo
     suspend fun clear()
 }

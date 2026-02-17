@@ -3,5 +3,6 @@
 3. Check material colors.
 4. Fix multiple pasting on iOS
 5. Change deeplink values
-6. Migrate from datastore preferences to classes
+6. Migrate from datastore preferences to custom serialization
 7. Added datastore encryption
+8. Extract endpoint strings to one place

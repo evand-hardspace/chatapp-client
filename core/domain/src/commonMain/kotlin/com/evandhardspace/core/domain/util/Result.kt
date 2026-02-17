@@ -29,11 +29,11 @@ inline fun <T, E1 : DomainError, E2 : DomainError> Result<E1, T>.mapFailure(
 inline fun <T, E : DomainError> Result<E, T>.onSuccess(
     action: (T) -> Unit,
 ): Result<E, T> = when (this) {
-    is Result.Failure -> this
     is Result.Success -> {
         action(this.data)
         this
     }
+    is Result.Failure -> this
 }
 
 inline fun <T, E : DomainError> Result<E, T>.onFailure(
@@ -47,16 +47,24 @@ inline fun <T, E : DomainError> Result<E, T>.onFailure(
     is Result.Success -> this
 }
 
+inline fun <T, E : DomainError, R> Result<E, T>.fold(
+    onSuccess: (T) -> R,
+    onFailure: (E) -> R,
+): R = when (this) {
+    is Result.Success -> onSuccess(data)
+    is Result.Failure -> onFailure(error)
+}
+
 fun <T, E : DomainError> Result<E, T>.getOrNull(): T? = when (this) {
-    is Result.Failure<E> -> null
     is Result.Success<T> -> data
+    is Result.Failure<E> -> null
 }
 
 fun <T, E : DomainError> Result<E, T>.getOrDefault(
     defaultValue: (E) -> T,
 ): T? = when (this) {
-    is Result.Failure<E> -> defaultValue(error)
     is Result.Success<T> -> data
+    is Result.Failure<E> -> defaultValue(error)
 }
 
 fun <E : DomainError, T> Result<E, T>.asEmptyResult(): EmptyResult<E> = map { }
