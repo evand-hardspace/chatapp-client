@@ -27,7 +27,11 @@ val coreDataModule = module {
         }
     }
     single {
-        HttpClientFactory(get(), get()).create(get())
+        HttpClientFactory(
+            appLogger = get(),
+            sessionStorage = get(),
+            json = get(),
+        ).create(get())
     }
     singleOf(::KtorAuthService) bind AuthService::class
     singleOf(::DataStoreSessionStorage) binds arrayOf(
