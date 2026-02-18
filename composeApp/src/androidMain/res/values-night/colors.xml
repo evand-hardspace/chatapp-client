@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="background">#FF101C28</color>
+    <color name="foreground_logo_outline">#FFFFFF</color>
+    <color name="foreground_logo_primary">#FF19BA87</color>
+</resources>
