@@ -13,6 +13,12 @@ internal fun AuthInfoDto.toDomain(): AuthInfo = AuthInfo(
     user = user.toDomain(),
 )
 
+internal fun AuthInfoPreferences.toDomain(): AuthInfo = AuthInfo(
+    accessToken = accessToken,
+    refreshToken = refreshToken,
+    user = user.toDomain(),
+)
+
 internal fun AuthInfo.toPreferences(): AuthInfoPreferences = AuthInfoPreferences(
     accessToken = accessToken,
     refreshToken = refreshToken,
@@ -20,6 +26,14 @@ internal fun AuthInfo.toPreferences(): AuthInfoPreferences = AuthInfoPreferences
 )
 
 internal fun UserDto.toDomain(): User = User(
+    id = id,
+    email = email,
+    username = username,
+    hasVerifiedEmail = hasVerifiedEmail,
+    profilePictureUrl = profilePictureUrl,
+)
+
+internal fun UserPreferences.toDomain(): User = User(
     id = id,
     email = email,
     username = username,

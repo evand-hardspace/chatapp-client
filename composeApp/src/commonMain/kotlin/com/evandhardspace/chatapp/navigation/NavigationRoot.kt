@@ -8,16 +8,18 @@ import com.evandhardspace.auth.presentation.navigation.AuthNavGraphRoute
 import com.evandhardspace.auth.presentation.navigation.authNavGraph
 import com.evandhardspace.chat.presentation.navigation.ChatNavGraphRoute
 import com.evandhardspace.chat.presentation.navigation.chatNavGraph
+import com.evandhardspace.core.presentation.navigation.NavRoute
 
 @Composable
 fun NavigationRoot(
     navController: NavHostController,
+    startDestination: NavRoute,
     modifier: Modifier = Modifier,
 ) {
     NavHost(
         modifier = modifier,
         navController = navController,
-        startDestination = AuthNavGraphRoute.Root,
+        startDestination = startDestination,
     ) {
         authNavGraph(
             navController,

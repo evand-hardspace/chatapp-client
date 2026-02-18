@@ -4,7 +4,9 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
+import com.evandhardspace.core.data.mapper.toDomain
 import com.evandhardspace.core.data.mapper.toPreferences
+import com.evandhardspace.core.data.preferences.AuthInfoPreferences
 import com.evandhardspace.core.domain.auth.AuthInfo
 import com.evandhardspace.core.domain.auth.MutableSessionStorage
 import kotlinx.coroutines.flow.Flow
@@ -21,11 +23,10 @@ class DataStoreSessionStorage(
     private val json: Json,
 ) : MutableSessionStorage {
 
-    override val authInfo: Flow<AuthInfo?>
-        get() = dataStore.data.map { prefs ->
-            val authInfo = prefs[AuthInfoKey] ?: return@map null
-            json.decodeFromString(authInfo)
-        }
+    override fun authInfoFlow(): Flow<AuthInfo?> = dataStore.data.map { prefs ->
+        val authInfo = prefs[AuthInfoKey] ?: return@map null
+        json.decodeFromString<AuthInfoPreferences>(authInfo).toDomain()
+    }
 
     override suspend fun saveAuthInfo(info: AuthInfo): AuthInfo {
         val serialized = json.encodeToString(info.toPreferences())
@@ -33,7 +34,7 @@ class DataStoreSessionStorage(
         dataStore.edit { pref ->
             pref[AuthInfoKey] = serialized
         }
-        return authInfo.filterNotNull().first()
+        return authInfoFlow().filterNotNull().first()
     }
 
     override suspend fun clear() {

@@ -3,20 +3,38 @@ package com.evandhardspace.chatapp
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.rememberNavController
+import com.evandhardspace.auth.presentation.navigation.AuthNavGraphRoute
+import com.evandhardspace.chat.presentation.navigation.ChatNavGraphRoute
 import com.evandhardspace.chatapp.navigation.DeeplinkListener
 import com.evandhardspace.chatapp.navigation.NavigationRoot
+import com.evandhardspace.core.designsystem.annotations.ThemedPreview
 import com.evandhardspace.core.designsystem.component.layout.ChatAppSnackbarScaffold
 import com.evandhardspace.core.designsystem.component.snackbar.ChatAppSnackbarHostState
 import com.evandhardspace.core.designsystem.component.snackbar.LocalSnackbarHostState
 import com.evandhardspace.core.designsystem.theme.ChatAppTheme
+import org.koin.compose.viewmodel.koinViewModel
 
+@ThemedPreview
 @Composable
-@Preview
-fun App(): Unit = ChatAppTheme {
+fun App(
+    onAuthenticationChecked: () -> Unit = {},
+    viewModel: MainViewModel = koinViewModel(),
+): Unit = ChatAppTheme {
+    val state by viewModel.state.collectAsStateWithLifecycle()
+
+    LaunchedEffect(state) {
+        val currentState = state
+        if (currentState !is MainState.Loading) {
+            onAuthenticationChecked()
+        }
+    }
+
     val coroutineScope = rememberCoroutineScope()
     val snackbarHostState = remember {
         ChatAppSnackbarHostState(
@@ -34,7 +52,15 @@ fun App(): Unit = ChatAppTheme {
         ChatAppSnackbarScaffold(
             snackbarHostState = snackbarHostState,
         ) {
-            NavigationRoot(navController)
+            when (val currentState = state) {
+                is MainState.Loaded -> NavigationRoot(
+                    navController = navController,
+                    startDestination = if (currentState.isLoggedIn) ChatNavGraphRoute.Root
+                    else AuthNavGraphRoute.Root,
+                )
+
+                is MainState.Loading -> Unit // TODO(9): Add loader
+            }
         }
     }
 }

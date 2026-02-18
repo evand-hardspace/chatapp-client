@@ -1,9 +1,10 @@
 package com.evandhardspace.auth.presentation.navigation
 
+import com.evandhardspace.core.presentation.navigation.NavRoute
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-sealed interface AuthNavGraphRoute {
+sealed interface AuthNavGraphRoute: NavRoute {
     @Serializable
     data object Root : AuthNavGraphRoute
 

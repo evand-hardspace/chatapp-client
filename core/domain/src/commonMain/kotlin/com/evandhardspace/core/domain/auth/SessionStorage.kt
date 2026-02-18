@@ -3,7 +3,7 @@ package com.evandhardspace.core.domain.auth
 import kotlinx.coroutines.flow.Flow
 
 interface SessionStorage {
-    val authInfo: Flow<AuthInfo?>
+    fun authInfoFlow(): Flow<AuthInfo?>
 }
 
 interface MutableSessionStorage: SessionStorage {

@@ -61,7 +61,7 @@ class HttpClientFactory(
         install(Auth) {
             bearer {
                 loadTokens {
-                    sessionStorage.authInfo.firstOrNull()?.let {
+                    sessionStorage.authInfoFlow().firstOrNull()?.let {
                         BearerTokens(
                             accessToken = it.accessToken,
                             refreshToken = it.refreshToken,
@@ -71,7 +71,7 @@ class HttpClientFactory(
                 refreshTokens {
                     if ("auth/" in response.request.url.encodedPath) return@refreshTokens null
 
-                    val authInfo = sessionStorage.authInfo.firstOrNull()
+                    val authInfo = sessionStorage.authInfoFlow().firstOrNull()
 
                     if (authInfo?.refreshToken.isNullOrBlank()) {
                         sessionStorage.clear()
