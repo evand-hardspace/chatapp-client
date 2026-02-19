@@ -9,7 +9,7 @@ interface AuthService {
     suspend fun login(
         email: String,
         password: String,
-    ): Result<DataError.Remote, AuthInfo>
+    ): Result<DataError.Remote, AuthState.Authorized>
 
     suspend fun register(
         email: String,

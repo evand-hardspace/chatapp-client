@@ -9,9 +9,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.evandhardspace.core.designsystem.annotations.ThemedPreview
 import com.evandhardspace.core.designsystem.theme.ChatAppPreview
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun ChatListScreen(
+    viewModel: ChatListViewModel = koinViewModel(),
     modifier: Modifier = Modifier.fillMaxSize(),
 ) {
     Box(

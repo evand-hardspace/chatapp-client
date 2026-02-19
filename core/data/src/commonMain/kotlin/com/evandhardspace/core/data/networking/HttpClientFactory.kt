@@ -4,7 +4,8 @@ import com.evandhardspace.core.data.BuildKonfig
 import com.evandhardspace.core.data.dto.AuthInfoDto
 import com.evandhardspace.core.data.dto.request.RefreshRequest
 import com.evandhardspace.core.data.mapper.toDomain
-import com.evandhardspace.core.domain.auth.MutableSessionStorage
+import com.evandhardspace.core.domain.auth.AuthState
+import com.evandhardspace.core.domain.auth.MutableSessionRepository
 import com.evandhardspace.core.domain.logging.ChatAppLogger
 import com.evandhardspace.core.domain.util.fold
 import io.ktor.client.HttpClient
@@ -24,12 +25,13 @@ import io.ktor.client.statement.request
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.serialization.json.Json
 
 class HttpClientFactory(
     private val appLogger: ChatAppLogger,
-    private val sessionStorage: MutableSessionStorage,
+    private val sessionRepository: MutableSessionRepository,
     private val json: Json,
 ) {
     fun create(engine: HttpClientEngine): HttpClient = HttpClient(engine) {
@@ -61,7 +63,7 @@ class HttpClientFactory(
         install(Auth) {
             bearer {
                 loadTokens {
-                    sessionStorage.authInfoFlow().firstOrNull()?.let {
+                    (sessionRepository.authState.first() as? AuthState.Authorized)?.let {
                         BearerTokens(
                             accessToken = it.accessToken,
                             refreshToken = it.refreshToken,
@@ -71,32 +73,31 @@ class HttpClientFactory(
                 refreshTokens {
                     if ("auth/" in response.request.url.encodedPath) return@refreshTokens null
 
-                    val authInfo = sessionStorage.authInfoFlow().firstOrNull()
+                    val authState: AuthState? = sessionRepository.authState.firstOrNull()
 
-                    if (authInfo?.refreshToken.isNullOrBlank()) {
-                        sessionStorage.clear()
+                    if (authState == null || authState !is AuthState.Authorized) {
+                        sessionRepository.logout()
                         return@refreshTokens null
                     }
 
                     client.post<RefreshRequest, AuthInfoDto>(
                         route = "/auth/refresh", // TODO(8),
                         body = RefreshRequest(
-                            refreshToken = authInfo.refreshToken,
+                            refreshToken = authState.refreshToken,
                         ),
                     ) { markAsRefreshTokenRequest() }.fold(
                         onSuccess = { newAuthInfo ->
-                            val savedAuthInfo = sessionStorage.saveAuthInfo(newAuthInfo.toDomain())
+                            val savedAuthInfo = sessionRepository.saveAuthInfo(newAuthInfo.toDomain())
                             BearerTokens(
                                 savedAuthInfo.accessToken,
                                 savedAuthInfo.refreshToken,
                             )
                         },
                         onFailure = {
-                            sessionStorage.clear()
+                            sessionRepository.logout()
                             null
                         },
                     )
-
                 }
             }
         }

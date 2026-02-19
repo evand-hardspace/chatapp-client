@@ -7,8 +7,8 @@ import com.evandhardspace.core.data.dto.request.RegisterRequest
 import com.evandhardspace.core.data.mapper.toDomain
 import com.evandhardspace.core.data.networking.get
 import com.evandhardspace.core.data.networking.post
-import com.evandhardspace.core.domain.auth.AuthInfo
 import com.evandhardspace.core.domain.auth.AuthService
+import com.evandhardspace.core.domain.auth.AuthState
 import com.evandhardspace.core.domain.util.DataError
 import com.evandhardspace.core.domain.util.EmptyResult
 import com.evandhardspace.core.domain.util.Result
@@ -50,7 +50,7 @@ internal class KtorAuthService(
     override suspend fun login(
         email: String,
         password: String,
-    ): Result<DataError.Remote, AuthInfo> = client.post<LoginRequest, AuthInfoDto>(
+    ): Result<DataError.Remote, AuthState.Authorized> = client.post<LoginRequest, AuthInfoDto>(
         route = "/auth/login",
         body = LoginRequest(
             email = email,

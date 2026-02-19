@@ -18,6 +18,7 @@ import com.evandhardspace.core.designsystem.component.layout.ChatAppSnackbarScaf
 import com.evandhardspace.core.designsystem.component.snackbar.ChatAppSnackbarHostState
 import com.evandhardspace.core.designsystem.component.snackbar.LocalSnackbarHostState
 import com.evandhardspace.core.designsystem.theme.ChatAppTheme
+import com.evandhardspace.core.presentation.util.OnEffect
 import org.koin.compose.viewmodel.koinViewModel
 
 @ThemedPreview
@@ -26,15 +27,6 @@ fun App(
     onAuthenticationChecked: () -> Unit = {},
     viewModel: MainViewModel = koinViewModel(),
 ): Unit = ChatAppTheme {
-    val state by viewModel.state.collectAsStateWithLifecycle()
-
-    LaunchedEffect(state) {
-        val currentState = state
-        if (currentState !is MainState.Loading) {
-            onAuthenticationChecked()
-        }
-    }
-
     val coroutineScope = rememberCoroutineScope()
     val snackbarHostState = remember {
         ChatAppSnackbarHostState(
@@ -45,6 +37,27 @@ fun App(
 
     val navController = rememberNavController()
     DeeplinkListener(navController)
+
+    val state by viewModel.state.collectAsStateWithLifecycle()
+
+    LaunchedEffect(state) {
+        val currentState = state
+        if (currentState !is MainState.Loading) {
+            onAuthenticationChecked()
+        }
+    }
+
+    OnEffect(viewModel.effects) { effect ->
+        when (effect) {
+            is MainEffect.LoggedOut -> {
+                navController.navigate(AuthNavGraphRoute.Root) {
+                    popUpTo(AuthNavGraphRoute.Root) {
+                        inclusive = false
+                    }
+                }
+            }
+        }
+    }
 
     CompositionLocalProvider(
         LocalSnackbarHostState provides snackbarHostState,

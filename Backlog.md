@@ -7,3 +7,4 @@
 7. Added datastore encryption
 8. Extract endpoint strings to one place
 9. All loader on main screen
+10. Provide correct app coroutine scope

@@ -30,7 +30,7 @@ import com.evandhardspace.core.designsystem.component.textfield.ChatAppPasswordT
 import com.evandhardspace.core.designsystem.component.textfield.ChatAppTextField
 import com.evandhardspace.core.designsystem.theme.ChatAppPreview
 import com.evandhardspace.core.designsystem.theme.paddings
-import com.evandhardspace.core.presentation.util.ObserveAsEffect
+import com.evandhardspace.core.presentation.util.OnEffect
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -44,7 +44,7 @@ internal fun RegisterScreen(
     val state by viewModel.state.collectAsStateWithLifecycle()
     val snackbarHostState = LocalSnackbarHostState.current
 
-    ObserveAsEffect(viewModel.effects) { effect ->
+    OnEffect(viewModel.effects) { effect ->
         when (effect) {
             is RegisterEffect.Success -> onRegisterSuccess(effect.email)
         }

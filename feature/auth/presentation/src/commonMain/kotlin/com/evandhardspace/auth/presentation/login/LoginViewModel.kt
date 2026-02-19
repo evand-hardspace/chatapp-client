@@ -10,7 +10,7 @@ import chatapp.feature.auth.presentation.generated.resources.error_invalid_email
 import chatapp.feature.auth.presentation.generated.resources.error_password_should_not_be_empty
 import com.evandhardspace.auth.domain.validation.EmailValidator
 import com.evandhardspace.core.domain.auth.AuthService
-import com.evandhardspace.core.domain.auth.MutableSessionStorage
+import com.evandhardspace.core.domain.auth.MutableSessionRepository
 import com.evandhardspace.core.domain.util.DataError
 import com.evandhardspace.core.domain.util.onFailure
 import com.evandhardspace.core.domain.util.onSuccess
@@ -29,7 +29,7 @@ import kotlinx.coroutines.launch
 internal class LoginViewModel(
     private val emailValidator: EmailValidator,
     private val authService: AuthService,
-    private val sessionRepository: MutableSessionStorage,
+    private val sessionRepository: MutableSessionRepository,
 ) : ViewModel() {
 
     private val _effects = Channel<LoginEffect>()

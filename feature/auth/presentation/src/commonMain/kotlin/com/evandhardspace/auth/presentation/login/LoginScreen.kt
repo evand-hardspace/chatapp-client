@@ -35,7 +35,7 @@ import com.evandhardspace.core.designsystem.component.textfield.ChatAppPasswordT
 import com.evandhardspace.core.designsystem.component.textfield.ChatAppTextField
 import com.evandhardspace.core.designsystem.theme.ChatAppPreview
 import com.evandhardspace.core.designsystem.theme.paddings
-import com.evandhardspace.core.presentation.util.ObserveAsEffect
+import com.evandhardspace.core.presentation.util.OnEffect
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -48,7 +48,7 @@ internal fun LoginScreen(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-    ObserveAsEffect(viewModel.effects) { effect ->
+    OnEffect(viewModel.effects) { effect ->
         when(effect) {
             LoginEffect.Success -> onLoginSuccess()
         }

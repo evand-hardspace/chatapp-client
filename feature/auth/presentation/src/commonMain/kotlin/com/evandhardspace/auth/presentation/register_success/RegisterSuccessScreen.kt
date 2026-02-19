@@ -20,7 +20,7 @@ import com.evandhardspace.core.designsystem.component.layout.ChatAppAdaptiveResu
 import com.evandhardspace.core.designsystem.component.layout.ChatAppSimpleResultLayout
 import com.evandhardspace.core.designsystem.component.snackbar.LocalSnackbarHostState
 import com.evandhardspace.core.designsystem.theme.ChatAppPreview
-import com.evandhardspace.core.presentation.util.ObserveAsEffect
+import com.evandhardspace.core.presentation.util.OnEffect
 import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -34,7 +34,7 @@ internal fun RegisterSuccessScreen(
     val state by viewModel.state.collectAsStateWithLifecycle()
     val snackbarHostState = LocalSnackbarHostState.current
 
-    ObserveAsEffect(viewModel.effects) { effect ->
+    OnEffect(viewModel.effects) { effect ->
         when (effect) {
             is RegisterSuccessEffect.ResendVerificationEmailSuccess -> {
                 snackbarHostState.show(
