@@ -39,6 +39,7 @@ fun ChatAppButton(
     isLoading: Boolean = false,
     leadingIcon: @Composable (() -> Unit)? = null,
 ) {
+    val enabled = if(isLoading) false else enabled
     val colors = when (style) {
         ChatAppButtonStyle.Primary -> ButtonDefaults.buttonColors(
             containerColor = MaterialTheme.colorScheme.primary,

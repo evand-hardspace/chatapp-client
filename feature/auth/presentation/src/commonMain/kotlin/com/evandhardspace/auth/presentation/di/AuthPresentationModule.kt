@@ -3,6 +3,7 @@ package com.evandhardspace.auth.presentation.di
 import com.evandhardspace.auth.domain.validation.EmailValidator
 import com.evandhardspace.auth.domain.validation.UsernameValidator
 import com.evandhardspace.auth.presentation.email_verifiaction.EmailVerificationViewModel
+import com.evandhardspace.auth.presentation.forgot_password.ForgotPasswordViewModel
 import com.evandhardspace.auth.presentation.login.LoginViewModel
 import com.evandhardspace.auth.presentation.register.RegisterViewModel
 import com.evandhardspace.auth.presentation.register_success.RegisterSuccessViewModel
@@ -22,4 +23,5 @@ val authPresentationModule = module {
     viewModelOf(::LoginViewModel)
     viewModelOf(::RegisterSuccessViewModel)
     viewModelOf(::EmailVerificationViewModel)
+    viewModelOf(::ForgotPasswordViewModel)
 }

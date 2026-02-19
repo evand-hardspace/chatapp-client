@@ -21,6 +21,7 @@
     <string name="verification_email_sent_to_x">We've sent a verification email to %1$s</string>
     <string name="verifying_account">Verifying account...</string>
     <string name="close">Close</string>
+    <string name="submit">Submit</string>
     <string name="email_verified_failed">Failed to verify your email</string>
     <string name="email_verified_failed_description">Unable to verify your email. Maybe the link is invalid or has expired.</string>
     <string name="email_verified_successfully">Email verified successfully!</string>
@@ -31,4 +32,5 @@
     <string name="already_have_account">Already have an account?</string>
     <string name="error_invalid_credentials">The email or password is incorrect</string>
     <string name="error_email_not_verified">Unable to login because your email isn't verified</string>
+    <string name="forgot_password_email_sent_successfully">We've successfully emailed you with a link to reset your password.</string>
 </resources>

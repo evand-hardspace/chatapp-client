@@ -7,7 +7,7 @@ import com.evandhardspace.core.data.dto.request.RegisterRequest
 import com.evandhardspace.core.data.mapper.toDomain
 import com.evandhardspace.core.data.networking.get
 import com.evandhardspace.core.data.networking.post
-import com.evandhardspace.core.domain.auth.AuthService
+import com.evandhardspace.core.domain.auth.AuthRepository
 import com.evandhardspace.core.domain.auth.AuthState
 import com.evandhardspace.core.domain.util.DataError
 import com.evandhardspace.core.domain.util.EmptyResult
@@ -15,9 +15,9 @@ import com.evandhardspace.core.domain.util.Result
 import com.evandhardspace.core.domain.util.map
 import io.ktor.client.HttpClient
 
-internal class KtorAuthService(
+internal class KtorAuthRepository(
     private val client: HttpClient,
-) : AuthService {
+) : AuthRepository {
     override suspend fun register(
         email: String,
         username: String,
@@ -46,6 +46,13 @@ internal class KtorAuthService(
             "token" to token,
         ),
     )
+
+    override suspend fun forgotPassword(email: String): EmptyResult<DataError.Remote> {
+        return client.post<EmailRequest, Unit>(
+            route = "/auth/forgot-password",
+            body = EmailRequest(email),
+        )
+    }
 
     override suspend fun login(
         email: String,

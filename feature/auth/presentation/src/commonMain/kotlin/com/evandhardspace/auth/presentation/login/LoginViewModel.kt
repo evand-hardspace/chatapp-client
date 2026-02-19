@@ -9,7 +9,7 @@ import chatapp.feature.auth.presentation.generated.resources.error_invalid_crede
 import chatapp.feature.auth.presentation.generated.resources.error_invalid_email
 import chatapp.feature.auth.presentation.generated.resources.error_password_should_not_be_empty
 import com.evandhardspace.auth.domain.validation.EmailValidator
-import com.evandhardspace.core.domain.auth.AuthService
+import com.evandhardspace.core.domain.auth.AuthRepository
 import com.evandhardspace.core.domain.auth.MutableSessionRepository
 import com.evandhardspace.core.domain.util.DataError
 import com.evandhardspace.core.domain.util.onFailure
@@ -28,7 +28,7 @@ import kotlinx.coroutines.launch
 
 internal class LoginViewModel(
     private val emailValidator: EmailValidator,
-    private val authService: AuthService,
+    private val authRepository: AuthRepository,
     private val sessionRepository: MutableSessionRepository,
 ) : ViewModel() {
 
@@ -93,7 +93,7 @@ internal class LoginViewModel(
             val email = state.value.emailTextFieldState.text.toString()
             val password = state.value.passwordTextFieldState.text.toString()
 
-            authService
+            authRepository
                 .login(
                     email = email,
                     password = password

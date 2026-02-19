@@ -4,7 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.evandhardspace.auth.presentation.navigation.AuthNavGraphRoute.RegisterSuccess.Companion.EMAIL_ARG_KEY
-import com.evandhardspace.core.domain.auth.AuthService
+import com.evandhardspace.core.domain.auth.AuthRepository
 import com.evandhardspace.core.domain.util.onFailure
 import com.evandhardspace.core.domain.util.onSuccess
 import com.evandhardspace.core.presentation.util.asUiText
@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 internal class RegisterSuccessViewModel(
-    private val authService: AuthService,
+    private val authRepository: AuthRepository,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
@@ -47,7 +47,7 @@ internal class RegisterSuccessViewModel(
                 )
             }
 
-            authService
+            authRepository
                 .resendVerificationEmail(email)
                 .onSuccess {
                     _state.update {

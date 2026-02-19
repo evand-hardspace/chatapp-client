@@ -1,10 +1,10 @@
 package com.evandhardspace.core.data.di
 
 import com.evandhardspace.core.data.auth.DataStoreSessionRepository
-import com.evandhardspace.core.data.auth.KtorAuthService
+import com.evandhardspace.core.data.auth.KtorAuthRepository
 import com.evandhardspace.core.data.logging.KermitLogger
 import com.evandhardspace.core.data.networking.HttpClientFactory
-import com.evandhardspace.core.domain.auth.AuthService
+import com.evandhardspace.core.domain.auth.AuthRepository
 import com.evandhardspace.core.domain.auth.MutableSessionRepository
 import com.evandhardspace.core.domain.auth.SessionRepository
 import com.evandhardspace.core.domain.logging.ChatAppLogger
@@ -43,7 +43,7 @@ val coreDataModule = module {
             json = get(),
         ).create(get())
     }
-    singleOf(::KtorAuthService) bind AuthService::class
+    singleOf(::KtorAuthRepository) bind AuthRepository::class
     single {
         DataStoreSessionRepository(
             dataStore = get(),

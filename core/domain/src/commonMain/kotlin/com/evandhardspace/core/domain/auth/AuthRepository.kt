@@ -4,7 +4,7 @@ import com.evandhardspace.core.domain.util.DataError
 import com.evandhardspace.core.domain.util.EmptyResult
 import com.evandhardspace.core.domain.util.Result
 
-interface AuthService {
+interface AuthRepository {
 
     suspend fun login(
         email: String,
@@ -24,4 +24,6 @@ interface AuthService {
     suspend fun verifyEmail(
         token: String,
     ): EmptyResult<DataError.Remote>
+
+    suspend fun forgotPassword(email: String): EmptyResult<DataError.Remote>
 }

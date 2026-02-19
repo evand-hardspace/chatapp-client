@@ -79,7 +79,7 @@ If you face any issues, please report them on [YouTrack](https://youtrack.jetbra
 
 * Android:
 ```shell
-adb shell am start -W -a android.intent.action.VIEW -d "<deeplink>" com.evandhardspace.chatapp
+adb <-s device> shell am start -W -a android.intent.action.VIEW -d "<deeplink>" com.evandhardspace.chatapp
 ```
 
 * iOS:

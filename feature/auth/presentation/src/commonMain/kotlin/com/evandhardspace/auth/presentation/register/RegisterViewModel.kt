@@ -10,7 +10,7 @@ import chatapp.feature.auth.presentation.generated.resources.error_invalid_passw
 import chatapp.feature.auth.presentation.generated.resources.error_invalid_username
 import com.evandhardspace.auth.domain.validation.EmailValidator
 import com.evandhardspace.auth.domain.validation.UsernameValidator
-import com.evandhardspace.core.domain.auth.AuthService
+import com.evandhardspace.core.domain.auth.AuthRepository
 import com.evandhardspace.core.domain.util.DataError
 import com.evandhardspace.core.domain.util.onFailure
 import com.evandhardspace.core.domain.util.onSuccess
@@ -31,7 +31,7 @@ internal class RegisterViewModel(
     private val emailValidator: EmailValidator,
     private val passwordValidator: PasswordValidator,
     private val usernameValidator: UsernameValidator,
-    private val authService: AuthService,
+    private val authRepository: AuthRepository,
 ) : ViewModel() {
 
     private val _effects = Channel<RegisterEffect>()
@@ -104,7 +104,7 @@ internal class RegisterViewModel(
             val username = state.value.usernameTextState.text.toString()
             val password = state.value.passwordTextState.text.toString()
 
-            authService
+            authRepository
                 .register(
                     email = email,
                     username = username,

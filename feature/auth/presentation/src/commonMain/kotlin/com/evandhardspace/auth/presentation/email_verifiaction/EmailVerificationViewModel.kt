@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.evandhardspace.auth.presentation.email_verifiaction.EmailVerificationState.VerificationState
 import com.evandhardspace.auth.presentation.navigation.AuthNavGraphRoute.EmailVerification
-import com.evandhardspace.core.domain.auth.AuthService
+import com.evandhardspace.core.domain.auth.AuthRepository
 import com.evandhardspace.core.domain.util.onFailure
 import com.evandhardspace.core.domain.util.onSuccess
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 internal class EmailVerificationViewModel(
-    private val authService: AuthService,
+    private val authRepository: AuthRepository,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
@@ -44,7 +44,7 @@ internal class EmailVerificationViewModel(
                 return@launch
             }
 
-            authService.verifyEmail(token)
+            authRepository.verifyEmail(token)
                 .onSuccess {
                     _state.update { it.copy(verification = VerificationState.Verified) }
                 }

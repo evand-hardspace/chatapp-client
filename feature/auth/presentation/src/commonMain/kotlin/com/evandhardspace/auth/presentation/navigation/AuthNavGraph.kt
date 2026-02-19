@@ -8,6 +8,7 @@ import androidx.navigation.navigation
 import com.evandhardspace.auth.presentation.email_verifiaction.EmailVerificationScreen
 import com.evandhardspace.auth.presentation.email_verifiaction.util.emailVerificationDeeplinkPatternChatappScheme
 import com.evandhardspace.auth.presentation.email_verifiaction.util.emailVerificationDeeplinkPatternHttpsScheme
+import com.evandhardspace.auth.presentation.forgot_password.ForgotPasswordScreen
 import com.evandhardspace.auth.presentation.login.LoginScreen
 import com.evandhardspace.auth.presentation.register.RegisterScreen
 import com.evandhardspace.auth.presentation.register_success.RegisterSuccessScreen
@@ -95,6 +96,7 @@ fun NavGraphBuilder.authNavGraph(
         }
 
         composable<AuthNavGraphRoute.ForgotPassword> {
+            ForgotPasswordScreen()
         }
     }
 }
