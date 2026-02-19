@@ -25,7 +25,14 @@ sealed interface AuthNavGraphRoute: NavRoute {
     }
 
     @Serializable
-    data object ResetPassword : AuthNavGraphRoute
+    data class ResetPassword(
+        @SerialName(TOKEN_ARG_KEY)
+        val token: String,
+    ) : AuthNavGraphRoute {
+        companion object {
+            const val TOKEN_ARG_KEY = "token"
+        }
+    }
 
     @Serializable
     data object ForgotPassword : AuthNavGraphRoute

@@ -7,6 +7,7 @@ import com.evandhardspace.auth.presentation.forgot_password.ForgotPasswordViewMo
 import com.evandhardspace.auth.presentation.login.LoginViewModel
 import com.evandhardspace.auth.presentation.register.RegisterViewModel
 import com.evandhardspace.auth.presentation.register_success.RegisterSuccessViewModel
+import com.evandhardspace.auth.presentation.reset_password.ResetPasswordViewModel
 import com.evandhardspace.core.domain.validation.rule.password.PasswordValidator
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
@@ -24,4 +25,5 @@ val authPresentationModule = module {
     viewModelOf(::RegisterSuccessViewModel)
     viewModelOf(::EmailVerificationViewModel)
     viewModelOf(::ForgotPasswordViewModel)
+    viewModelOf(::ResetPasswordViewModel)
 }

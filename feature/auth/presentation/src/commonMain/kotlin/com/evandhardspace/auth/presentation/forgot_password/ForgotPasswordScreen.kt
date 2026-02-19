@@ -69,9 +69,7 @@ internal fun ForgotPasswordContent(
         Spacer(modifier = Modifier.height(MaterialTheme.paddings.default))
         ChatAppButton(
             text = stringResource(Res.string.submit),
-            onClick = {
-                onAction(ForgotPasswordAction.OnSubmitClick)
-            },
+            onClick = { onAction(ForgotPasswordAction.OnSubmit) },
             modifier = Modifier
                 .fillMaxWidth(),
             enabled = state.canSubmit,

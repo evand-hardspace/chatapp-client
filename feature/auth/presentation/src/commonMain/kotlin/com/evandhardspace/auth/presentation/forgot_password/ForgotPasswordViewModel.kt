@@ -35,7 +35,7 @@ internal class ForgotPasswordViewModel(
 
     fun onAction(action: ForgotPasswordAction) {
         when (action) {
-            ForgotPasswordAction.OnSubmitClick -> submitForgotPasswordRequest()
+            ForgotPasswordAction.OnSubmit -> submitForgotPasswordRequest()
         }
     }
 

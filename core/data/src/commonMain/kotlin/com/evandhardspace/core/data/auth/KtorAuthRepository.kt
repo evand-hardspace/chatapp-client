@@ -4,6 +4,7 @@ import com.evandhardspace.core.data.dto.AuthInfoDto
 import com.evandhardspace.core.data.dto.request.EmailRequest
 import com.evandhardspace.core.data.dto.request.LoginRequest
 import com.evandhardspace.core.data.dto.request.RegisterRequest
+import com.evandhardspace.core.data.dto.request.ResetPasswordRequest
 import com.evandhardspace.core.data.mapper.toDomain
 import com.evandhardspace.core.data.networking.get
 import com.evandhardspace.core.data.networking.post
@@ -64,4 +65,15 @@ internal class KtorAuthRepository(
             password = password,
         ),
     ).map(AuthInfoDto::toDomain)
+
+    override suspend fun resetPassword(
+        newPassword: String,
+        token: String
+    ): EmptyResult<DataError.Remote> = client.post(
+        route = "/auth/reset-password",
+        body = ResetPasswordRequest(
+            newPassword = newPassword,
+            token = token,
+        )
+    )
 }

@@ -36,6 +36,7 @@ import com.evandhardspace.core.designsystem.theme.extended
 import com.evandhardspace.core.designsystem.theme.paddings
 import com.evandhardspace.core.presentation.util.DesktopMaxWidth
 import com.evandhardspace.core.presentation.util.DeviceConfiguration
+import com.evandhardspace.core.presentation.util.compose.clearFocusOnTap
 import com.evandhardspace.core.presentation.util.currentDeviceConfiguration
 
 @Composable
@@ -52,7 +53,9 @@ fun ChatAppAdaptiveFormLayout(
     when (configuration) {
         DeviceConfiguration.MobilePortrait -> {
             ChatAppSurface(
-                modifier = modifier.statusBarsPadding(),
+                modifier = modifier
+                    .statusBarsPadding()
+                    .clearFocusOnTap(),
                 header = {
                     Spacer(modifier = Modifier.height(MaterialTheme.paddings.double))
                     logo()
@@ -164,6 +167,7 @@ fun ColumnScope.AuthHeaderSection(
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.error,
                 modifier = Modifier
+                    .padding(top = MaterialTheme.paddings.half)
                     .fillMaxWidth(),
                 textAlign = TextAlign.Center,
             )

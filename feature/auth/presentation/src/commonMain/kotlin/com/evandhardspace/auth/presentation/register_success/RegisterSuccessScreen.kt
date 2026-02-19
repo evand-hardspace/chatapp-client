@@ -27,7 +27,7 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 internal fun RegisterSuccessScreen(
-    onLogin: () -> Unit,
+    navigateToLogin: () -> Unit,
     modifier: Modifier = Modifier.fillMaxSize(),
     viewModel: RegisterSuccessViewModel = koinViewModel(),
 ) {
@@ -48,7 +48,7 @@ internal fun RegisterSuccessScreen(
         modifier = modifier,
         state = state,
         onAction = viewModel::onAction,
-        onLogin = onLogin,
+        onLogin = navigateToLogin,
     )
 }
 
