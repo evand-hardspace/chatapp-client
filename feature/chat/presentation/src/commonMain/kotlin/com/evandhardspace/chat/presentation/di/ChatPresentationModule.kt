@@ -1,9 +1,9 @@
 package com.evandhardspace.chat.presentation.di
 
-import com.evandhardspace.chat.presentation.chat_list.ChatListViewModel
-import org.koin.core.module.dsl.viewModelOf
-import org.koin.dsl.module
+import org.koin.core.annotation.ComponentScan
+import org.koin.core.annotation.Module
 
-val chatPresentationModule = module {
-    viewModelOf(::ChatListViewModel)
-}
+
+@Module
+@ComponentScan("com.evandhardspace.chat.presentation")
+class ChatPresentationModule

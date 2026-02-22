@@ -1,19 +1,15 @@
 package com.evandhardspace.chatapp.di
 
-import com.evandhardspace.auth.presentation.di.authPresentationModule
-import com.evandhardspace.chat.presentation.di.chatPresentationModule
+import com.evandhardspace.chatapp.ChatappKoinApp
 import com.evandhardspace.core.data.di.coreDataModule
-import org.koin.core.context.startKoin
 import org.koin.dsl.KoinAppDeclaration
+import org.koin.plugin.module.dsl.startKoin
 
 fun initKoin(config: KoinAppDeclaration? = null) {
-    startKoin {
+    startKoin<ChatappKoinApp> {
         config?.invoke(this)
         modules(
-            appModule,
             coreDataModule,
-            authPresentationModule,
-            chatPresentationModule,
         )
     }
 }

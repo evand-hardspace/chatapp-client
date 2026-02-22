@@ -2,28 +2,23 @@ package com.evandhardspace.auth.presentation.di
 
 import com.evandhardspace.auth.domain.validation.EmailValidator
 import com.evandhardspace.auth.domain.validation.UsernameValidator
-import com.evandhardspace.auth.presentation.email_verifiaction.EmailVerificationViewModel
-import com.evandhardspace.auth.presentation.forgot_password.ForgotPasswordViewModel
-import com.evandhardspace.auth.presentation.login.LoginViewModel
-import com.evandhardspace.auth.presentation.register.RegisterViewModel
-import com.evandhardspace.auth.presentation.register_success.RegisterSuccessViewModel
-import com.evandhardspace.auth.presentation.reset_password.ResetPasswordViewModel
 import com.evandhardspace.core.domain.validation.rule.password.PasswordValidator
-import org.koin.core.module.dsl.viewModelOf
-import org.koin.dsl.module
+import org.koin.core.annotation.ComponentScan
+import org.koin.core.annotation.Factory
+import org.koin.core.annotation.Module
 
-internal val authDomainModule = module {
-    factory<EmailValidator> { EmailValidator() }
-    factory<UsernameValidator> { UsernameValidator() }
-    factory<PasswordValidator> { PasswordValidator() }
+@Module
+private class AuthDomainModule {
+    @Factory
+    fun provideEmailValidator(): EmailValidator = EmailValidator()
+
+    @Factory
+    fun provideUsernameValidator(): UsernameValidator = UsernameValidator()
+
+    @Factory
+    fun providePasswordValidator(): PasswordValidator = PasswordValidator()
 }
 
-val authPresentationModule = module {
-    includes(authDomainModule)
-    viewModelOf(::RegisterViewModel)
-    viewModelOf(::LoginViewModel)
-    viewModelOf(::RegisterSuccessViewModel)
-    viewModelOf(::EmailVerificationViewModel)
-    viewModelOf(::ForgotPasswordViewModel)
-    viewModelOf(::ResetPasswordViewModel)
-}
+@ComponentScan("com.evandhardspace.auth.presentation")
+@Module(includes = [AuthDomainModule::class])
+class AuthPresentationModule

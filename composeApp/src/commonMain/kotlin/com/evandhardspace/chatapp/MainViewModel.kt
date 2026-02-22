@@ -15,7 +15,9 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.koin.core.annotation.KoinViewModel
 
+@KoinViewModel
 class MainViewModel(
     private val sessionRepository: MutableSessionRepository,
 ) : ViewModel() {

@@ -26,7 +26,9 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.koin.core.annotation.KoinViewModel
 
+@KoinViewModel
 internal class RegisterViewModel(
     private val emailValidator: EmailValidator,
     private val passwordValidator: PasswordValidator,
