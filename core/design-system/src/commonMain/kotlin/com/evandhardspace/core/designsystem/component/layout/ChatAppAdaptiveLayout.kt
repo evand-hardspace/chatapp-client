@@ -54,8 +54,8 @@ fun ChatAppAdaptiveFormLayout(
         DeviceConfiguration.MobilePortrait -> {
             ChatAppSurface(
                 modifier = modifier
-                    .statusBarsPadding()
                     .clearFocusOnTap(),
+                consumeContentSurfaceInsets = true,
                 header = {
                     Spacer(modifier = Modifier.height(MaterialTheme.paddings.double))
                     logo()
@@ -72,12 +72,14 @@ fun ChatAppAdaptiveFormLayout(
                 formContent()
             }
         }
+
         DeviceConfiguration.MobileLandscape -> {
             Row(
                 horizontalArrangement = Arrangement.spacedBy(MaterialTheme.paddings.default),
                 modifier = modifier
                     .fillMaxSize()
-                    .padding(horizontal = MaterialTheme.paddings.default),
+                    .background(MaterialTheme.colorScheme.background)
+                    .padding(start = MaterialTheme.paddings.default),
             ) {
                 Column(
                     modifier = Modifier
@@ -97,16 +99,22 @@ fun ChatAppAdaptiveFormLayout(
                 ChatAppSurface(
                     modifier = Modifier
                         .weight(1f),
+                    consumeContentSurfaceInsets = false,
                 ) {
                     Spacer(modifier = Modifier.height(MaterialTheme.paddings.half))
                     Column(
-                        modifier = Modifier.windowInsetsPadding(WindowInsets.systemBars.only(WindowInsetsSides.End)),
+                        modifier = Modifier.windowInsetsPadding(
+                            WindowInsets.systemBars.only(
+                                WindowInsetsSides.End,
+                            )
+                        ),
                         content = formContent,
                     )
                     Spacer(modifier = Modifier.height(MaterialTheme.paddings.half))
                 }
             }
         }
+
         DeviceConfiguration.TabletPortrait,
         DeviceConfiguration.TabletLandscape,
         DeviceConfiguration.Desktop -> {

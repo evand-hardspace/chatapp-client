@@ -46,16 +46,14 @@ fun ChatAppAdaptiveResultLayout(
         if (configuration == DeviceConfiguration.MobilePortrait) {
             ChatAppSurface(
                 modifier = Modifier
-                    .statusBarsPadding()
-                    .consumeWindowInsets(
-                        WindowInsets.statusBars
-                    )
+                    .consumeWindowInsets(WindowInsets.statusBars)
                     .padding(innerPadding),
                 header = {
                     Spacer(modifier = Modifier.height(MaterialTheme.paddings.double))
                     ChatAppBrandLogo()
                     Spacer(modifier = Modifier.height(MaterialTheme.paddings.double))
                 },
+                consumeContentSurfaceInsets = true,
                 content = content,
             )
         } else {
