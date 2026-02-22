@@ -9,7 +9,7 @@ import com.evandhardspace.core.domain.auth.AuthRepository
 import com.evandhardspace.core.domain.util.onFailure
 import com.evandhardspace.core.domain.util.onSuccess
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.koin.core.annotation.KoinViewModel
@@ -22,8 +22,8 @@ internal class EmailVerificationViewModel(
 
     private val token: String? = savedStateHandle[EmailVerification.TOKEN_ARG_KEY]
 
-    private val _state = MutableStateFlow(EmailVerificationState())
-    val state = _state.asStateFlow()
+    val state: StateFlow<EmailVerificationState>
+        field = MutableStateFlow(EmailVerificationState())
 
     init {
         viewModelScope.launch {
@@ -33,14 +33,14 @@ internal class EmailVerificationViewModel(
 
     private fun verifyEmail() {
         viewModelScope.launch {
-            _state.update {
+            state.update {
                 it.copy(
                     verification = VerificationState.Verifying,
                 )
             }
 
             if (token == null) {
-                _state.update {
+                state.update {
                     it.copy(verification = VerificationState.Error)
                 }
                 return@launch
@@ -48,10 +48,10 @@ internal class EmailVerificationViewModel(
 
             authRepository.verifyEmail(token)
                 .onSuccess {
-                    _state.update { it.copy(verification = VerificationState.Verified) }
+                    state.update { it.copy(verification = VerificationState.Verified) }
                 }
                 .onFailure {
-                    _state.update { it.copy(verification = VerificationState.Error) }
+                    state.update { it.copy(verification = VerificationState.Error) }
                 }
         }
     }

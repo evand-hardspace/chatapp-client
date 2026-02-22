@@ -9,7 +9,7 @@ import com.evandhardspace.core.domain.util.onFailure
 import com.evandhardspace.core.domain.util.onSuccess
 import com.evandhardspace.core.presentation.util.asUiText
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -24,8 +24,8 @@ internal class ForgotPasswordViewModel(
     private val emailValidator: EmailValidator,
 ) : ViewModel() {
 
-    private val _state = MutableStateFlow(ForgotPasswordState())
-    val state = _state.asStateFlow()
+    val state: StateFlow<ForgotPasswordState>
+        field = MutableStateFlow(ForgotPasswordState())
 
     private val isEmailValidFlow = snapshotFlow { state.value.emailTextFieldState.text }
         .map { email -> emailValidator.validate(email) }
@@ -43,7 +43,7 @@ internal class ForgotPasswordViewModel(
 
     private fun observeValidationState() {
         isEmailValidFlow.onEach { isEmailValid ->
-            _state.update {
+            state.update {
                 it.copy(
                     canSubmit = isEmailValid,
                 )
@@ -56,7 +56,7 @@ internal class ForgotPasswordViewModel(
 
 
         viewModelScope.launch {
-            _state.update {
+            state.update {
                 it.copy(
                     isLoading = true,
                     isEmailSentSuccessfully = false,
@@ -68,7 +68,7 @@ internal class ForgotPasswordViewModel(
             authRepository
                 .forgotPassword(email)
                 .onSuccess {
-                    _state.update {
+                    state.update {
                         it.copy(
                             isEmailSentSuccessfully = true,
                             isLoading = false,
@@ -76,7 +76,7 @@ internal class ForgotPasswordViewModel(
                     }
                 }
                 .onFailure { error ->
-                    _state.update {
+                    state.update {
                         it.copy(
                             errorText = error.asUiText(),
                             isLoading = false,

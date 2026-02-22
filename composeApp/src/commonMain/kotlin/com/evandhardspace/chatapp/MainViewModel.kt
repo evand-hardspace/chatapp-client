@@ -7,7 +7,7 @@ import com.evandhardspace.core.domain.auth.MutableSessionRepository
 import com.evandhardspace.core.domain.auth.SessionEvents
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
@@ -25,8 +25,8 @@ class MainViewModel(
     private val _effects = Channel<MainEffect>()
     val effects = _effects.receiveAsFlow()
 
-    private val _state = MutableStateFlow<MainState>(MainState.Loading)
-    val state = _state.asStateFlow()
+    val state: StateFlow<MainState>
+        field = MutableStateFlow<MainState>(MainState.Loading)
 
     init {
         loadLoggedInInitialState()
@@ -36,7 +36,7 @@ class MainViewModel(
     private fun loadLoggedInInitialState() {
         viewModelScope.launch {
             val authState = sessionRepository.authState.first()
-            _state.update {
+            state.update {
                 MainState.Loaded(
                     isLoggedIn = authState is AuthState.Authorized,
                 )
@@ -48,7 +48,7 @@ class MainViewModel(
         sessionRepository.events
             .filterIsInstance<SessionEvents.LoggedOut>()
             .onEach {
-                _state.update { MainState.Loaded(isLoggedIn = false) }
+                state.update { MainState.Loaded(isLoggedIn = false) }
                 _effects.send(MainEffect.LoggedOut)
             }.launchIn(viewModelScope)
     }

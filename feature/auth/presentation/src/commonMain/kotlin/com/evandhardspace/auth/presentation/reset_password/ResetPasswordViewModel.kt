@@ -15,7 +15,7 @@ import com.evandhardspace.core.domain.util.onSuccess
 import com.evandhardspace.core.domain.validation.rule.password.PasswordValidator
 import com.evandhardspace.core.presentation.util.asUiText
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -31,14 +31,15 @@ internal class ResetPasswordViewModel(
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
-    private val token = savedStateHandle.get<String>(TOKEN_ARG_KEY) ?: error("No password reset token")
+    private val token =
+        savedStateHandle.get<String>(TOKEN_ARG_KEY) ?: error("No password reset token")
 
     private val isPasswordValidFlow = snapshotFlow { state.value.passwordTextState.text }
         .map { password -> passwordValidator.validate(password.toString()) }
         .distinctUntilChanged()
 
-    private val _state = MutableStateFlow(ResetPasswordState())
-    val state = _state.asStateFlow()
+    val state: StateFlow<ResetPasswordState>
+        field = MutableStateFlow(ResetPasswordState())
 
     init {
         observeValidationState()
@@ -48,7 +49,7 @@ internal class ResetPasswordViewModel(
         when (action) {
             ResetPasswordAction.OnSubmit -> resetPassword()
             ResetPasswordAction.OnTogglePasswordVisibility -> {
-                _state.update {
+                state.update {
                     it.copy(
                         isPasswordVisible = !it.isPasswordVisible
                     )
@@ -59,7 +60,7 @@ internal class ResetPasswordViewModel(
 
     private fun observeValidationState() {
         isPasswordValidFlow.onEach { isPasswordValid ->
-            _state.update {
+            state.update {
                 it.copy(
                     canSubmit = isPasswordValid,
                 )
@@ -72,7 +73,7 @@ internal class ResetPasswordViewModel(
 
 
         viewModelScope.launch {
-            _state.update {
+            state.update {
                 it.copy(
                     isLoading = true,
                     isPasswordChanged = false,
@@ -86,7 +87,7 @@ internal class ResetPasswordViewModel(
                     token = token,
                 )
                 .onSuccess {
-                    _state.update {
+                    state.update {
                         it.copy(
                             isLoading = false,
                             isPasswordChanged = true,
@@ -100,7 +101,7 @@ internal class ResetPasswordViewModel(
                         DataError.Remote.Conflict -> Res.string.error_same_password.asUiText()
                         else -> error.asUiText()
                     }
-                    _state.update {
+                    state.update {
                         it.copy(
                             errorText = errorText,
                             isLoading = false,

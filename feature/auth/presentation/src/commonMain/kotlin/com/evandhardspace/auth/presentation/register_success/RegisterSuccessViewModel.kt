@@ -10,7 +10,7 @@ import com.evandhardspace.core.domain.util.onSuccess
 import com.evandhardspace.core.presentation.util.asUiText
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -27,11 +27,12 @@ internal class RegisterSuccessViewModel(
     private val _effects = Channel<RegisterSuccessEffect>()
     val effects = _effects.receiveAsFlow()
 
-    private val _state = MutableStateFlow(
-        RegisterSuccessState(registeredEmail = email),
-    )
-    val state = _state.asStateFlow()
-
+    val state: StateFlow<RegisterSuccessState>
+        field = MutableStateFlow(
+            RegisterSuccessState(
+                registeredEmail = email,
+            ),
+        )
 
     fun onAction(action: RegisterSuccessAction) {
         when (action) {
@@ -43,7 +44,7 @@ internal class RegisterSuccessViewModel(
         if (state.value.isResendingVerificationEmail) return
 
         viewModelScope.launch {
-            _state.update {
+            state.update {
                 it.copy(
                     isResendingVerificationEmail = true,
                 )
@@ -52,7 +53,7 @@ internal class RegisterSuccessViewModel(
             authRepository
                 .resendVerificationEmail(email)
                 .onSuccess {
-                    _state.update {
+                    state.update {
                         it.copy(
                             isResendingVerificationEmail = false,
                         )
@@ -60,7 +61,7 @@ internal class RegisterSuccessViewModel(
                     _effects.send(RegisterSuccessEffect.ResendVerificationEmailSuccess)
                 }
                 .onFailure { error ->
-                    _state.update {
+                    state.update {
                         it.copy(
                             isResendingVerificationEmail = false,
                             resendVerificationError = error.asUiText(),

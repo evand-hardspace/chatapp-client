@@ -1,3 +1,4 @@
+import com.evandhardspace.chatapp.convention.kotlinFreeCompileArgs
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 
 plugins {
@@ -7,6 +8,10 @@ plugins {
 }
 
 kotlin {
+    compilerOptions {
+        freeCompilerArgs.addAll(kotlinFreeCompileArgs)
+    }
+
     sourceSets {
         androidMain.dependencies {
             implementation(libs.jetbrains.compose.uiToolingPreview)

@@ -18,7 +18,7 @@ import com.evandhardspace.core.domain.validation.rule.password.PasswordValidator
 import com.evandhardspace.core.presentation.util.asUiText
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
@@ -39,8 +39,8 @@ internal class RegisterViewModel(
     private val _effects = Channel<RegisterEffect>()
     val effects = _effects.receiveAsFlow()
 
-    private val _state = MutableStateFlow(RegisterState())
-    val state = _state.asStateFlow()
+    val state: StateFlow<RegisterState>
+        field = MutableStateFlow(RegisterState())
 
     private val emailErrorFlow = snapshotFlow { state.value.emailTextState.text.toString() }
         .map { email ->
@@ -72,7 +72,7 @@ internal class RegisterViewModel(
             usernameErrorFlow,
             passwordErrorFlow,
         ) { emailError, usernameError, passwordError ->
-            _state.update {
+            state.update {
                 it.copy(
                     emailError = emailError,
                     usernameError = usernameError,
@@ -86,7 +86,7 @@ internal class RegisterViewModel(
         when (action) {
             is RegisterAction.OnRegister -> register()
             is RegisterAction.OnInputTextFocusGain -> Unit
-            is RegisterAction.OnTogglePasswordVisibility -> _state.update {
+            is RegisterAction.OnTogglePasswordVisibility -> state.update {
                 it.copy(
                     isPasswordVisible = it.isPasswordVisible.not(),
                 )
@@ -96,7 +96,7 @@ internal class RegisterViewModel(
 
     private fun register() {
         viewModelScope.launch {
-            _state.update {
+            state.update {
                 it.copy(
                     isRegistering = true
                 )
@@ -113,7 +113,7 @@ internal class RegisterViewModel(
                     password = password,
                 )
                 .onSuccess {
-                    _state.update {
+                    state.update {
                         it.copy(
                             isRegistering = false
                         )
@@ -125,7 +125,7 @@ internal class RegisterViewModel(
                         DataError.Remote.Conflict -> Res.string.error_account_exists.asUiText()
                         else -> error.asUiText()
                     }
-                    _state.update {
+                    state.update {
                         it.copy(
                             isRegistering = false,
                             registrationError = registrationError,

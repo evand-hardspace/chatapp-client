@@ -17,7 +17,7 @@ import com.evandhardspace.core.domain.util.onSuccess
 import com.evandhardspace.core.presentation.util.asUiText
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
@@ -37,8 +37,8 @@ internal class LoginViewModel(
     private val _effects = Channel<LoginEffect>()
     val effects = _effects.receiveAsFlow()
 
-    private val _state = MutableStateFlow(LoginState())
-    val state = _state.asStateFlow()
+    val state: StateFlow<LoginState>
+        field = MutableStateFlow(LoginState())
 
     private val emailErrorFlow = snapshotFlow { state.value.emailTextFieldState.text.toString() }
         .map { email ->
@@ -62,7 +62,7 @@ internal class LoginViewModel(
             emailErrorFlow,
             passwordErrorFlow,
         ) { emailError, passwordError ->
-            _state.update {
+            state.update {
                 it.copy(
                     emailError = emailError,
                     passwordError = passwordError,
@@ -81,7 +81,7 @@ internal class LoginViewModel(
     }
 
     private fun togglePasswordVisibility() {
-        _state.update { it.copy(isPasswordVisible = it.isPasswordVisible.not()) }
+        state.update { it.copy(isPasswordVisible = it.isPasswordVisible.not()) }
     }
 
     private fun login() {
@@ -90,7 +90,7 @@ internal class LoginViewModel(
         }
 
         viewModelScope.launch {
-            _state.update { it.copy(isLoading = true) }
+            state.update { it.copy(isLoading = true) }
 
             val email = state.value.emailTextFieldState.text.toString()
             val password = state.value.passwordTextFieldState.text.toString()
@@ -102,7 +102,7 @@ internal class LoginViewModel(
                 )
                 .onSuccess { authInfo ->
                     sessionRepository.saveAuthInfo(authInfo)
-                    _state.update { it.copy(isLoading = false) }
+                    state.update { it.copy(isLoading = false) }
                     _effects.send(LoginEffect.Success)
                 }
                 .onFailure { error ->
@@ -111,7 +111,7 @@ internal class LoginViewModel(
                         DataError.Remote.Forbidden -> Res.string.error_email_not_verified.asUiText()
                         else -> error.asUiText()
                     }
-                    _state.update {
+                    state.update {
                         it.copy(
                             error = errorMessage,
                             isLoading = false,
