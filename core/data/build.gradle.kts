@@ -8,6 +8,7 @@ kotlin {
         commonMain {
             dependencies {
                 implementation(projects.core.domain)
+                implementation(projects.core.common)
 
                 implementation(libs.kotlin.stdlib)
                 implementation(libs.bundles.ktor.common)

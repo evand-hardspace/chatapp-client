@@ -75,7 +75,6 @@ internal fun LoginContent(
     ChatAppAdaptiveFormLayout(
         headerText = stringResource(Res.string.welcome_back),
         errorText = state.error?.asComposableString(),
-        logo = { ChatAppBrandLogo() },
         modifier = Modifier
             .fillMaxSize()
     ) {

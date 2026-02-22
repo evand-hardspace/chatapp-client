@@ -1,4 +1,4 @@
-package com.evandhardspace.chatapp.navigation
+package com.evandhardspace.chatapp.deeplink
 
 object ExternalUriHandler {
     private var cached: String? = null

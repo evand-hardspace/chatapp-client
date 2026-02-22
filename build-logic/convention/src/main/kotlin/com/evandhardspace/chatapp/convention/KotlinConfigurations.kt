@@ -6,6 +6,5 @@ val kotlinFreeCompileArgs: List<String>
         "-opt-in=kotlin.time.ExperimentalTime",
         "-Xexpect-actual-classes",
         "-Xcontext-parameters",
-        "-Xreturn-value-checker=full",
         "-Xexplicit-backing-fields",
     )

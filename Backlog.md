@@ -6,9 +6,9 @@
 6. Migrate from datastore preferences to custom serialization
 7. Added datastore encryption
 8. Extract endpoint strings to one place
-9. All loader on main screen
-10. Provide correct app coroutine scope
+9. All loaders on screen
 11. Add confirm new password field to reset password
 12. Forgot password error is not shown when email is invalid
 13. Add deeplink interceptor and fix authentication flow navigation
 14. Migrate to Nav3
+15. BE involved: add information about which account is trying to change the password

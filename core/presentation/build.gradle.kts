@@ -1,11 +1,11 @@
 plugins {
     alias(libs.plugins.convention.cmpLibrary)
 }
-
 kotlin {
     sourceSets {
         commonMain {
             dependencies {
+                api(projects.core.common)
                 implementation(projects.core.domain)
                 implementation(libs.kotlin.stdlib)
 

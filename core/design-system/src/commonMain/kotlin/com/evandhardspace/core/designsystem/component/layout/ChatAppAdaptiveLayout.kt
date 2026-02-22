@@ -43,7 +43,7 @@ import com.evandhardspace.core.presentation.util.currentDeviceConfiguration
 fun ChatAppAdaptiveFormLayout(
     headerText: String,
     errorText: String? = null,
-    logo: @Composable () -> Unit,
+    logo: @Composable () -> Unit = { ChatAppBrandLogo() },
     modifier: Modifier = Modifier,
     formContent: @Composable ColumnScope.() -> Unit,
 ) {
@@ -182,7 +182,6 @@ fun ChatAppAdaptiveFormLayoutDarkPreview() {
         ChatAppAdaptiveFormLayout(
             headerText = "Welcome to ChatApp!",
             errorText = "Login failed!",
-            logo = { ChatAppBrandLogo() },
             formContent = {
                 Text(
                     text = "Sample form title",

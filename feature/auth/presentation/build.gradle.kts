@@ -9,6 +9,7 @@ kotlin {
                 implementation(projects.core.domain)
                 implementation(projects.core.presentation)
                 implementation(projects.core.designSystem)
+                implementation(projects.core.urlUtil)
                 implementation(projects.feature.auth.domain)
 
                 implementation(libs.kotlin.stdlib)

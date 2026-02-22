@@ -20,8 +20,8 @@ import chatapp.feature.auth.presentation.generated.resources.return_to_login
 import chatapp.feature.auth.presentation.generated.resources.set_new_password
 import chatapp.feature.auth.presentation.generated.resources.submit
 import com.evandhardspace.core.designsystem.annotations.ThemedPreview
-import com.evandhardspace.core.designsystem.component.brand.ChatAppBrandLogo
 import com.evandhardspace.core.designsystem.component.button.ChatAppButton
+import com.evandhardspace.core.designsystem.component.button.ChatAppButtonStyle
 import com.evandhardspace.core.designsystem.component.layout.ChatAppAdaptiveFormLayout
 import com.evandhardspace.core.designsystem.component.textfield.ChatAppPasswordTextField
 import com.evandhardspace.core.designsystem.theme.ChatAppPreview
@@ -59,7 +59,6 @@ private fun ResetPasswordContent(
             else Res.string.set_new_password,
         ),
         errorText = state.errorText?.asComposableString(),
-        logo = { ChatAppBrandLogo() }
     ) {
         if (state.isPasswordChanged) {
             Text(
@@ -93,7 +92,13 @@ private fun ResetPasswordContent(
                 text = stringResource(Res.string.submit),
                 onClick = { onAction(ResetPasswordAction.OnSubmit) },
                 enabled = !state.isLoading && state.canSubmit,
-                isLoading = state.isLoading
+                isLoading = state.isLoading,
+            )
+            ChatAppButton(
+                modifier = Modifier.fillMaxWidth(),
+                text = stringResource(Res.string.return_to_login),
+                onClick = navigateToLogin,
+                style = ChatAppButtonStyle.Text,
             )
         }
     }
@@ -101,11 +106,26 @@ private fun ResetPasswordContent(
 
 @ThemedPreview
 @Composable
-private fun ResetPasswordContentPreview() {
+private fun ResetPasswordContentPasswordChangedPreview() {
     ChatAppPreview {
         ResetPasswordContent(
             state = ResetPasswordState(
                 isPasswordChanged = true,
+            ),
+            onAction = {},
+            navigateToLogin = {},
+        )
+    }
+}
+
+
+@ThemedPreview
+@Composable
+private fun ResetPasswordContentPasswordNotChangedPreview() {
+    ChatAppPreview {
+        ResetPasswordContent(
+            state = ResetPasswordState(
+                isPasswordChanged = false,
             ),
             onAction = {},
             navigateToLogin = {},

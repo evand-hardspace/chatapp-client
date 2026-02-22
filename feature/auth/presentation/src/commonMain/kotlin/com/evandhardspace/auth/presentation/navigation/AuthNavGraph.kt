@@ -3,18 +3,15 @@ package com.evandhardspace.auth.presentation.navigation
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import androidx.navigation.navDeepLink
 import androidx.navigation.navigation
 import com.evandhardspace.auth.presentation.email_verifiaction.EmailVerificationScreen
-import com.evandhardspace.auth.presentation.email_verifiaction.util.emailVerificationDeeplinkPatternChatappScheme
-import com.evandhardspace.auth.presentation.email_verifiaction.util.emailVerificationDeeplinkPatternHttpsScheme
-import com.evandhardspace.auth.presentation.email_verifiaction.util.resetPasswordDeeplinkPatternChatappScheme
-import com.evandhardspace.auth.presentation.email_verifiaction.util.resetPasswordDeeplinkPatternHttpsScheme
 import com.evandhardspace.auth.presentation.forgot_password.ForgotPasswordScreen
 import com.evandhardspace.auth.presentation.login.LoginScreen
 import com.evandhardspace.auth.presentation.register.RegisterScreen
 import com.evandhardspace.auth.presentation.register_success.RegisterSuccessScreen
 import com.evandhardspace.auth.presentation.reset_password.ResetPasswordScreen
+import com.evandhardspace.auth.presentation.reset_password.restricted.ResetPasswordRestrictedScreen
+import com.evandhardspace.core.navigation.fullClearBackStack
 
 fun NavGraphBuilder.authNavGraph(
     navController: NavController,
@@ -70,41 +67,21 @@ fun NavGraphBuilder.authNavGraph(
             )
         }
 
-        composable<AuthNavGraphRoute.EmailVerification>(
-            deepLinks = listOf(
-                navDeepLink { this.uriPattern = emailVerificationDeeplinkPatternHttpsScheme },
-                navDeepLink { this.uriPattern = emailVerificationDeeplinkPatternChatappScheme },
-            ),
-        ) {
+        composable<AuthNavGraphRoute.EmailVerification> {
             EmailVerificationScreen(
-                onLogin = {
+                navigateBack = navController::popBackStack,
+                navigateToLogin = {
                     navController.navigate(AuthNavGraphRoute.Login) {
-                        popUpTo<AuthNavGraphRoute.EmailVerification> {
-                            inclusive = true
-                        }
+                        navController.fullClearBackStack()
                     }
                 },
-                onClose = {
-                    navController.navigate(AuthNavGraphRoute.Login) {
-                        popUpTo<AuthNavGraphRoute.EmailVerification> {
-                            inclusive = true
-                        }
-                    }
-                }
             )
         }
 
         composable<AuthNavGraphRoute.ForgotPassword> {
             ForgotPasswordScreen()
         }
-        composable<AuthNavGraphRoute.ResetPassword>(
-            deepLinks = listOf(
-                navDeepLink { this.uriPattern = resetPasswordDeeplinkPatternHttpsScheme },
-                navDeepLink {
-                    this.uriPattern = resetPasswordDeeplinkPatternChatappScheme
-                },
-            ),
-        ) {
+        composable<AuthNavGraphRoute.ResetPassword> {
             ResetPasswordScreen(
                 navigateToLogin = {
                     navController.navigate(AuthNavGraphRoute.Login) {
@@ -113,7 +90,12 @@ fun NavGraphBuilder.authNavGraph(
                             inclusive = true
                         }
                     }
-                }
+                },
+            )
+        }
+        composable<AuthNavGraphRoute.ResetPasswordRestricted> {
+            ResetPasswordRestrictedScreen(
+                navigateBack = { navController.popBackStack() }
             )
         }
     }

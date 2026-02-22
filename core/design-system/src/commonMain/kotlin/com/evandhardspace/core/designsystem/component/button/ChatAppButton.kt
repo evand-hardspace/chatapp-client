@@ -17,6 +17,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.evandhardspace.core.designsystem.annotations.ThemedPreview
+import com.evandhardspace.core.designsystem.component.ChatAppLoadingIndicator
 import com.evandhardspace.core.designsystem.theme.ChatAppPreview
 import com.evandhardspace.core.designsystem.theme.extended
 import com.evandhardspace.core.designsystem.theme.paddings
@@ -39,7 +40,7 @@ fun ChatAppButton(
     isLoading: Boolean = false,
     leadingIcon: @Composable (() -> Unit)? = null,
 ) {
-    val enabled = if(isLoading) false else enabled
+    val enabled = if (isLoading) false else enabled
     val colors = when (style) {
         ChatAppButtonStyle.Primary -> ButtonDefaults.buttonColors(
             containerColor = MaterialTheme.colorScheme.primary,
@@ -111,14 +112,13 @@ fun ChatAppButton(
         Box(
             contentAlignment = Alignment.Center,
         ) {
-            CircularProgressIndicator(
+            ChatAppLoadingIndicator(
                 modifier = Modifier
-                    .size(15.dp)
+                    .size(20.dp)
                     .alpha(
                         alpha = if (isLoading) 1f else 0f,
                     ),
-                strokeWidth = 1.5.dp,
-                color = Color.Black,
+                strokeWidth = 2.dp,
             )
             Row(
                 horizontalArrangement = Arrangement.spacedBy(
@@ -199,3 +199,17 @@ fun ChatAppTextButtonPreview() {
         )
     }
 }
+
+@ThemedPreview
+@Composable
+fun ChatAppButtonLoadingPreview() {
+    ChatAppPreview(paddings = true) {
+        ChatAppButton(
+            text = "Text Button",
+            onClick = {},
+            style = ChatAppButtonStyle.Primary,
+            isLoading = true,
+        )
+    }
+}
+

@@ -6,6 +6,7 @@ import com.evandhardspace.core.domain.auth.AuthState
 import com.evandhardspace.core.domain.auth.MutableSessionRepository
 import com.evandhardspace.core.domain.auth.SessionEvents
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filterIsInstance
@@ -35,10 +36,11 @@ class MainViewModel(
 
     private fun loadLoggedInInitialState() {
         viewModelScope.launch {
+            delay(1000)
             val authState = sessionRepository.authState.first()
             state.update {
                 MainState.Loaded(
-                    isLoggedIn = authState is AuthState.Authorized,
+                    isAuthorized = authState is AuthState.Authenticated,
                 )
             }
         }
@@ -48,7 +50,7 @@ class MainViewModel(
         sessionRepository.events
             .filterIsInstance<SessionEvents.LoggedOut>()
             .onEach {
-                state.update { MainState.Loaded(isLoggedIn = false) }
+                state.update { MainState.Loaded(isAuthorized = false) }
                 _effects.send(MainEffect.LoggedOut)
             }.launchIn(viewModelScope)
     }

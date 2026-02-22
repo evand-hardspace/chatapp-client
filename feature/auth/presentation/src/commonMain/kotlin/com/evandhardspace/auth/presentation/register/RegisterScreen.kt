@@ -69,7 +69,6 @@ internal fun RegisterContent(
         modifier = modifier,
         headerText = stringResource(Res.string.welcome_to_chatapp),
         errorText = state.registrationError?.asComposableString(),
-        logo = { ChatAppBrandLogo() },
     ) {
         ChatAppTextField(
             state = state.usernameTextState,

@@ -7,19 +7,19 @@ import com.evandhardspace.core.data.preferences.UserPreferences
 import com.evandhardspace.core.domain.auth.AuthState
 import com.evandhardspace.core.domain.auth.User
 
-internal fun AuthInfoDto.toDomain() = AuthState.Authorized(
+internal fun AuthInfoDto.toDomain() = AuthState.Authenticated(
     accessToken = accessToken,
     refreshToken = refreshToken,
     user = user.toDomain(),
 )
 
-internal fun AuthInfoPreferences.toDomain() = AuthState.Authorized(
+internal fun AuthInfoPreferences.toDomain() = AuthState.Authenticated(
     accessToken = accessToken,
     refreshToken = refreshToken,
     user = user.toDomain(),
 )
 
-internal fun AuthState.Authorized.toPreferences(): AuthInfoPreferences = AuthInfoPreferences(
+internal fun AuthState.Authenticated.toPreferences(): AuthInfoPreferences = AuthInfoPreferences(
     accessToken = accessToken,
     refreshToken = refreshToken,
     user = user.toPreferences(),

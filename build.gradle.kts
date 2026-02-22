@@ -14,4 +14,5 @@ plugins {
     alias(libs.plugins.android.lint) apply false
     alias(libs.plugins.kotlin.android) apply false
     alias(libs.plugins.koin) apply false
+    alias(libs.plugins.kotlin.jvm) apply false
 }
