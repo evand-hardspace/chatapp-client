@@ -6,6 +6,7 @@ import com.evandhardspace.core.domain.auth.AuthState
 import com.evandhardspace.core.domain.auth.MutableSessionRepository
 import com.evandhardspace.core.domain.auth.SessionEvents
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filterIsInstance
@@ -35,6 +36,7 @@ class MainViewModel(
 
     private fun loadLoggedInInitialState() {
         viewModelScope.launch {
+            delay(1000)
             val authState = sessionRepository.authState.first()
             state.update {
                 MainState.Loaded(

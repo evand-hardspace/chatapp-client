@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -28,6 +27,7 @@ import chatapp.feature.auth.presentation.generated.resources.login
 import chatapp.feature.auth.presentation.generated.resources.verifying_account
 import com.evandhardspace.auth.presentation.email_verifiaction.EmailVerificationState.VerificationState
 import com.evandhardspace.core.designsystem.annotations.ThemedPreview
+import com.evandhardspace.core.designsystem.component.ChatAppLoadingIndicator
 import com.evandhardspace.core.designsystem.component.brand.ChatAppFailureIcon
 import com.evandhardspace.core.designsystem.component.brand.ChatAppSuccessIcon
 import com.evandhardspace.core.designsystem.component.button.ChatAppButton
@@ -125,10 +125,9 @@ private fun VerifyingContent(modifier: Modifier = Modifier) {
         ),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        CircularProgressIndicator(
+        ChatAppLoadingIndicator(
             modifier = Modifier
                 .size(48.dp),
-            color = MaterialTheme.colorScheme.primary
         )
         Text(
             text = stringResource(Res.string.verifying_account),

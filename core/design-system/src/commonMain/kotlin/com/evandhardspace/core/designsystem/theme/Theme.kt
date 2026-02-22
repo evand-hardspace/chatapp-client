@@ -188,7 +188,7 @@ val LightColorScheme = lightColorScheme(
     background = ChatAppBrand100,
     onBackground = ChatAppBase0,
     surface = ChatAppBase0,
-    onSurface = ChatAppBase1000,
+    onSurface = ChatAppBase950,
     surfaceVariant = ChatAppBase100,
     onSurfaceVariant = ChatAppBase900,
 
