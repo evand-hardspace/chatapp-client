@@ -11,3 +11,4 @@
 12. Forgot password error is not shown when email is invalid
 13. Add deeplink interceptor and fix authentication flow navigation
 14. Migrate to Nav3
+15. BE involved: add information about which account is trying to change the password

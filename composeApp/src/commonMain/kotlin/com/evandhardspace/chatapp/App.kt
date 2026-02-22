@@ -70,11 +70,15 @@ fun App(
         ) {
             when (val currentState = state) {
                 is MainState.Loaded -> {
-                    NavigationRoot(
-                        navController = navController,
-                        startDestination = if (currentState.isAuthorized) ChatNavGraphRoute.Root
-                        else AuthNavGraphRoute.Root,
-                    )
+                    if (deeplinkManager.isProcessing.collectAsStateWithLifecycle().value) {
+                        ChatAppLoadingSpace(Modifier.fillMaxSize())
+                    } else {
+                        NavigationRoot(
+                            navController = navController,
+                            startDestination = if (currentState.isAuthorized) ChatNavGraphRoute.Root
+                            else AuthNavGraphRoute.Root,
+                        )
+                    }
                     DeeplinkListener(deeplinkManager, navController)
                 }
 

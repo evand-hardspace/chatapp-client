@@ -40,4 +40,6 @@
     <string name="error_reset_password_token_invalid">It seems like the reset password link is not valid or has expired. Please request a new email.</string>
     <string name="return_to_login">Return to login</string>
     <string name="go_back">Go back</string>
+    <string name="you_are_logged_in">You are already logged in</string>
+    <string name="password_change_restricted_description"> If you want to change your password, please log out first and retry your attempt.</string>
 </resources>

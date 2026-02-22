@@ -1,4 +1,4 @@
-package com.evandhardspace.auth.presentation.email_verifiaction.deeplink
+package com.evandhardspace.auth.presentation.reset_password.deeplink
 
 import androidx.navigation.NavController
 import com.evandhardspace.auth.presentation.navigation.AuthNavGraphRoute
@@ -11,13 +11,13 @@ import kotlinx.coroutines.flow.first
 import org.koin.core.annotation.Factory
 
 // TODO(5): Change deeplink
-private const val emailVerificationDeeplinkPatternHttpsScheme =
-    "https://chirp.pl-coding.com/api/auth/verify"
-private const val emailVerificationDeeplinkPatternChatappScheme =
-    "chirp://chirp.pl-coding.com/api/auth/verify"
+internal const val resetPasswordDeeplinkPatternHttpsScheme =
+    "https://chirp.pl-coding.com/api/auth/reset-password"
+internal const val resetPasswordDeeplinkPatternChatappScheme =
+    "chirp://chirp.pl-coding.com/api/auth/reset-password"
 
 @Factory
-internal class EmailVerificationDeeplinkInterceptor(
+class ResetPasswordDeeplinkInterceptor(
     private val sessionRepository: SessionRepository,
 ) : DeeplinkInterceptor {
     override suspend fun process(
@@ -26,21 +26,27 @@ internal class EmailVerificationDeeplinkInterceptor(
     ): Boolean {
         if (
             uri.startsWith(
-                emailVerificationDeeplinkPatternHttpsScheme,
-                emailVerificationDeeplinkPatternChatappScheme,
+                resetPasswordDeeplinkPatternHttpsScheme,
+                resetPasswordDeeplinkPatternChatappScheme,
             ).not()
         ) return false
 
         val token = uri.asUrl().parameters.find { it.key == "token" }?.getSingleOrNull()
-
         if (token == null) return false
+
         val isAuthenticated = sessionRepository.authState.first() is AuthState.Authenticated
         if (isAuthenticated) {
-            navController.navigate(AuthNavGraphRoute.EmailVerification(token = token)) {
+            navController.navigate(
+                route = AuthNavGraphRoute.ResetPasswordRestricted,
+            ) {
                 launchSingleTop = true
             }
         } else {
-            navController.navigate(AuthNavGraphRoute.EmailVerification(token = token)) {
+            navController.navigate(
+                AuthNavGraphRoute.ResetPassword(
+                    token = token,
+                ),
+            ) {
                 navController.fullClearBackStack()
                 launchSingleTop = true
             }

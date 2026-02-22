@@ -4,7 +4,7 @@ import com.evandhardspace.core.navigation.NavRoute
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-sealed interface AuthNavGraphRoute: NavRoute {
+sealed interface AuthNavGraphRoute : NavRoute {
     @Serializable
     data object Root : AuthNavGraphRoute
 
@@ -33,6 +33,9 @@ sealed interface AuthNavGraphRoute: NavRoute {
             const val TOKEN_ARG_KEY = "token"
         }
     }
+
+    @Serializable
+    data object ResetPasswordRestricted : AuthNavGraphRoute
 
     @Serializable
     data object ForgotPassword : AuthNavGraphRoute
