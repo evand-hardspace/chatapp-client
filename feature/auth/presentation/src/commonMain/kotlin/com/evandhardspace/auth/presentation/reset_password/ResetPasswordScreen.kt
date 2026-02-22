@@ -59,7 +59,6 @@ private fun ResetPasswordContent(
             else Res.string.set_new_password,
         ),
         errorText = state.errorText?.asComposableString(),
-        logo = { ChatAppBrandLogo() }
     ) {
         if (state.isPasswordChanged) {
             Text(

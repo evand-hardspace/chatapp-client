@@ -19,7 +19,6 @@ import chatapp.feature.auth.presentation.generated.resources.forgot_password
 import chatapp.feature.auth.presentation.generated.resources.forgot_password_email_sent_successfully
 import chatapp.feature.auth.presentation.generated.resources.submit
 import com.evandhardspace.core.designsystem.annotations.ThemedPreview
-import com.evandhardspace.core.designsystem.component.brand.ChatAppBrandLogo
 import com.evandhardspace.core.designsystem.component.button.ChatAppButton
 import com.evandhardspace.core.designsystem.component.layout.ChatAppAdaptiveFormLayout
 import com.evandhardspace.core.designsystem.component.textfield.ChatAppTextField
@@ -53,7 +52,6 @@ internal fun ForgotPasswordContent(
         modifier = modifier,
         headerText = stringResource(Res.string.forgot_password),
         errorText = state.errorText?.asComposableString(),
-        logo = { ChatAppBrandLogo() }
     ) {
         ChatAppTextField(
             state = state.emailTextFieldState,

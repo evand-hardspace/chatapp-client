@@ -8,7 +8,8 @@ import com.evandhardspace.auth.presentation.navigation.AuthNavGraphRoute
 import com.evandhardspace.auth.presentation.navigation.authNavGraph
 import com.evandhardspace.chat.presentation.navigation.ChatNavGraphRoute
 import com.evandhardspace.chat.presentation.navigation.chatNavGraph
-import com.evandhardspace.core.presentation.navigation.NavRoute
+import com.evandhardspace.chatapp.deeplink.fallback.deeplinkFallbackScreen
+import com.evandhardspace.core.navigation.NavRoute
 
 @Composable
 fun NavigationRoot(
@@ -21,6 +22,7 @@ fun NavigationRoot(
         navController = navController,
         startDestination = startDestination,
     ) {
+        deeplinkFallbackScreen(navController)
         authNavGraph(
             navController,
             onLoginSuccess = {

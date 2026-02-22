@@ -25,6 +25,8 @@ kotlin {
             implementation(projects.core.common)
             implementation(projects.core.presentation)
             implementation(projects.core.designSystem)
+            implementation(projects.core.urlUtil)
+            implementation(projects.core.navigation)
 
             implementation(projects.feature.auth.domain)
             implementation(projects.feature.auth.presentation)

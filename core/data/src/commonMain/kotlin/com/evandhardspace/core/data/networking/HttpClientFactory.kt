@@ -63,7 +63,7 @@ class HttpClientFactory(
         install(Auth) {
             bearer {
                 loadTokens {
-                    (sessionRepository.authState.first() as? AuthState.Authorized)?.let {
+                    (sessionRepository.authState.first() as? AuthState.Authenticated)?.let {
                         BearerTokens(
                             accessToken = it.accessToken,
                             refreshToken = it.refreshToken,
@@ -75,7 +75,7 @@ class HttpClientFactory(
 
                     val authState: AuthState? = sessionRepository.authState.firstOrNull()
 
-                    if (authState == null || authState !is AuthState.Authorized) {
+                    if (authState == null || authState !is AuthState.Authenticated) {
                         sessionRepository.logout()
                         return@refreshTokens null
                     }

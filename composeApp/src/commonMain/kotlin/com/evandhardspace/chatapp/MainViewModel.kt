@@ -38,7 +38,7 @@ class MainViewModel(
             val authState = sessionRepository.authState.first()
             state.update {
                 MainState.Loaded(
-                    isLoggedIn = authState is AuthState.Authorized,
+                    isAuthorized = authState is AuthState.Authenticated,
                 )
             }
         }
@@ -48,7 +48,7 @@ class MainViewModel(
         sessionRepository.events
             .filterIsInstance<SessionEvents.LoggedOut>()
             .onEach {
-                state.update { MainState.Loaded(isLoggedIn = false) }
+                state.update { MainState.Loaded(isAuthorized = false) }
                 _effects.send(MainEffect.LoggedOut)
             }.launchIn(viewModelScope)
     }

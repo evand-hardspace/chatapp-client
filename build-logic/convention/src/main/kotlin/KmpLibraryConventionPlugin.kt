@@ -35,6 +35,7 @@ class KmpLibraryConventionPlugin: Plugin<Project> {
 
             dependencies {
                 commonMainImplementation(libs.findLibrary("koin-annotations").get())
+                commonMainImplementation(libs.findLibrary("koin-core").get())
                 commonMainImplementation(libs.findLibrary("kotlinx-serialization-json").get())
                 commonTestImplementation(libs.findLibrary("kotlin-test").get())
             }

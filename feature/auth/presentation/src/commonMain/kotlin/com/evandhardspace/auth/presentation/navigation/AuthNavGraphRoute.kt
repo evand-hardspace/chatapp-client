@@ -1,6 +1,6 @@
 package com.evandhardspace.auth.presentation.navigation
 
-import com.evandhardspace.core.presentation.navigation.NavRoute
+import com.evandhardspace.core.navigation.NavRoute
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

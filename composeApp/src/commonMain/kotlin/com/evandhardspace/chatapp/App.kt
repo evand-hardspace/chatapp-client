@@ -11,14 +11,16 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.rememberNavController
 import com.evandhardspace.auth.presentation.navigation.AuthNavGraphRoute
 import com.evandhardspace.chat.presentation.navigation.ChatNavGraphRoute
-import com.evandhardspace.chatapp.navigation.DeeplinkListener
+import com.evandhardspace.chatapp.deeplink.DeeplinkListener
 import com.evandhardspace.chatapp.navigation.NavigationRoot
 import com.evandhardspace.core.designsystem.annotations.ThemedPreview
 import com.evandhardspace.core.designsystem.component.layout.ChatAppSnackbarScaffold
 import com.evandhardspace.core.designsystem.component.snackbar.ChatAppSnackbarHostState
 import com.evandhardspace.core.designsystem.component.snackbar.LocalSnackbarHostState
 import com.evandhardspace.core.designsystem.theme.ChatAppTheme
+import com.evandhardspace.core.navigation.deeplink.DeeplinkProcessor
 import com.evandhardspace.core.presentation.util.OnEffect
+import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 
 @ThemedPreview
@@ -26,6 +28,7 @@ import org.koin.compose.viewmodel.koinViewModel
 fun App(
     onAuthenticationChecked: () -> Unit = {},
     viewModel: MainViewModel = koinViewModel(),
+    deeplinkManager: DeeplinkProcessor = koinInject(),
 ): Unit = ChatAppTheme {
     val coroutineScope = rememberCoroutineScope()
     val snackbarHostState = remember {
@@ -34,10 +37,7 @@ fun App(
             scope = coroutineScope,
         )
     }
-
     val navController = rememberNavController()
-    DeeplinkListener(navController)
-
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     LaunchedEffect(state) {
@@ -66,14 +66,18 @@ fun App(
             snackbarHostState = snackbarHostState,
         ) {
             when (val currentState = state) {
-                is MainState.Loaded -> NavigationRoot(
-                    navController = navController,
-                    startDestination = if (currentState.isLoggedIn) ChatNavGraphRoute.Root
-                    else AuthNavGraphRoute.Root,
-                )
+                is MainState.Loaded -> {
+                    NavigationRoot(
+                        navController = navController,
+                        startDestination = if (currentState.isAuthorized) ChatNavGraphRoute.Root
+                        else AuthNavGraphRoute.Root,
+                    )
+                    DeeplinkListener(deeplinkManager, navController)
+                }
 
                 is MainState.Loading -> Unit // TODO(9): Add loader
             }
         }
     }
 }
+

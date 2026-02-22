@@ -58,7 +58,7 @@ internal class KtorAuthRepository(
     override suspend fun login(
         email: String,
         password: String,
-    ): Result<DataError.Remote, AuthState.Authorized> = client.post<LoginRequest, AuthInfoDto>(
+    ): Result<DataError.Remote, AuthState.Authenticated> = client.post<LoginRequest, AuthInfoDto>(
         route = "/auth/login",
         body = LoginRequest(
             email = email,

@@ -26,7 +26,6 @@ inline fun <T, E1 : DomainError, E2 : DomainError> Result<E1, T>.mapFailure(
     is Result.Success -> Result.Success(data)
 }
 
-@IgnorableReturnValue
 inline fun <T, E : DomainError> Result<E, T>.onSuccess(
     action: (T) -> Unit,
 ): Result<E, T> = when (this) {
@@ -37,7 +36,6 @@ inline fun <T, E : DomainError> Result<E, T>.onSuccess(
     is Result.Failure -> this
 }
 
-@IgnorableReturnValue
 inline fun <T, E : DomainError> Result<E, T>.onFailure(
     action: (E) -> Unit,
 ): Result<E, T> = when (this) {

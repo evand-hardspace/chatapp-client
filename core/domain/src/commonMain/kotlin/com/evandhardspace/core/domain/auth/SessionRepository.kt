@@ -11,7 +11,7 @@ interface SessionRepository {
 }
 
 interface MutableSessionRepository: SessionRepository {
-    suspend fun saveAuthInfo(info: AuthState.Authorized): AuthState.Authorized
+    suspend fun saveAuthInfo(info: AuthState.Authenticated): AuthState.Authenticated
     suspend fun logout()
 }
 

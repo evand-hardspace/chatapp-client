@@ -29,18 +29,18 @@ class DataStoreSessionRepository(
     private val _events = MutableSharedFlow<SessionEvents>()
     override val events: SharedFlow<SessionEvents> = _events.asSharedFlow()
     override val authState: Flow<AuthState> = dataStore.data.map { prefs ->
-        val authInfo = prefs[AuthInfoKey] ?: return@map AuthState.Unauthorized
+        val authInfo = prefs[AuthInfoKey] ?: return@map AuthState.Unauthenticated
         json.decodeFromString<AuthInfoPreferences>(authInfo).toDomain()
     }
 
-    override suspend fun saveAuthInfo(info: AuthState.Authorized): AuthState.Authorized {
+    override suspend fun saveAuthInfo(info: AuthState.Authenticated): AuthState.Authenticated {
         val serialized = json.encodeToString(info.toPreferences())
         // TODO(6): replace with updateData
         dataStore.edit { pref ->
             pref[AuthInfoKey] = serialized
         }
         val result = authState.first()
-        require(result is AuthState.Authorized) { "authState should emit a state that was just saved" }
+        require(result is AuthState.Authenticated) { "authState should emit a state that was just saved" }
         return result
     }
 
