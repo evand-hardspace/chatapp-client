@@ -8,7 +8,7 @@ import org.koin.core.annotation.Factory
 import org.koin.core.annotation.Module
 
 @Module
-private class AuthDomainModule {
+internal class AuthDomainModule {
     @Factory
     fun provideEmailValidator(): EmailValidator = EmailValidator()
 
