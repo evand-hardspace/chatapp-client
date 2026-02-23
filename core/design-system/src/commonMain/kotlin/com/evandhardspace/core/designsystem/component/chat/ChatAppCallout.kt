@@ -109,7 +109,7 @@ fun ChatAppCallout(
 fun ChatAppCalloutStartPreview() {
     ChatAppPreview(paddings = true) {
         ChatAppCallout(
-            messageContent = LoremIpsum(20).values.joinToString(" "),
+            messageContent = LoremIpsum(20).values.joinToString(),
             sender = "Ivan",
             formattedDateTime = "Friday 18:20pm",
             calloutPosition = CalloutPosition.Start,
@@ -123,7 +123,7 @@ fun ChatAppCalloutStartPreview() {
 fun ChatAppCalloutEndPreview() {
     ChatAppPreview(paddings = true) {
         ChatAppCallout(
-            messageContent = LoremIpsum(20).values.joinToString(" "),
+            messageContent = LoremIpsum(20).values.joinToString(),
             sender = "Ivan",
             formattedDateTime = "Friday 18:20pm",
             calloutPosition = CalloutPosition.End,
