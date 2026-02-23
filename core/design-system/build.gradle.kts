@@ -11,6 +11,8 @@ kotlin {
                 implementation(libs.kotlin.stdlib)
                 implementation(libs.jetbrains.compose.components.resources)
                 implementation(libs.jetbrains.compose.uiToolingPreview)
+                implementation(libs.coil.compose)
+                implementation(libs.coil.network.ktor)
             }
         }
 
