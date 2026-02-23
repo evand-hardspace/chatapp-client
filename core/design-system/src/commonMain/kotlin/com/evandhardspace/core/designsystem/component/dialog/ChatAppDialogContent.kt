@@ -36,7 +36,7 @@ fun ChatAppDialogContent(
 
 @ThemedPreview
 @Composable
-fun ChatAppDialogContentPreview() {
+private fun ChatAppDialogContentPreview() {
     ChatAppPreview(paddings = true) {
         ChatAppDialogContent(
             onDismiss = {},

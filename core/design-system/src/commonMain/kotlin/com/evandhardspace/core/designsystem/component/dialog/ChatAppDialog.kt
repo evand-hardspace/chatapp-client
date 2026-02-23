@@ -113,7 +113,7 @@ fun ChatAppDialog(
 
 @ThemedPreview
 @Composable
-fun ChatAppDialogPreview() {
+private fun ChatAppDialogPreview() {
     ChatAppPreview(paddings = true) {
         ChatAppDialog(
             title = "Delete profile picture?",
