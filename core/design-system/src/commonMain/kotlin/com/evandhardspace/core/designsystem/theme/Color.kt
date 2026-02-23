@@ -31,7 +31,7 @@ val ChatAppBase0 = Color(0xFFFFFFFF)
 // Red Colors
 val ChatAppRed600 = Color(0xFFAA142A)
 val ChatAppRed500 = Color(0xFFDA233E)
-val ChatAppRed200 = Color(0xFFFF7987)
+val ChatAppRed200 = Color(0xFFEA6572)
 
 // Accent Colors (15% alpha)
 val ChatAppBlue = Color(0x26A2C0FF)
