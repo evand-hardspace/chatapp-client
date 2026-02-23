@@ -27,7 +27,6 @@ import chatapp.feature.auth.presentation.generated.resources.login
 import chatapp.feature.auth.presentation.generated.resources.password
 import chatapp.feature.auth.presentation.generated.resources.welcome_back
 import com.evandhardspace.core.designsystem.annotations.ThemedPreview
-import com.evandhardspace.core.designsystem.component.brand.ChatAppBrandLogo
 import com.evandhardspace.core.designsystem.component.button.ChatAppButton
 import com.evandhardspace.core.designsystem.component.button.ChatAppButtonStyle
 import com.evandhardspace.core.designsystem.component.layout.ChatAppAdaptiveFormLayout
