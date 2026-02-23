@@ -80,7 +80,7 @@ internal fun EmailVerificationContent(
                             text = stringResource(
                                 if (state.verification.isAuthenticated) Res.string.go_back else Res.string.login
                             ),
-                            onClick = if (state.verification.isAuthenticated) navigateToLogin else navigateBack,
+                            onClick = if (state.verification.isAuthenticated) navigateBack else navigateToLogin ,
                             modifier = Modifier.fillMaxWidth()
                         )
                     }
