@@ -100,7 +100,9 @@ private fun ChatListDetailsContent(
     DialogViewModelScope(
         visible = state.dialogState is DialogState.CreateChat,
     ) {
-        CreateChatScreen()
+        CreateChatScreen(
+            onDismiss = { onAction(ChatListDetailsAction.OnDismissCurrentDialog) },
+        )
     }
 
     BackHandler(enabled = scaffoldNavigator.canNavigateBack()) {

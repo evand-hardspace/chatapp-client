@@ -39,16 +39,18 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 internal fun CreateChatScreen(
+    onDismiss: () -> Unit,
     viewModel: CreateChatViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     ChatAppAdaptiveDialogSheetLayout(
-        onDismiss = { viewModel.onAction(CreateChatAction.OnDismissDialog) },
+        onDismiss = onDismiss,
     ) {
         CreateChatContent(
             state = state,
             onAction = viewModel::onAction,
+            onDismiss = onDismiss,
         )
     }
 }
@@ -57,6 +59,7 @@ internal fun CreateChatScreen(
 private fun CreateChatContent(
     state: CreateChatState,
     onAction: (CreateChatAction) -> Unit,
+    onDismiss: () -> Unit,
 ) {
     var isTextFieldFocused by remember { mutableStateOf(false) }
     val imeHeight = WindowInsets.ime.getBottom(LocalDensity.current)
@@ -76,14 +79,12 @@ private fun CreateChatContent(
             .navigationBarsPadding(),
     ) {
         AnimatedVisibility(
-            visible = !shouldHideHeader
+            visible = shouldHideHeader.not(),
         ) {
             Column {
                 ManageChatHeaderRow(
                     title = stringResource(Res.string.create_chat),
-                    onCloseClick = {
-                        onAction(CreateChatAction.OnDismissDialog)
-                    },
+                    onCloseClick = onDismiss,
                     modifier = Modifier.fillMaxWidth()
                 )
                 ChatAppHorizontalDivider()
@@ -91,11 +92,9 @@ private fun CreateChatContent(
         }
         ChatParticipantSearchTextSection(
             queryState = state.queryTextState,
-            onAddClick = {
-                onAction(CreateChatAction.OnAdd)
-            },
+            onAddClick = { onAction(CreateChatAction.OnAdd) },
             isSearchEnabled = state.canAddParticipant,
-            isLoading = state.isAddingParticipant,
+            isLoading = state.isSearching,
             modifier = Modifier
                 .fillMaxWidth(),
             error = state.searchError,
@@ -127,9 +126,7 @@ private fun CreateChatContent(
             secondaryButton = {
                 ChatAppButton(
                     text = stringResource(Res.string.cancel),
-                    onClick = {
-                        onAction(CreateChatAction.OnDismissDialog)
-                    },
+                    onClick = onDismiss,
                     style = ChatAppButtonStyle.Secondary,
                 )
             },
@@ -145,6 +142,7 @@ private fun CreateChatScreenPreview() {
         CreateChatContent(
             state = CreateChatState(),
             onAction = {},
+            onDismiss = {},
         )
     }
 }

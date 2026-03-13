@@ -1,4 +1,4 @@
-package com.evandhardspace.chat.domain
+package com.evandhardspace.chat.domain.model
 
 import kotlin.time.Instant
 

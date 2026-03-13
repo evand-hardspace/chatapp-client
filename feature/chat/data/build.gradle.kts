@@ -13,6 +13,9 @@ kotlin {
                 implementation(projects.feature.chat.database)
 
                 implementation(libs.kotlin.stdlib)
+
+                implementation(libs.bundles.ktor.common)
+                implementation(libs.koin.core)
             }
         }
 

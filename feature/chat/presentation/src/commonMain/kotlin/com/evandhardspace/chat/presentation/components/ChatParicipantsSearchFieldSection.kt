@@ -32,11 +32,8 @@ internal fun ChatParticipantSearchTextSection(
 ) {
     Row(
         modifier = modifier
-            .padding(
-                horizontal = 20.dp,
-                vertical = 16.dp
-            ),
-        verticalAlignment = Alignment.CenterVertically,
+            .padding(MaterialTheme.paddings.default),
+        verticalAlignment = Alignment.Top,
         horizontalArrangement = Arrangement.spacedBy(MaterialTheme.paddings.default),
     ) {
         ChatAppTextField(
