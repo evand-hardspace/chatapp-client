@@ -28,6 +28,7 @@ fun ChatAppBottomSheet(
 
     ModalBottomSheet(
         onDismissRequest = onDismiss,
+        sheetState = sheetState,
         dragHandle = null,
         contentWindowInsets = { WindowInsets() },
         modifier = modifier.statusBarsPadding(),

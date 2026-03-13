@@ -23,8 +23,10 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.backhandler.BackHandler
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.evandhardspace.chat.presentation.create_chat.CreateChatScreen
 import com.evandhardspace.core.designsystem.theme.extended
 import com.evandhardspace.core.designsystem.theme.paddings
+import com.evandhardspace.core.presentation.util.dialog.DialogViewModelScope
 import kotlinx.coroutines.launch
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -66,6 +68,7 @@ private fun ChatListDetailsContent(
                             text = "Chat $chatIndex",
                             modifier = Modifier
                                 .clickable {
+                                    onAction(ChatListDetailsAction.OnCreateChat)
                                     onAction(ChatListDetailsAction.OnOpenChat(chatIndex.toString()))
                                     scope.launch {
                                         scaffoldNavigator.navigateTo(
@@ -93,6 +96,12 @@ private fun ChatListDetailsContent(
             }
         }
     )
+
+    DialogViewModelScope(
+        visible = state.dialogState is DialogState.CreateChat,
+    ) {
+        CreateChatScreen()
+    }
 
     BackHandler(enabled = scaffoldNavigator.canNavigateBack()) {
         scope.launch {

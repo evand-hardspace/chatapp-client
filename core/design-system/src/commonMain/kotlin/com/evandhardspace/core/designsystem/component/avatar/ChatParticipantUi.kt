@@ -1,6 +1,6 @@
 package com.evandhardspace.core.designsystem.component.avatar
 
-data class AvatarUi(
+data class ChatParticipantUi(
     val id: String,
     val username: String,
     val initials: String,

@@ -11,7 +11,7 @@ import com.evandhardspace.core.designsystem.theme.ChatAppPreview
 
 @Composable
 fun ChatAppStackedAvatars(
-    avatars: List<AvatarUi>,
+    avatars: List<ChatParticipantUi>,
     modifier: Modifier = Modifier,
     size: AvatarSize = AvatarSize.Small,
     maxVisible: Int = 2,
@@ -51,22 +51,22 @@ fun ChatAppStackedAvatarsPreview() {
     ChatAppPreview {
         ChatAppStackedAvatars(
             avatars = listOf(
-                AvatarUi(
+                ChatParticipantUi(
                     id = "1",
                     username = "Ivan",
                     initials = "IK",
                 ),
-                AvatarUi(
+                ChatParticipantUi(
                     id = "2",
                     username = "John",
                     initials = "JS",
                 ),
-                AvatarUi(
+                ChatParticipantUi(
                     id = "3",
                     username = "Bob",
                     initials = "BM",
                 ),
-                AvatarUi(
+                ChatParticipantUi(
                     id = "4",
                     username = "Charlie",
                     initials = "CF",
