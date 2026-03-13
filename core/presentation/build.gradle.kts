@@ -11,6 +11,8 @@ kotlin {
 
                 implementation(libs.jetbrains.compose.components.resources)
                 implementation(libs.material3.adaptive)
+
+                implementation(libs.bundles.koin.common)
             }
         }
 
