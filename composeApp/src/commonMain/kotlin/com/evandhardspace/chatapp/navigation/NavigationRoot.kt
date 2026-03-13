@@ -26,13 +26,13 @@ fun NavigationRoot(
         authNavGraph(
             navController,
             onLoginSuccess = {
-                navController.navigate(ChatNavGraphRoute.ChatListRoute) {
+                navController.navigate(ChatNavGraphRoute.ChatListDetailsRoute) {
                     popUpTo(AuthNavGraphRoute.Root) {
                         inclusive = true
                     }
                 }
             },
         )
-        chatNavGraph()
+        chatNavGraph(navController)
     }
 }

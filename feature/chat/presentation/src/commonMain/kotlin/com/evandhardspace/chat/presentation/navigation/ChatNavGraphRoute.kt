@@ -9,5 +9,5 @@ sealed interface ChatNavGraphRoute: NavRoute {
     data object Root : ChatNavGraphRoute
 
     @Serializable
-    data object ChatListRoute : ChatNavGraphRoute
+    data object ChatListDetailsRoute : ChatNavGraphRoute
 }
