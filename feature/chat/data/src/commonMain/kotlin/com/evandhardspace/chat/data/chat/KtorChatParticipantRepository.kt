@@ -6,8 +6,8 @@ import com.evandhardspace.core.data.networking.get
 import com.evandhardspace.core.domain.util.DataError
 import com.evandhardspace.core.domain.util.Result
 import com.evandhardspace.core.domain.util.map
-import com.evandhardspace.chat.data.chat.dto.ChatParticipantDto
-import com.evandhardspace.chat.data.chat.mapper.toDomain
+import com.evandhardspace.chat.data.dto.ChatParticipantDto
+import com.evandhardspace.chat.data.mapper.toDomain
 import io.ktor.client.HttpClient
 import org.koin.core.annotation.Factory
 

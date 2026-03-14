@@ -33,6 +33,7 @@ import com.evandhardspace.core.designsystem.component.dialog.ChatAppAdaptiveDial
 import com.evandhardspace.core.designsystem.component.dialog.rememberAdaptiveDialogSheetController
 import com.evandhardspace.core.designsystem.theme.ChatAppPreview
 import com.evandhardspace.core.presentation.util.DeviceConfiguration
+import com.evandhardspace.core.presentation.util.OnEffect
 import com.evandhardspace.core.presentation.util.compose.clearFocusOnTap
 import com.evandhardspace.core.presentation.util.currentDeviceConfiguration
 import org.jetbrains.compose.resources.stringResource
@@ -40,11 +41,18 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 internal fun CreateChatScreen(
+    viewModel: CreateChatViewModel = koinViewModel(),
+    onChatCreated: (chatId: String) -> Unit,
     onDismiss: () -> Unit,
-    viewModel: CreateChatViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val dialogSheetController = rememberAdaptiveDialogSheetController(onDismiss)
+
+    OnEffect(viewModel.effects) { effect ->
+        when(effect) {
+            is CreateChatEffect.OnChatCreated -> onChatCreated(effect.chatId)
+        }
+    }
 
     ChatAppAdaptiveDialogSheetLayout(
         controller = dialogSheetController,

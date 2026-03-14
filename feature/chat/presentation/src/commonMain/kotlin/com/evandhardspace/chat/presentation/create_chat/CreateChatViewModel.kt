@@ -7,16 +7,19 @@ import androidx.lifecycle.viewModelScope
 import chatapp.feature.chat.presentation.generated.resources.Res
 import chatapp.feature.chat.presentation.generated.resources.error_participant_not_found
 import com.evandhardspace.chat.domain.ChatParticipantRepository
+import com.evandhardspace.chat.domain.ChatRepository
 import com.evandhardspace.chat.presentation.create_chat.mapper.toUi
 import com.evandhardspace.core.domain.util.DataError
 import com.evandhardspace.core.domain.util.onFailure
 import com.evandhardspace.core.domain.util.onSuccess
 import com.evandhardspace.core.presentation.util.asUiText
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.koin.core.annotation.KoinViewModel
@@ -27,16 +30,21 @@ private const val DEFAULT_SEARCH_DEBOUNCE_SECONDS = 1
 @KoinViewModel
 internal class CreateChatViewModel(
     private val chatParticipantRepository: ChatParticipantRepository,
+    private val charRepository: ChatRepository,
 ) : ViewModel() {
+
+    private val _effects = Channel<CreateChatEffect>()
+    val effects = _effects.receiveAsFlow()
+
+    val state: StateFlow<CreateChatState>
+        field = MutableStateFlow(CreateChatState())
+
 
     private val searchFlow = snapshotFlow { state.value.queryTextState.text.toString() }
         .debounce(DEFAULT_SEARCH_DEBOUNCE_SECONDS.seconds)
         .onEach { query ->
             performSearch(query)
         }
-
-    val state: StateFlow<CreateChatState>
-        field = MutableStateFlow(CreateChatState())
 
     init {
         searchFlow.launchIn(viewModelScope)
@@ -45,7 +53,7 @@ internal class CreateChatViewModel(
     fun onAction(action: CreateChatAction) {
         when (action) {
             CreateChatAction.OnAdd -> addParticipant()
-            CreateChatAction.OnCreateChat -> Unit
+            CreateChatAction.OnCreateChat -> createChat()
         }
     }
 
@@ -64,6 +72,42 @@ internal class CreateChatViewModel(
                 }
                 state.value.queryTextState.clearText()
             }
+        }
+    }
+
+    private fun createChat() {
+        val userIds = state.value.selectedChatParticipants.map { it.id }
+        if (userIds.isEmpty()) {
+            return
+        }
+
+        viewModelScope.launch {
+            state.update {
+                it.copy(
+                    isCreatingChat = true,
+                    canAddParticipant = false,
+                )
+            }
+
+            charRepository
+                .createChat(userIds)
+                .onSuccess { chat ->
+                    state.update {
+                        it.copy(
+                            isCreatingChat = false,
+                        )
+                    }
+                    _effects.send(CreateChatEffect.OnChatCreated(chat.id))
+                }
+                .onFailure { error ->
+                    state.update { latestState ->
+                        latestState.copy(
+                            createChatError = error.asUiText(),
+                            canAddParticipant = latestState.currentSearchResult != null && latestState.isSearching.not(),
+                            isCreatingChat = false,
+                        )
+                    }
+                }
         }
     }
 

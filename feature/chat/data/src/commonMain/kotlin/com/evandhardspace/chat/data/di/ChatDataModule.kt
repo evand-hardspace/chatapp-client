@@ -1,4 +1,4 @@
-package com.evandhardspace.chat.data.chat.di
+package com.evandhardspace.chat.data.di
 
 import org.koin.core.annotation.ComponentScan
 import org.koin.core.annotation.Module

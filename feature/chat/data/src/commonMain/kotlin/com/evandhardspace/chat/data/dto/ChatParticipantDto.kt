@@ -1,4 +1,4 @@
-package com.evandhardspace.chat.data.chat.dto
+package com.evandhardspace.chat.data.dto
 
 import kotlinx.serialization.Serializable
 
