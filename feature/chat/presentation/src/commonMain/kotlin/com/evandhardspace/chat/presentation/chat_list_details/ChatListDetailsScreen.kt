@@ -9,7 +9,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.adaptive.layout.AnimatedPane
-import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffold
 import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffoldRole
 import androidx.compose.material3.adaptive.navigation.rememberListDetailPaneScaffoldNavigator
 import androidx.compose.runtime.Composable
@@ -17,9 +16,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.backhandler.BackHandler
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.evandhardspace.chat.presentation.create_chat.CreateChatScreen
+import com.evandhardspace.core.designsystem.component.layout.NavigableListDetailPaneScaffold
 import com.evandhardspace.core.designsystem.theme.extended
 import com.evandhardspace.core.designsystem.theme.paddings
 import com.evandhardspace.core.presentation.util.dialog.DialogViewModelScope
@@ -48,9 +47,8 @@ private fun ChatListDetailsContent(
     )
     val scope = rememberCoroutineScope()
 
-    ListDetailPaneScaffold(
-        directive = scaffoldDirective,
-        value = scaffoldNavigator.scaffoldValue,
+    NavigableListDetailPaneScaffold(
+        navigator = scaffoldNavigator,
         modifier = Modifier
             .background(MaterialTheme.colorScheme.extended.surfaceLower),
         listPane = {
@@ -82,7 +80,8 @@ private fun ChatListDetailsContent(
             AnimatedPane {
                 Box(
                     modifier = Modifier
-                        .fillMaxSize(),
+                        .fillMaxSize()
+                        .background(MaterialTheme.colorScheme.primary),
                     contentAlignment = Alignment.Center,
                 ) {
                     state.selectedChatId?.let {
@@ -99,11 +98,5 @@ private fun ChatListDetailsContent(
         CreateChatScreen(
             onDismiss = { onAction(ChatListDetailsAction.OnDismissCurrentDialog) },
         )
-    }
-
-    BackHandler(enabled = scaffoldNavigator.canNavigateBack()) {
-        scope.launch {
-            scaffoldNavigator.navigateBack()
-        }
     }
 }

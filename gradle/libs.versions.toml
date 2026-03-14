@@ -2,26 +2,27 @@
 # Build tools
 agp = "8.11.2"
 material3 = "1.10.0-alpha05"
-kotlin = "2.3.20-RC"
+kotlin = "2.3.20-RC3"
 ksp = "2.3.4"
 google-services = "4.4.4"
 
 androidDesugarJdkLibs = "2.1.5"
-androidTools = "32.0.1"
+androidTools = "32.1.0"
 
 # Compose
 compose-hot-reload = "1.0.0"
-composeBom = "2026.02.00"
-composeMultiplatform = "1.10.1"
+composeBom = "2026.03.00"
+composeMultiplatform = "1.10.2"
 # Maintain compose multiplatform version aligned with navigation, cache error could happen
 compose-lifecycle = "2.9.2"
 navigation-compose = "2.9.2"
 jetbrains-core-bundle = "1.0.1"
 material-icons = "1.7.3"
+navigationEvent = "1.0.1"
 
 # AndroidX
-androidx-activity = "1.12.4"
-androidx-core = "1.17.0"
+androidx-activity = "1.13.0"
+androidx-core = "1.18.0"
 androidx-lifecycle = "2.9.0"
 androidx-test-ext = "1.2.1"
 androidx-runner = "1.6.2"
@@ -37,18 +38,18 @@ kotlinx-datetime = "0.7.1"
 # Third party
 koin = "4.2.0-RC1"
 koin-plugin = "0.3.0"
-ktor = "3.4.0"
-room = "2.7.2"
-sqlite = "2.5.2"
-datastore = "1.2.0"
-firebase-bom = "34.9.0"
+ktor = "3.4.1"
+room = "2.8.4"
+sqlite = "2.6.2"
+datastore = "1.2.1"
+firebase-bom = "34.10.0"
 adaptive = "1.2.0"
 jetbrains-savedstate = "1.4.0"
-coil = "3.3.0"
-coil-network = "3.3.0"
+coil = "3.4.0"
+coil-network = "3.4.0"
 moko = "0.20.1"
 buildkonfig = "0.17.1"
-kermit = "2.0.8"
+kermit = "2.1.0"
 
 projectVersionName = "1.0"
 projectMinSdk = "28"
@@ -87,7 +88,7 @@ kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serializa
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
 
 # JetBrains
-jetbrains-compose-backhandler = { module = "org.jetbrains.compose.ui:ui-backhandler", version.ref = "composeMultiplatform" }
+jetbrains-compose-navigationEvent = { module = "org.jetbrains.androidx.navigationevent:navigationevent-compose", version.ref = "navigationEvent" }
 jetbrains-compose-navigation = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigation-compose" }
 jetbrains-compose-uiTooling = { module = "org.jetbrains.compose.ui:ui-tooling", version.ref = "composeMultiplatform" }
 jetbrains-compose-runtime = { module = "org.jetbrains.compose.runtime:runtime", version.ref = "composeMultiplatform" }

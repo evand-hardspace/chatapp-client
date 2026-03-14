@@ -8,6 +8,12 @@ kotlin {
             dependencies {
                 implementation(projects.core.presentation)
 
+                api(libs.material3.adaptive)
+                api(libs.material3.adaptive.layout)
+                api(libs.material3.adaptive.navigation)
+
+                api(libs.jetbrains.compose.navigationEvent)
+
                 implementation(libs.kotlin.stdlib)
                 implementation(libs.jetbrains.compose.components.resources)
                 implementation(libs.jetbrains.compose.uiToolingPreview)
@@ -24,6 +30,7 @@ kotlin {
 
         androidMain {
             dependencies {
+                implementation(libs.androidx.activity.compose)
             }
         }
         iosMain {
