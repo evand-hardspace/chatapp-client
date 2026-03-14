@@ -29,6 +29,7 @@ internal fun Project.configureKotlinMultiplatform() {
 
         compilerOptions {
             freeCompilerArgs.addAll(kotlinFreeCompileArgs)
+            optIn.addAll(kotlinOptInAnnotations)
         }
     }
 }

@@ -1,5 +1,3 @@
-@file:OptIn(FlowPreview::class)
-
 package com.evandhardspace.chat.presentation.create_chat
 
 import androidx.compose.foundation.text.input.clearText
@@ -14,7 +12,6 @@ import com.evandhardspace.core.domain.util.DataError
 import com.evandhardspace.core.domain.util.onFailure
 import com.evandhardspace.core.domain.util.onSuccess
 import com.evandhardspace.core.presentation.util.asUiText
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.debounce
