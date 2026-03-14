@@ -30,6 +30,7 @@ import com.evandhardspace.core.designsystem.component.brand.ChatAppHorizontalDiv
 import com.evandhardspace.core.designsystem.component.button.ChatAppButton
 import com.evandhardspace.core.designsystem.component.button.ChatAppButtonStyle
 import com.evandhardspace.core.designsystem.component.dialog.ChatAppAdaptiveDialogSheetLayout
+import com.evandhardspace.core.designsystem.component.dialog.rememberAdaptiveDialogSheetController
 import com.evandhardspace.core.designsystem.theme.ChatAppPreview
 import com.evandhardspace.core.presentation.util.DeviceConfiguration
 import com.evandhardspace.core.presentation.util.compose.clearFocusOnTap
@@ -43,14 +44,15 @@ internal fun CreateChatScreen(
     viewModel: CreateChatViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val dialogSheetController = rememberAdaptiveDialogSheetController(onDismiss)
 
     ChatAppAdaptiveDialogSheetLayout(
-        onDismiss = onDismiss,
+        controller = dialogSheetController,
     ) {
         CreateChatContent(
             state = state,
             onAction = viewModel::onAction,
-            onDismiss = onDismiss,
+            onDismiss = dialogSheetController::dismiss,
         )
     }
 }
@@ -67,7 +69,7 @@ private fun CreateChatContent(
     val configuration = currentDeviceConfiguration()
 
     val shouldHideHeader = configuration == DeviceConfiguration.MobileLandscape
-            || (isKeyboardVisible && configuration != DeviceConfiguration.Desktop) || isTextFieldFocused
+            && (isKeyboardVisible || isTextFieldFocused)
 
     Column(
         modifier = Modifier
