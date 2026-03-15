@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import chatapp.feature.chat.presentation.generated.resources.Res
 import chatapp.feature.chat.presentation.generated.resources.cancel
 import com.evandhardspace.core.designsystem.theme.extended
+import com.evandhardspace.core.designsystem.theme.paddings
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -26,8 +27,7 @@ internal fun ManageChatHeaderRow(
     Row(
         modifier = modifier
             .padding(
-                horizontal = 20.dp,
-                vertical = 16.dp
+                MaterialTheme.paddings.default,
             ),
         verticalAlignment = Alignment.CenterVertically
     ) {

@@ -11,7 +11,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.semantics.semantics
@@ -20,6 +19,7 @@ import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import com.evandhardspace.core.designsystem.component.brand.ChatAppHorizontalDivider
 import com.evandhardspace.core.designsystem.theme.extended
+import com.evandhardspace.core.designsystem.theme.iconSize
 import com.evandhardspace.core.designsystem.theme.paddings
 
 @Composable
@@ -54,7 +54,7 @@ fun ChatAppDropdownMenu(
                         if (item.icon != null) {
                             Icon(
                                 modifier = Modifier
-                                    .size(DropdownIconSizeDp.dp)
+                                    .size(MaterialTheme.iconSize.default)
                                     .semantics { hideFromAccessibility() },
                                 imageVector = item.icon,
                                 contentDescription = null,
@@ -63,7 +63,7 @@ fun ChatAppDropdownMenu(
                         } else if (atLeastOneIconExists) {
                             Spacer(
                                 modifier = Modifier
-                                    .size(DropdownIconSizeDp.dp)
+                                    .size(MaterialTheme.iconSize.default)
                                     .semantics { hideFromAccessibility() },
                             )
                         }
@@ -82,5 +82,3 @@ fun ChatAppDropdownMenu(
         }
     }
 }
-
-private const val DropdownIconSizeDp = 20

@@ -23,6 +23,11 @@ val MaterialTheme.paddings: ChatAppPaddings
     @ReadOnlyComposable
     get() = LocalChatAppPaddings.current
 
+val MaterialTheme.iconSize
+    @Composable
+    @ReadOnlyComposable
+    get() = LocalChatAppIconSize.current
+
 @Immutable
 data class ExtendedColors(
     // Button states

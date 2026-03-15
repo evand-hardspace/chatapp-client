@@ -1,6 +1,5 @@
 package com.evandhardspace.chat.presentation.component.chat_list
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -10,10 +9,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,9 +16,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.DpOffset
-import androidx.compose.ui.unit.dp
 import chatapp.core.design_system.generated.resources.logo_chatapp
 import chatapp.core.design_system.generated.resources.users_icon
 import chatapp.core.design_system.generated.resources.logout_icon
@@ -31,7 +23,7 @@ import chatapp.feature.chat.presentation.generated.resources.Res
 import chatapp.feature.chat.presentation.generated.resources.app_name
 import chatapp.feature.chat.presentation.generated.resources.logout
 import chatapp.feature.chat.presentation.generated.resources.profile_settings
-import com.evandhardspace.chat.presentation.component.ChatHeader
+import com.evandhardspace.chat.presentation.component.ChatHeaderContent
 import com.evandhardspace.core.designsystem.annotations.ThemedPreview
 import com.evandhardspace.core.designsystem.component.avatar.ChatAppAvatarPhoto
 import com.evandhardspace.core.designsystem.component.avatar.ChatParticipantUi
@@ -54,7 +46,7 @@ internal fun ChatListHeader(
     onLogoutClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    ChatHeader(
+    ChatHeaderContent(
         modifier = modifier
             .fillMaxWidth(),
     ) {

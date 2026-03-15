@@ -35,7 +35,7 @@ import com.evandhardspace.core.designsystem.component.avatar.ChatParticipantUi
 import com.evandhardspace.core.designsystem.theme.ChatAppPreview
 import com.evandhardspace.core.designsystem.theme.extended
 import com.evandhardspace.core.designsystem.theme.paddings
-import com.evandhardspace.core.designsystem.theme.titleXSmall
+import com.evandhardspace.core.designsystem.theme.titleExtraSmall
 import org.jetbrains.compose.resources.stringResource
 import kotlin.time.Clock
 
@@ -81,7 +81,7 @@ fun ChatListItemUi(
                         } else {
                             stringResource(Res.string.group_chat)
                         },
-                        style = MaterialTheme.typography.titleXSmall,
+                        style = MaterialTheme.typography.titleExtraSmall,
                         color = MaterialTheme.colorScheme.extended.textPrimary,
                         overflow = TextOverflow.Ellipsis,
                         maxLines = 1,

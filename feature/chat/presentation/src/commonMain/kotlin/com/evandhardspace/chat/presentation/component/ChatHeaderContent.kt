@@ -14,7 +14,7 @@ import com.evandhardspace.core.designsystem.component.brand.ChatAppHorizontalDiv
 import com.evandhardspace.core.designsystem.theme.paddings
 
 @Composable
-internal fun ChatHeader(
+internal fun ChatHeaderContent(
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit,
 ) {

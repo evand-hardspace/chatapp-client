@@ -22,7 +22,7 @@ import com.evandhardspace.core.designsystem.component.avatar.ChatAppAvatarPhoto
 import com.evandhardspace.core.designsystem.component.avatar.ChatParticipantUi
 import com.evandhardspace.core.designsystem.theme.extended
 import com.evandhardspace.core.designsystem.theme.paddings
-import com.evandhardspace.core.designsystem.theme.titleXSmall
+import com.evandhardspace.core.designsystem.theme.titleExtraSmall
 import com.evandhardspace.core.presentation.util.DeviceConfiguration
 import com.evandhardspace.core.presentation.util.currentDeviceConfiguration
 
@@ -96,7 +96,7 @@ private fun ChatParticipantListItem(
         )
         Text(
             text = participantUi.username,
-            style = MaterialTheme.typography.titleXSmall,
+            style = MaterialTheme.typography.titleExtraSmall,
             color = MaterialTheme.colorScheme.extended.textPrimary,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,

@@ -21,7 +21,7 @@ import chatapp.feature.chat.presentation.generated.resources.sending
 import chatapp.feature.chat.presentation.generated.resources.sent
 import com.evandhardspace.chat.domain.model.DeliveryStatus
 import com.evandhardspace.core.designsystem.theme.extended
-import com.evandhardspace.core.designsystem.theme.labelXSmall
+import com.evandhardspace.core.designsystem.theme.labelExtraSmall
 import com.evandhardspace.core.designsystem.theme.paddings
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
@@ -64,7 +64,7 @@ internal fun MessageStatus(
         Text(
             text = text,
             color = color,
-            style = MaterialTheme.typography.labelXSmall,
+            style = MaterialTheme.typography.labelExtraSmall,
         )
     }
 }

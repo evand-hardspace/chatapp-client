@@ -37,7 +37,7 @@ val PlusJakartaSans @Composable get() = FontFamily(
     ),
 )
 
-val Typography.labelXSmall: TextStyle
+val Typography.labelExtraSmall: TextStyle
     @Composable get() = TextStyle(
         fontFamily = PlusJakartaSans,
         fontWeight = FontWeight.SemiBold,
@@ -45,7 +45,7 @@ val Typography.labelXSmall: TextStyle
         lineHeight = 14.sp,
     )
 
-val Typography.titleXSmall: TextStyle
+val Typography.titleExtraSmall: TextStyle
     @Composable get() = TextStyle(
         fontFamily = PlusJakartaSans,
         fontWeight = FontWeight.SemiBold,
