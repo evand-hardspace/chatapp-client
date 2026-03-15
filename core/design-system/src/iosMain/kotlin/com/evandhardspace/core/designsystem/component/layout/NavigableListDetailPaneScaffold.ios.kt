@@ -63,6 +63,7 @@ internal actual fun <T> ThreePaneScaffoldPredictiveBackHandler(
                     targetValue = 0f,
                 ) {
                     isBackInReleaseState = false
+                    navigator.seekBack(backBehavior, 0f)
                 }
             },
 
@@ -97,7 +98,7 @@ private class BackReleaseAnimatable(
 
     fun animateTo(
         targetValue: Float,
-        onComplete: (() -> Unit)? = null,
+        onComplete: (suspend () -> Unit)? = null,
     ) {
         job?.cancel()
         job = scope.launch {
