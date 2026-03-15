@@ -5,7 +5,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 data class ChatAppIconSize(
-    val default: Dp = 20.dp,
+    val medium: Dp = 16.dp,
+    val large: Dp = 20.dp,
 )
 
 val LocalChatAppIconSize = staticCompositionLocalOf { ChatAppIconSize() }

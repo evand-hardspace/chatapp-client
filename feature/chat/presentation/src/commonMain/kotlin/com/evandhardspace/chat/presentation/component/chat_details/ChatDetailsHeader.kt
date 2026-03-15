@@ -71,7 +71,7 @@ internal fun ChatDetailHeader(
                 Icon(
                     imageVector = vectorResource(DesignSystemRes.drawable.arrow_left_icon),
                     contentDescription = stringResource(Res.string.go_back),
-                    modifier = Modifier.size(MaterialTheme.iconSize.default),
+                    modifier = Modifier.size(MaterialTheme.iconSize.large),
                     tint = MaterialTheme.colorScheme.extended.textSecondary,
                 )
             }
@@ -92,7 +92,7 @@ internal fun ChatDetailHeader(
                 Icon(
                     imageVector = vectorResource(DesignSystemRes.drawable.dots_icon),
                     contentDescription = stringResource(Res.string.open_chat_options_menu),
-                    modifier = Modifier.size(MaterialTheme.iconSize.default),
+                    modifier = Modifier.size(MaterialTheme.iconSize.large),
                     tint = MaterialTheme.colorScheme.extended.textSecondary,
                 )
             }

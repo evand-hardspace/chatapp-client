@@ -54,7 +54,7 @@ fun ChatAppDropdownMenu(
                         if (item.icon != null) {
                             Icon(
                                 modifier = Modifier
-                                    .size(MaterialTheme.iconSize.default)
+                                    .size(MaterialTheme.iconSize.large)
                                     .semantics { hideFromAccessibility() },
                                 imageVector = item.icon,
                                 contentDescription = null,
@@ -63,7 +63,7 @@ fun ChatAppDropdownMenu(
                         } else if (atLeastOneIconExists) {
                             Spacer(
                                 modifier = Modifier
-                                    .size(MaterialTheme.iconSize.default)
+                                    .size(MaterialTheme.iconSize.large)
                                     .semantics { hideFromAccessibility() },
                             )
                         }
