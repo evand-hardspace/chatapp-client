@@ -13,8 +13,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.evandhardspace.chat.presentation.chat_details.ChatDetailScreen
 import com.evandhardspace.chat.presentation.chat_details.ChatDetailsAction
+import com.evandhardspace.chat.presentation.chat_details.ChatDetailsScreen
 import com.evandhardspace.chat.presentation.chat_details.ChatDetailsViewModel
 import com.evandhardspace.chat.presentation.chat_list.ChatListScreen
 import com.evandhardspace.chat.presentation.create_chat.CreateChatScreen
@@ -86,7 +86,7 @@ private fun ChatListDetailsContent(
         },
         detailPane = {
             AnimatedPane {
-                ChatDetailScreen(
+                ChatDetailsScreen(
                     viewModel = chatDetailViewModel,
                     modifier = Modifier.clipOnTransition(32.dp),
                     chatId = state.selectedChatId,

@@ -45,7 +45,7 @@ import kotlin.time.Clock
 import kotlin.uuid.Uuid
 
 @Composable
-internal fun ChatDetailScreen(
+internal fun ChatDetailsScreen(
     chatId: String?,
     isDetailPresent: Boolean,
     modifier: Modifier = Modifier,
@@ -84,7 +84,7 @@ private fun ChatDetailContent(
         modifier = modifier
             .fillMaxSize(),
         contentWindowInsets = WindowInsets.safeDrawing,
-        containerColor = if (!configuration.isWideScreen) MaterialTheme.colorScheme.surface
+        containerColor = if (configuration.isWideScreen.not()) MaterialTheme.colorScheme.surface
         else MaterialTheme.colorScheme.extended.surfaceLower,
     ) { innerPadding ->
         Box(
