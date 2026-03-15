@@ -1,7 +1,7 @@
 package com.evandhardspace.core.data.networking
 
 import com.evandhardspace.core.domain.util.DataError
-import com.evandhardspace.core.domain.util.ErrorResult
+import com.evandhardspace.core.domain.util.ErrorEither
 import io.ktor.client.engine.darwin.DarwinHttpRequestException
 import io.ktor.client.plugins.HttpRequestTimeoutException
 import io.ktor.client.statement.HttpResponse
@@ -18,21 +18,21 @@ import platform.Foundation.NSURLErrorNetworkConnectionLost
 import platform.Foundation.NSURLErrorNotConnectedToInternet
 import platform.Foundation.NSURLErrorResourceUnavailable
 import platform.Foundation.NSURLErrorTimedOut
-import com.evandhardspace.core.domain.util.Result
-import com.evandhardspace.core.domain.util.ensure
-import com.evandhardspace.core.domain.util.errorResult
+import com.evandhardspace.core.domain.util.Either
 import com.evandhardspace.core.domain.util.raise
-import com.evandhardspace.core.domain.util.result
+import com.evandhardspace.core.domain.util.bind
+import com.evandhardspace.core.domain.util.errorResult
+import com.evandhardspace.core.domain.util.either
 import kotlinx.coroutines.currentCoroutineContext
 
 actual suspend fun <T> platformSafeCall(
     execute: suspend () -> HttpResponse,
-    handleResponse: suspend (HttpResponse) -> Result<DataError.Remote, T>
-): Result<DataError.Remote, T> = result {
+    handleResponse: suspend (HttpResponse) -> Either<DataError.Remote, T>
+): Either<DataError.Remote, T> = either {
     try {
-        handleResponse(execute()).ensure()
+        handleResponse(execute()).bind()
     } catch (e: DarwinHttpRequestException) {
-        handleDarwinException(e).ensure()
+        handleDarwinException(e).bind()
     } catch (_: UnresolvedAddressException) {
         DataError.Remote.NoInternet.raise()
     } catch (_: HttpRequestTimeoutException) {
@@ -45,7 +45,7 @@ actual suspend fun <T> platformSafeCall(
     }
 }
 
-private fun handleDarwinException(e: DarwinHttpRequestException): ErrorResult<DataError.Remote> =
+private fun handleDarwinException(e: DarwinHttpRequestException): ErrorEither<DataError.Remote> =
     errorResult {
         val nsError = e.origin
 

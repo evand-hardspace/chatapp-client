@@ -11,8 +11,8 @@ import com.evandhardspace.core.data.networking.post
 import com.evandhardspace.core.domain.auth.AuthRepository
 import com.evandhardspace.core.domain.auth.AuthState
 import com.evandhardspace.core.domain.util.DataError
-import com.evandhardspace.core.domain.util.EmptyResult
-import com.evandhardspace.core.domain.util.Result
+import com.evandhardspace.core.domain.util.EmptyEither
+import com.evandhardspace.core.domain.util.Either
 import com.evandhardspace.core.domain.util.map
 import io.ktor.client.HttpClient
 
@@ -23,7 +23,7 @@ internal class KtorAuthRepository(
         email: String,
         username: String,
         password: String,
-    ): EmptyResult<DataError.Remote> = client.post(
+    ): EmptyEither<DataError.Remote> = client.post(
         route = "/auth/register",
         body = RegisterRequest(
             email = email,
@@ -34,21 +34,21 @@ internal class KtorAuthRepository(
 
     override suspend fun resendVerificationEmail(
         email: String,
-    ): EmptyResult<DataError.Remote> = client.post(
+    ): EmptyEither<DataError.Remote> = client.post(
         route = "/auth/resend-verification",
         body = EmailRequest(email),
     )
 
     override suspend fun verifyEmail(
         token: String,
-    ): EmptyResult<DataError.Remote> = client.get(
+    ): EmptyEither<DataError.Remote> = client.get(
         route = "/auth/verify",
         queryParams = mapOf(
             "token" to token,
         ),
     )
 
-    override suspend fun forgotPassword(email: String): EmptyResult<DataError.Remote> {
+    override suspend fun forgotPassword(email: String): EmptyEither<DataError.Remote> {
         return client.post<EmailRequest, Unit>(
             route = "/auth/forgot-password",
             body = EmailRequest(email),
@@ -58,7 +58,7 @@ internal class KtorAuthRepository(
     override suspend fun login(
         email: String,
         password: String,
-    ): Result<DataError.Remote, AuthState.Authenticated> = client.post<LoginRequest, AuthInfoDto>(
+    ): Either<DataError.Remote, AuthState.Authenticated> = client.post<LoginRequest, AuthInfoDto>(
         route = "/auth/login",
         body = LoginRequest(
             email = email,
@@ -69,7 +69,7 @@ internal class KtorAuthRepository(
     override suspend fun resetPassword(
         newPassword: String,
         token: String
-    ): EmptyResult<DataError.Remote> = client.post(
+    ): EmptyEither<DataError.Remote> = client.post(
         route = "/auth/reset-password",
         body = ResetPasswordRequest(
             newPassword = newPassword,

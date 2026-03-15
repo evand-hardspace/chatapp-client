@@ -4,9 +4,9 @@ import com.evandhardspace.core.domain.util.DataError
 import io.ktor.client.call.NoTransformationFoundException
 import io.ktor.client.call.body
 import io.ktor.client.statement.HttpResponse
-import com.evandhardspace.core.domain.util.Result
+import com.evandhardspace.core.domain.util.Either
 import com.evandhardspace.core.domain.util.raise
-import com.evandhardspace.core.domain.util.result
+import com.evandhardspace.core.domain.util.either
 import io.ktor.client.HttpClient
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.delete
@@ -19,12 +19,12 @@ import io.ktor.client.request.url
 
 expect suspend fun <T> platformSafeCall(
     execute: suspend () -> HttpResponse,
-    handleResponse: suspend (HttpResponse) -> Result<DataError.Remote, T>
-): Result<DataError.Remote, T>
+    handleResponse: suspend (HttpResponse) -> Either<DataError.Remote, T>
+): Either<DataError.Remote, T>
 
 suspend inline fun <reified T> safeCall(
     noinline execute: suspend () -> HttpResponse
-): Result<DataError.Remote, T> = platformSafeCall(execute = execute) { response ->
+): Either<DataError.Remote, T> = platformSafeCall(execute = execute) { response ->
     responseToResult(response)
 }
 
@@ -33,7 +33,7 @@ suspend inline fun <reified Request, reified Response: Any> HttpClient.post(
     body: Request,
     queryParams: Map<String, Any> = mapOf(),
     crossinline builder: HttpRequestBuilder.() -> Unit = {},
-): Result<DataError.Remote, Response> {
+): Either<DataError.Remote, Response> {
     return safeCall {
         post {
             url(route.ensureBaseUrlRoute())
@@ -50,7 +50,7 @@ suspend inline fun <reified Response: Any> HttpClient.get(
     route: String,
     queryParams: Map<String, Any> = mapOf(),
     crossinline builder: HttpRequestBuilder.() -> Unit = {},
-): Result<DataError.Remote, Response> {
+): Either<DataError.Remote, Response> {
     return safeCall {
         get {
             url(route.ensureBaseUrlRoute())
@@ -67,7 +67,7 @@ suspend inline fun <reified Request, reified Response: Any> HttpClient.delete(
     queryParams: Map<String, Any> = mapOf(),
     body: Request,
     crossinline builder: HttpRequestBuilder.() -> Unit = {},
-): Result<DataError.Remote, Response> {
+): Either<DataError.Remote, Response> {
     return safeCall {
         delete {
             url(route.ensureBaseUrlRoute())
@@ -85,7 +85,7 @@ suspend inline fun <reified Request, reified Response: Any> HttpClient.put(
     queryParams: Map<String, Any> = mapOf(),
     body: Request,
     crossinline builder: HttpRequestBuilder.() -> Unit = {},
-): Result<DataError.Remote, Response> {
+): Either<DataError.Remote, Response> {
     return safeCall {
         put {
             url(route.ensureBaseUrlRoute())
@@ -98,8 +98,8 @@ suspend inline fun <reified Request, reified Response: Any> HttpClient.put(
     }
 }
 
-suspend inline fun <reified T> responseToResult(response: HttpResponse): Result<DataError.Remote, T> =
-    result {
+suspend inline fun <reified T> responseToResult(response: HttpResponse): Either<DataError.Remote, T> =
+    either {
         when (response.status.value) {
             in 200..299 -> {
                 try {
