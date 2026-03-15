@@ -1,4 +1,4 @@
-package com.evandhardspace.chat.presentation.chat_details.component
+package com.evandhardspace.chat.presentation.component.chat_details
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer

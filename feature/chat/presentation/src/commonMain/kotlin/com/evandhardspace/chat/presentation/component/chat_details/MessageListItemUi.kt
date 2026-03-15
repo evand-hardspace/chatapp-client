@@ -1,4 +1,4 @@
-package com.evandhardspace.chat.presentation.chat_details.component
+package com.evandhardspace.chat.presentation.component.chat_details
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -24,31 +24,33 @@ import com.evandhardspace.core.presentation.util.asUiText
 @Composable
 internal fun MessageListItemUi(
     messageUi: MessageUi,
-    onMessageLongClick: () -> Unit,
+    onMessageLongClick: (MessageUi.LocalUserMessage) -> Unit,
+    onDeleteClick: (MessageUi.LocalUserMessage) -> Unit,
+    onRetryClick: (MessageUi.LocalUserMessage) -> Unit,
     onDismissMessageMenu: () -> Unit,
-    onDeleteClick: () -> Unit,
-    onRetryClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Box(
         modifier = modifier,
     ) {
-        when(messageUi) {
+        when (messageUi) {
             is MessageUi.DateSeparator -> {
                 DateSeparatorUi(
                     date = messageUi.date.asComposableString(),
                     modifier = Modifier.fillMaxWidth(),
                 )
             }
+
             is MessageUi.LocalUserMessage -> {
                 LocalUserMessage(
                     message = messageUi,
-                    onMessageLongClick = onMessageLongClick,
+                    onMessageLongClick = { onMessageLongClick(messageUi) },
                     onDismissMessageMenu = onDismissMessageMenu,
-                    onDeleteClick = onDeleteClick,
-                    onRetryClick = onRetryClick,
+                    onDeleteClick = { onDeleteClick(messageUi) },
+                    onRetryClick = { onRetryClick(messageUi) }
                 )
             }
+
             is MessageUi.OtherUserMessage -> {
                 OtherUserMessage(
                     message = messageUi,

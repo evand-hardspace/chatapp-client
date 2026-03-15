@@ -30,9 +30,11 @@ import chatapp.feature.chat.presentation.generated.resources.create_chat
 import chatapp.feature.chat.presentation.generated.resources.do_you_want_to_logout
 import chatapp.feature.chat.presentation.generated.resources.do_you_want_to_logout_description
 import chatapp.feature.chat.presentation.generated.resources.logout
+import chatapp.feature.chat.presentation.generated.resources.no_messages
+import chatapp.feature.chat.presentation.generated.resources.no_messages_subtitle
+import com.evandhardspace.chat.presentation.component.chat_details.EmptyContentSection
 import com.evandhardspace.chat.presentation.component.chat_list.ChatListHeader
 import com.evandhardspace.chat.presentation.component.chat_list.ChatListItemUi
-import com.evandhardspace.chat.presentation.component.chat_list.EmptyChatSection
 import com.evandhardspace.chat.presentation.model.ChatUi
 import com.evandhardspace.core.designsystem.annotations.ThemedPreview
 import com.evandhardspace.core.designsystem.component.brand.ChatAppHorizontalDivider
@@ -117,11 +119,13 @@ private fun ChatListContent(
                 }
 
                 state.chats.isEmpty() -> {
-                    EmptyChatSection(
+                    EmptyContentSection(
                         modifier = Modifier
                             .weight(1f)
                             .fillMaxWidth()
                             .padding(horizontal = MaterialTheme.paddings.half),
+                        title = stringResource(Res.string.no_messages),
+                        description = stringResource(Res.string.no_messages_subtitle),
                     )
                 }
 

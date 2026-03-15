@@ -1,4 +1,4 @@
-package com.evandhardspace.chat.presentation.chat_details.component
+package com.evandhardspace.chat.presentation.component.chat_details
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
