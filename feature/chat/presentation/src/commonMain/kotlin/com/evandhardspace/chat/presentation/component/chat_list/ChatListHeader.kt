@@ -35,7 +35,8 @@ import com.evandhardspace.chat.presentation.component.ChatHeader
 import com.evandhardspace.core.designsystem.annotations.ThemedPreview
 import com.evandhardspace.core.designsystem.component.avatar.ChatAppAvatarPhoto
 import com.evandhardspace.core.designsystem.component.avatar.ChatParticipantUi
-import com.evandhardspace.core.designsystem.component.brand.ChatAppHorizontalDivider
+import com.evandhardspace.core.designsystem.component.dropdown.ChatAppDropdownMenu
+import com.evandhardspace.core.designsystem.component.dropdown.DropdownItem
 import com.evandhardspace.core.designsystem.theme.ChatAppPreview
 import com.evandhardspace.core.designsystem.theme.extended
 import com.evandhardspace.core.designsystem.theme.paddings
@@ -75,7 +76,7 @@ internal fun ChatListHeader(
             Spacer(modifier = Modifier.weight(1f))
             ProfileAvatarSection(
                 localParticipant = localParticipant,
-                isMenuOpen = isUserMenuOpen,
+                isMenuExpanded = isUserMenuOpen,
                 onClick = onUserAvatarClick,
                 onDismissMenu = onDismissMenu,
                 onProfileSettingsClick = onProfileSettingsClick,
@@ -88,7 +89,7 @@ internal fun ChatListHeader(
 @Composable
 private fun ProfileAvatarSection(
     localParticipant: ChatParticipantUi?,
-    isMenuOpen: Boolean,
+    isMenuExpanded: Boolean,
     onClick: () -> Unit,
     onDismissMenu: () -> Unit,
     onProfileSettingsClick: () -> Unit,
@@ -116,59 +117,24 @@ private fun ProfileAvatarSection(
             )
         }
 
-        DropdownMenu(
-            expanded = isMenuOpen,
-            shape = MaterialTheme.shapes.large,
-            onDismissRequest = onDismissMenu,
-            offset = DpOffset(x = 0.dp, y = MaterialTheme.paddings.quarter),
-            containerColor = MaterialTheme.colorScheme.surface,
-            border = BorderStroke(
-                width = 1.dp,
-                color = MaterialTheme.colorScheme.extended.surfaceOutline,
+        ChatAppDropdownMenu(
+            expanded = isMenuExpanded,
+            onDismiss = onDismissMenu,
+            items = listOf(
+                DropdownItem(
+                    title = stringResource(Res.string.profile_settings),
+                    icon = vectorResource(DesignSystemRes.drawable.users_icon),
+                    contentColor = MaterialTheme.colorScheme.extended.textSecondary,
+                    onClick = onProfileSettingsClick,
+                ),
+                DropdownItem(
+                    title = stringResource(Res.string.logout),
+                    icon = vectorResource(DesignSystemRes.drawable.logout_icon),
+                    contentColor = MaterialTheme.colorScheme.extended.destructiveHover,
+                    onClick = onLogoutClick,
+                ),
             )
-        ) {
-            DropdownMenuItem(
-                text = {
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.paddings.threeQuarters),
-                    ) {
-                        Icon(
-                            imageVector = vectorResource(DesignSystemRes.drawable.users_icon),
-                            contentDescription = stringResource(Res.string.profile_settings),
-                            tint = MaterialTheme.colorScheme.extended.textSecondary,
-                            modifier = Modifier.size(20.dp),
-                        )
-                        Text(
-                            text = stringResource(Res.string.profile_settings),
-                            color = MaterialTheme.colorScheme.extended.textSecondary,
-                            fontWeight = FontWeight.Medium,
-                        )
-                    }
-                },
-                onClick = onProfileSettingsClick,
-            )
-            ChatAppHorizontalDivider()
-            DropdownMenuItem(
-                text = {
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.paddings.threeQuarters),
-                    ) {
-                        Icon(
-                            imageVector = vectorResource(DesignSystemRes.drawable.logout_icon),
-                            contentDescription = stringResource(Res.string.logout),
-                            tint = MaterialTheme.colorScheme.extended.destructiveHover,
-                            modifier = Modifier.size(20.dp),
-                        )
-                        Text(
-                            text = stringResource(Res.string.logout),
-                            color = MaterialTheme.colorScheme.extended.destructiveHover,
-                            fontWeight = FontWeight.Medium,
-                        )
-                    }
-                },
-                onClick = onLogoutClick,
-            )
-        }
+        )
     }
 }
 
