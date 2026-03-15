@@ -13,7 +13,11 @@ fun NavGraphBuilder.chatNavGraph(
         startDestination = ChatNavGraphRoute.ChatListDetailsRoute,
     ) {
         composable<ChatNavGraphRoute.ChatListDetailsRoute> {
-            ChatListDetailsScreen()
+            ChatListDetailsScreen(
+                onLogout = {
+                    // TODO: Logout user
+                }
+            )
         }
     }
 }
