@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
@@ -43,18 +44,16 @@ import chatapp.core.design_system.generated.resources.Res as DesignSystemRes
 
 @Composable
 internal fun ChatDetailHeader(
-    chatUi: ChatUi,
+    chatUi: ChatUi?,
     isDetailPresent: Boolean,
     isChatOptionsDropDownOpen: Boolean,
     onChatOptionsClick: () -> Unit,
-    onDismissChatOptions: ()  -> Unit,
+    onDismissChatOptions: () -> Unit,
     onManageChatClick: () -> Unit,
     onLeaveChatClick: () -> Unit,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val isGroupChat = chatUi.otherParticipants.size > 1
-
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -64,7 +63,7 @@ internal fun ChatDetailHeader(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(MaterialTheme.paddings.threeQuarters),
     ) {
-        if(!isDetailPresent) {
+        if (isDetailPresent.not()) {
             ChatAppIconButton(
                 onClick = onBackClick,
             ) {
@@ -77,13 +76,18 @@ internal fun ChatDetailHeader(
             }
         }
 
-        ChatItemHeaderRow(
-            chat = chatUi,
-            isGroupChat = isGroupChat,
-            modifier = Modifier
-                .weight(1f)
-                .clickable(onClick = onManageChatClick),
-        )
+        if (chatUi != null) {
+            val isGroupChat = chatUi.otherParticipants.size > 1
+            ChatItemHeaderRow(
+                chat = chatUi,
+                isGroupChat = isGroupChat,
+                modifier = Modifier
+                    .weight(1f)
+                    .clickable(onClick = onManageChatClick),
+            )
+        } else {
+            Spacer(modifier = Modifier.weight(1f))
+        }
 
         Box {
             ChatAppIconButton(
@@ -160,6 +164,30 @@ private fun ChatDetailHeaderContentPreview() {
                         ),
                         latestMessageSenderUsername = "Ivan",
                     ),
+                    onChatOptionsClick = {},
+                    onManageChatClick = {},
+                    onLeaveChatClick = {},
+                    onDismissChatOptions = {},
+                    onBackClick = {},
+                )
+            }
+        }
+    }
+}
+
+@ThemedPreview
+@Composable
+private fun ChatDetailHeaderEmptyContentPreview() {
+    ChatAppPreview {
+        Column(
+            modifier = Modifier
+                .fillMaxSize(),
+        ) {
+            ChatHeaderContent {
+                ChatDetailHeader(
+                    isDetailPresent = false,
+                    isChatOptionsDropDownOpen = true,
+                    chatUi = null,
                     onChatOptionsClick = {},
                     onManageChatClick = {},
                     onLeaveChatClick = {},

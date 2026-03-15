@@ -16,7 +16,8 @@ import kotlin.coroutines.cancellation.CancellationException
 @Composable
 internal actual fun <T> ThreePaneScaffoldPredictiveBackHandler(
     navigator: ThreePaneScaffoldNavigator<T>,
-    backBehavior: BackNavigationBehavior
+    backBehavior: BackNavigationBehavior,
+    onBackCompleted: (() -> Unit)?,
 ) {
     key(navigator, backBehavior) {
         PredictiveBackHandler(enabled = navigator.canNavigateBack(backBehavior)) { progress ->
@@ -33,6 +34,7 @@ internal actual fun <T> ThreePaneScaffoldPredictiveBackHandler(
                     )
                 }
                 // code for completion
+                onBackCompleted?.invoke()
                 navigator.navigateBack(backBehavior)
             } catch (_: CancellationException) {
                 // code for cancellation

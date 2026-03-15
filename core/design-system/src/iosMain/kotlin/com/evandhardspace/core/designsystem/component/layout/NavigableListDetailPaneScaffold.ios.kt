@@ -23,7 +23,8 @@ import kotlinx.coroutines.launch
 @Composable
 internal actual fun <T> ThreePaneScaffoldPredictiveBackHandler(
     navigator: ThreePaneScaffoldNavigator<T>,
-    backBehavior: BackNavigationBehavior
+    backBehavior: BackNavigationBehavior,
+    onBackCompleted: (() -> Unit)?,
 ) {
     key(navigator, backBehavior) {
         val scope = rememberCoroutineScope()
@@ -67,6 +68,7 @@ internal actual fun <T> ThreePaneScaffoldPredictiveBackHandler(
 
             onBackCompleted = {
                 scope.launch {
+                    onBackCompleted?.invoke()
                     navigator.navigateBack(backBehavior)
                     isBackInReleaseState = false
                 }

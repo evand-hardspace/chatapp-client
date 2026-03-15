@@ -11,6 +11,7 @@ import com.evandhardspace.chat.presentation.model.MessageUi
 import com.evandhardspace.core.designsystem.component.avatar.ChatAppAvatarPhoto
 import com.evandhardspace.core.designsystem.component.chat.CalloutPosition
 import com.evandhardspace.core.designsystem.component.chat.ChatAppCallout
+import com.evandhardspace.core.designsystem.component.util.chatCalloutColor
 import com.evandhardspace.core.designsystem.theme.paddings
 
 @Composable
@@ -33,6 +34,7 @@ internal fun OtherUserMessage(
             sender = message.sender.username,
             calloutPosition = CalloutPosition.Start,
             formattedDateTime = message.formattedSentTime.asComposableString(),
+            color = chatCalloutColor(message.sender.id),
         )
     }
 }

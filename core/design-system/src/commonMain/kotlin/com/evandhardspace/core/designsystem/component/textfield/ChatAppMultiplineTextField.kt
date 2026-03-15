@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.input.KeyboardActionHandler
+import androidx.compose.foundation.text.input.TextFieldLineLimits
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material3.MaterialTheme
@@ -36,6 +37,7 @@ fun ChatAppMultiLineTextField(
     modifier: Modifier = Modifier,
     placeholder: String? = null,
     enabled: Boolean = true,
+    maxHeightInLines: Int = 5,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     onKeyboardAction: KeyboardActionHandler? = null,
     bottomContent: @Composable (RowScope.() -> Unit)? = null,
@@ -59,11 +61,13 @@ fun ChatAppMultiLineTextField(
     ) {
         BasicTextField(
             state = state,
-            modifier = Modifier
-                .weight(1f),
             enabled = enabled,
             textStyle = MaterialTheme.typography.bodyLarge.copy(
                 color = MaterialTheme.colorScheme.extended.textPrimary
+            ),
+            lineLimits = TextFieldLineLimits.MultiLine(
+                minHeightInLines = 1,
+                maxHeightInLines = maxHeightInLines,
             ),
             keyboardOptions = keyboardOptions,
             onKeyboardAction = onKeyboardAction,

@@ -3,6 +3,7 @@ package com.evandhardspace.chat.presentation.chat_list
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -98,12 +99,12 @@ private fun ChatListContent(
     ) { innerPadding ->
         Column(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding),
+                .fillMaxSize(),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             ChatListHeader(
+                modifier = Modifier.padding(top = innerPadding.calculateTopPadding()),
                 localParticipant = state.localParticipant,
                 isUserMenuOpen = state.isUserMenuOpen,
                 onUserAvatarClick = { onAction(ChatListAction.OnUserAvatar) },
@@ -114,7 +115,7 @@ private fun ChatListContent(
             when {
                 state.isLoading -> {
                     CircularProgressIndicator(
-                        color = MaterialTheme.colorScheme.primary
+                        color = MaterialTheme.colorScheme.primary,
                     )
                 }
 
@@ -134,6 +135,7 @@ private fun ChatListContent(
                         modifier = Modifier
                             .fillMaxWidth()
                             .weight(1f),
+                        contentPadding = PaddingValues(bottom = innerPadding.calculateBottomPadding()),
                     ) {
                         items(
                             items = state.chats,

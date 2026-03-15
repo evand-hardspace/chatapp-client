@@ -21,10 +21,12 @@ fun <T> NavigableListDetailPaneScaffold(
     paneExpansionDragHandle: (@Composable ThreePaneScaffoldScope.(PaneExpansionState) -> Unit)? =
         null,
     paneExpansionState: PaneExpansionState? = null,
+    onBackCompleted: (() -> Unit)? = null,
 ) {
     ThreePaneScaffoldPredictiveBackHandler(
         navigator = navigator,
         backBehavior = defaultBackBehavior,
+        onBackCompleted = onBackCompleted,
     )
 
     ListDetailPaneScaffold(
@@ -43,4 +45,5 @@ fun <T> NavigableListDetailPaneScaffold(
 internal expect fun <T> ThreePaneScaffoldPredictiveBackHandler(
     navigator: ThreePaneScaffoldNavigator<T>,
     backBehavior: BackNavigationBehavior,
+    onBackCompleted: (() -> Unit)?,
 )

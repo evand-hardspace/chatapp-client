@@ -1,20 +1,21 @@
 package com.evandhardspace.chat.presentation.chat_list_details
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.material3.adaptive.layout.AnimatedPane
 import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffoldRole
+import androidx.compose.material3.adaptive.layout.PaneAdaptedValue
 import androidx.compose.material3.adaptive.navigation.rememberListDetailPaneScaffoldNavigator
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.evandhardspace.chat.presentation.chat_details.ChatDetailScreen
+import com.evandhardspace.chat.presentation.chat_details.ChatDetailsAction
+import com.evandhardspace.chat.presentation.chat_details.ChatDetailsViewModel
 import com.evandhardspace.chat.presentation.chat_list.ChatListScreen
 import com.evandhardspace.chat.presentation.create_chat.CreateChatScreen
 import com.evandhardspace.core.designsystem.component.layout.NavigableListDetailPaneScaffold
@@ -47,12 +48,25 @@ private fun ChatListDetailsContent(
     val scaffoldNavigator = rememberListDetailPaneScaffoldNavigator(
         scaffoldDirective = scaffoldDirective,
     )
+    val detailPaneValue = scaffoldNavigator.scaffoldValue[ListDetailPaneScaffoldRole.Detail]
+    val listPaneValue = scaffoldNavigator.scaffoldValue[ListDetailPaneScaffoldRole.List]
+
     val scope = rememberCoroutineScope()
+    val chatDetailViewModel = koinViewModel<ChatDetailsViewModel>()
+
+    LaunchedEffect(detailPaneValue, state.selectedChatId) {
+        if (detailPaneValue == PaneAdaptedValue.Hidden && state.selectedChatId != null) {
+            action(ChatListDetailsAction.OnOpenChat(null))
+        }
+    }
 
     NavigableListDetailPaneScaffold(
         navigator = scaffoldNavigator,
         modifier = Modifier
             .background(MaterialTheme.colorScheme.extended.surfaceLower),
+        onBackCompleted = {
+            chatDetailViewModel.onAction(ChatDetailsAction.OnSelectChat(null))
+        },
         listPane = {
             AnimatedPane {
                 ChatListScreen(
@@ -72,17 +86,19 @@ private fun ChatListDetailsContent(
         },
         detailPane = {
             AnimatedPane {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .clipOnTransition(32.dp)
-                        .background(MaterialTheme.colorScheme.primary),
-                    contentAlignment = Alignment.Center,
-                ) {
-                    state.selectedChatId?.let {
-                        Text(text = it)
+                ChatDetailScreen(
+                    viewModel = chatDetailViewModel,
+                    modifier = Modifier.clipOnTransition(32.dp),
+                    chatId = state.selectedChatId,
+                    isDetailPresent = detailPaneValue == PaneAdaptedValue.Expanded && listPaneValue == PaneAdaptedValue.Expanded,
+                    onBack = {
+                        scope.launch {
+                            if (scaffoldNavigator.canNavigateBack()) {
+                                scaffoldNavigator.navigateBack()
+                            }
+                        }
                     }
-                }
+                )
             }
         }
     )
