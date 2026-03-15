@@ -1,4 +1,4 @@
-package com.evandhardspace.chat.presentation.create_chat.mapper
+package com.evandhardspace.chat.presentation.mapper
 
 import com.evandhardspace.chat.domain.model.ChatParticipant
 import com.evandhardspace.core.designsystem.component.avatar.ChatParticipantUi

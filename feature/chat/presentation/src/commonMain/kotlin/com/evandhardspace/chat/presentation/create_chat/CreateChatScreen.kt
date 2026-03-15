@@ -21,10 +21,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import chatapp.feature.chat.presentation.generated.resources.Res
 import chatapp.feature.chat.presentation.generated.resources.cancel
 import chatapp.feature.chat.presentation.generated.resources.create_chat
-import com.evandhardspace.chat.presentation.components.ChatParticipantSearchTextSection
-import com.evandhardspace.chat.presentation.components.ChatParticipantsSelectionSection
-import com.evandhardspace.chat.presentation.components.ManageChatButtonSection
-import com.evandhardspace.chat.presentation.components.ManageChatHeaderRow
+import com.evandhardspace.chat.presentation.component.ChatParticipantSearchTextSection
+import com.evandhardspace.chat.presentation.component.ChatParticipantsSelectionSection
+import com.evandhardspace.chat.presentation.component.ManageChatButtonSection
+import com.evandhardspace.chat.presentation.component.ManageChatHeaderRow
 import com.evandhardspace.core.designsystem.annotations.ThemedPreview
 import com.evandhardspace.core.designsystem.component.brand.ChatAppHorizontalDivider
 import com.evandhardspace.core.designsystem.component.button.ChatAppButton

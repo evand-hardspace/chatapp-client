@@ -8,7 +8,7 @@ import chatapp.feature.chat.presentation.generated.resources.Res
 import chatapp.feature.chat.presentation.generated.resources.error_participant_not_found
 import com.evandhardspace.chat.domain.ChatParticipantRepository
 import com.evandhardspace.chat.domain.ChatRepository
-import com.evandhardspace.chat.presentation.create_chat.mapper.toUi
+import com.evandhardspace.chat.presentation.mapper.toUi
 import com.evandhardspace.core.domain.util.DataError
 import com.evandhardspace.core.domain.util.onFailure
 import com.evandhardspace.core.domain.util.onSuccess

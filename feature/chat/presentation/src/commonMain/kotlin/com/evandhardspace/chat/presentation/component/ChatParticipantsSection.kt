@@ -1,4 +1,4 @@
-package com.evandhardspace.chat.presentation.components
+package com.evandhardspace.chat.presentation.component
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
