@@ -2,6 +2,7 @@ package com.evandhardspace.chat.database.entity
 
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.Index
 import androidx.room.PrimaryKey
 
 @Entity(
@@ -12,7 +13,11 @@ import androidx.room.PrimaryKey
             childColumns = ["chatId"],
             onDelete = ForeignKey.CASCADE,
         )
-    ]
+    ],
+    indices = [
+        Index(value = ["chatId"]),
+        Index(value = ["timestamp"]),
+    ],
 )
 data class ChatMessageEntity(
     @PrimaryKey

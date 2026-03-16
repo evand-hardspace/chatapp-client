@@ -19,5 +19,5 @@ data class LatestMessageView(
     val chatId: String,
     val senderId: String,
     val content: String,
-    val timestamp: Long
+    val timestamp: Long,
 )
