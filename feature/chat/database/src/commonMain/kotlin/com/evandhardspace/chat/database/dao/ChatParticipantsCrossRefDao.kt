@@ -1,0 +1,64 @@
+package com.evandhardspace.chat.database.dao
+
+import androidx.room.Dao
+import androidx.room.Query
+import androidx.room.Transaction
+import androidx.room.Upsert
+import com.evandhardspace.chat.database.entity.ChatParticipantCrossRef
+import com.evandhardspace.chat.database.entity.ChatParticipantEntity
+
+@Dao
+interface ChatParticipantsCrossRefDao {
+
+    @Upsert
+    suspend fun upsertCrossRefs(crossRefs: List<ChatParticipantCrossRef>)
+
+    @Query("SELECT userId FROM chatparticipantcrossref WHERE chatId = :chatId")
+    suspend fun getActiveParticipantIdsByChat(chatId: String): List<String>
+
+    @Query("SELECT userId FROM chatparticipantcrossref")
+    suspend fun getAllParticipantIdsByChat(chatId: String): List<String>
+
+    @Query("""
+        UPDATE chatparticipantcrossref
+        SET isActive = 0
+        WHERE chatId = :chatId AND userId IN (:userIds)
+    """)
+    suspend fun markParticipantsAsInactive(chatId: String, userIds: List<String>)
+
+    @Query("""
+        UPDATE chatparticipantcrossref
+        SET isActive = 1
+        WHERE chatId = :chatId AND userId IN (:userIds)
+    """)
+    suspend fun reactivateParticipants(chatId: String, userIds: List<String>)
+
+    @Transaction
+    suspend fun syncChatParticipants(
+        chatId: String,
+        participants: List<ChatParticipantEntity>,
+    ) {
+        if(participants.isEmpty()) return
+
+        val remoteParticipantIds = participants.map(ChatParticipantEntity::userId).toSet()
+        val allLocalParticipantIds = getAllParticipantIdsByChat(chatId).toSet()
+        val activeLocalParticipantIds = getActiveParticipantIdsByChat(chatId).toSet()
+        val inactiveLocalParticipantIds = allLocalParticipantIds - activeLocalParticipantIds
+
+        val participantsToReactivate = remoteParticipantIds.intersect(inactiveLocalParticipantIds)
+        val participantsToDeactivate = activeLocalParticipantIds - remoteParticipantIds
+
+        reactivateParticipants(chatId, participantsToReactivate.toList())
+        markParticipantsAsInactive(chatId, participantsToDeactivate.toList())
+
+        val completelyNewParticipantIds = remoteParticipantIds - allLocalParticipantIds
+        val newCrossRefs = completelyNewParticipantIds.map { userId ->
+            ChatParticipantCrossRef(
+                chatId = chatId,
+                userId = userId,
+                isActive = true,
+            )
+        }
+        upsertCrossRefs(newCrossRefs)
+    }
+}
