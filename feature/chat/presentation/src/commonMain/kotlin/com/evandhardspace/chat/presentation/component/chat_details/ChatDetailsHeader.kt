@@ -25,6 +25,7 @@ import chatapp.feature.chat.presentation.generated.resources.go_back
 import chatapp.feature.chat.presentation.generated.resources.leave_chat
 import chatapp.feature.chat.presentation.generated.resources.open_chat_options_menu
 import com.evandhardspace.chat.domain.model.ChatMessage
+import com.evandhardspace.chat.domain.model.DeliveryStatus
 import com.evandhardspace.chat.presentation.component.ChatHeaderContent
 import com.evandhardspace.chat.presentation.component.ChatItemHeaderRow
 import com.evandhardspace.chat.presentation.model.ChatUi
@@ -161,6 +162,7 @@ private fun ChatDetailHeaderContentPreview() {
                                     "and goes over multiple lines to showcase the ellipsis",
                             createdAt = Clock.System.now(),
                             senderId = "1",
+                            deliveryStatus = DeliveryStatus.Sent,
                         ),
                         latestMessageSenderUsername = "Ivan",
                     ),

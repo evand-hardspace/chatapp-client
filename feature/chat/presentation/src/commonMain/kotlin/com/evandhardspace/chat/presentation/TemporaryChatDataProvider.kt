@@ -42,6 +42,7 @@ internal fun temporaryChatListState(): ChatListState = ChatListState(
                         content = "Some message",
                         createdAt = Clock.System.now(),
                         senderId = "2",
+                        deliveryStatus = DeliveryStatus.Sent,
                     ),
                     latestMessageSenderUsername = "IV",
                 )
@@ -81,6 +82,7 @@ internal fun temporaryChatDetailsState(): ChatDetailsState = ChatDetailsState(
                     "and goes over multiple lines to showcase the ellipsis",
             createdAt = Clock.System.now(),
             senderId = "1",
+            deliveryStatus = DeliveryStatus.Sent,
         ),
         latestMessageSenderUsername = "IV",
     ),

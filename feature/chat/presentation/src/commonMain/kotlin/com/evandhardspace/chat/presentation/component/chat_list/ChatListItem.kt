@@ -28,6 +28,7 @@ import chatapp.feature.chat.presentation.generated.resources.Res
 import chatapp.feature.chat.presentation.generated.resources.group_chat
 import chatapp.feature.chat.presentation.generated.resources.you
 import com.evandhardspace.chat.domain.model.ChatMessage
+import com.evandhardspace.chat.domain.model.DeliveryStatus
 import com.evandhardspace.chat.presentation.model.ChatUi
 import com.evandhardspace.core.designsystem.annotations.ThemedPreview
 import com.evandhardspace.core.designsystem.component.avatar.ChatAppStackedAvatars
@@ -113,7 +114,7 @@ fun ChatListItemUi(
                             color = MaterialTheme.colorScheme.extended.textSecondary,
                         )
                     ) {
-                        append(chat.latestMessageSenderUsername + ":")
+                        append(chat.latestMessageSenderUsername + ": ")
                     }
                     append(chat.latestMessage.content)
                 }
@@ -170,6 +171,7 @@ fun ChatListItemPreview() {
                             "and goes over multiple lines to showcase the ellipsis",
                     createdAt = Clock.System.now(),
                     senderId = "1",
+                    deliveryStatus = DeliveryStatus.Sent,
                 ),
                 latestMessageSenderUsername = "Ivan",
             )

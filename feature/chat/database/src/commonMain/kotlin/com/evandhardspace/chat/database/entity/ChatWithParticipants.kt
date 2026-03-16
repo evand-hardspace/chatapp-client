@@ -14,6 +14,12 @@ data class ChatWithParticipants(
         associateBy = Junction(ChatParticipantCrossRef::class),
     )
     val participants: List<ChatParticipantEntity>,
+    @Relation(
+        parentColumn = "chatId",
+        entityColumn = "chatId",
+        entity = LatestMessageView::class,
+    )
+    val latestMessage: LatestMessageView?,
 )
 
 data class ChatInfoEntity(

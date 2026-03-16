@@ -9,6 +9,7 @@ kotlin {
                 api(projects.core.domain)
 
                 implementation(libs.kotlin.stdlib)
+                implementation(libs.kotlinx.coroutines.core)
             }
         }
 
