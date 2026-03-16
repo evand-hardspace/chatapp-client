@@ -3,6 +3,7 @@ package com.evandhardspace.chat.database.entity
 import androidx.room.Embedded
 import androidx.room.Junction
 import androidx.room.Relation
+import com.evandhardspace.chat.database.view.LatestMessageView
 
 data class ChatWithParticipants(
     @Embedded
@@ -30,4 +31,10 @@ data class ChatInfoEntity(
         entity = ChatMessageEntity::class
     )
     val messagesWithSenders: List<MessageWithSender>,
+    @Relation(
+        parentColumn = "chatId",
+        entityColumn = "chatId",
+        entity = LatestMessageView::class,
+    )
+    val latestMessage: LatestMessageView?,
 )
