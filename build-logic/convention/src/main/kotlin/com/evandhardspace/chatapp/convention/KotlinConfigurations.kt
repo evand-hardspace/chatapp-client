@@ -13,6 +13,7 @@ val kotlinOptInAnnotations: List<String>
         "kotlin.time.ExperimentalTime",
         "kotlinx.coroutines.FlowPreview",
         "kotlinx.cinterop.ExperimentalForeignApi",
+        "kotlinx.coroutines.ExperimentalCoroutinesApi",
         "androidx.compose.material3.ExperimentalMaterial3Api",
         "androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi",
         "androidx.compose.ui.ExperimentalComposeUiApi",

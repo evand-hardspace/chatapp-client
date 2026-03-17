@@ -31,4 +31,10 @@ internal class ChatRemoteDataSource(
         ).map { chatDtos ->
             chatDtos.map(ChatDto::toDomain)
         }
+
+    suspend fun getChatById(chatId: String): Either<DataError.Remote, Chat> =
+        httpClient.get<ChatDto>(
+            route = "/chat/$chatId",
+        ).map(ChatDto::toDomain)
+
 }
