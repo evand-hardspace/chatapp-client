@@ -43,9 +43,11 @@ import com.evandhardspace.chat.presentation.model.ChatUi
 import com.evandhardspace.chat.presentation.model.MessageUi
 import com.evandhardspace.core.designsystem.annotations.ThemedPreview
 import com.evandhardspace.core.designsystem.component.avatar.ChatParticipantUi
+import com.evandhardspace.core.designsystem.component.snackbar.LocalSnackbarHostState
 import com.evandhardspace.core.designsystem.theme.ChatAppPreview
 import com.evandhardspace.core.designsystem.theme.extended
 import com.evandhardspace.core.designsystem.theme.paddings
+import com.evandhardspace.core.presentation.util.OnEffect
 import com.evandhardspace.core.presentation.util.asUiText
 import com.evandhardspace.core.presentation.util.compose.clearFocusOnTap
 import com.evandhardspace.core.presentation.util.currentDeviceConfiguration
@@ -62,11 +64,21 @@ internal fun ChatDetailsScreen(
     onBack: () -> Unit,
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val snackbarState = LocalSnackbarHostState.current
 
     LaunchedEffect(chatId) {
         viewModel.onAction(
             ChatDetailsAction.OnSelectChat(chatId),
         )
+    }
+
+    OnEffect(viewModel.effects) { effect ->
+        when (effect) {
+            is ChatDetailsEffect.ChatLeft -> onBack()
+            is ChatDetailsEffect.Error -> snackbarState.show(
+                effect.error.asString(),
+            )
+        }
     }
 
     ChatDetailContent(

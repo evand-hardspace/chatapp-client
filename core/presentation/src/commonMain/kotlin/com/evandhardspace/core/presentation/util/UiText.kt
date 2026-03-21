@@ -47,7 +47,7 @@ sealed interface UiText {
             is StringText -> value
             is ResourceText -> getString(
                 resource = id,
-                *args
+                *args,
             )
         }
     }

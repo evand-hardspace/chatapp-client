@@ -5,6 +5,7 @@ import com.evandhardspace.chat.data.mapper.toEntity
 import com.evandhardspace.chat.data.mapper.toLastMessageView
 import com.evandhardspace.chat.database.ChatAppDatabase
 import com.evandhardspace.chat.database.entity.ChatInfoEntity
+import com.evandhardspace.chat.database.entity.ChatParticipantEntity
 import com.evandhardspace.chat.database.entity.ChatWithParticipants
 import com.evandhardspace.chat.domain.ChatRepository
 import com.evandhardspace.chat.domain.model.Chat
@@ -15,9 +16,13 @@ import com.evandhardspace.core.domain.util.Either
 import com.evandhardspace.core.domain.util.EmptyEither
 import com.evandhardspace.core.domain.util.asEmptyEither
 import com.evandhardspace.core.domain.util.onSuccess
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.supervisorScope
 import org.koin.core.annotation.Factory
 
 @Factory
@@ -27,9 +32,21 @@ internal class OfflineFirstChatRepository(
 ) : ChatRepository {
 
     override val chats: Flow<List<Chat>>
-        get() = database.chatDao.getChatsWithActiveParticipants()
-            .map { chatWithParticipantsList ->
-                chatWithParticipantsList.map(ChatWithParticipants::toDomain)
+        get() = database.chatDao.getChatsWithParticipants()
+            .map { allChatsWithParticipants ->
+                supervisorScope {
+                    allChatsWithParticipants
+                        .map { chatWithParticipants ->
+                            async {
+                                ChatWithParticipants(
+                                    chat = chatWithParticipants.chat,
+                                    participants = chatWithParticipants.participants.filterActive(chatWithParticipants.chat.chatId),
+                                    latestMessage = chatWithParticipants.latestMessage,
+                                )
+                            }
+                        }.awaitAll()
+                        .map(ChatWithParticipants::toDomain)
+                }
             }
 
     override suspend fun fetchChats(): Either<DataError.Remote, List<Chat>> {
@@ -62,6 +79,14 @@ internal class OfflineFirstChatRepository(
     override fun getChatInfoById(chatId: String): Flow<ChatInfo> =
         database.chatDao.getChatInfoById(chatId)
             .filterNotNull()
+            .map { chatInfo ->
+                ChatInfoEntity(
+                    chat = chatInfo.chat,
+                    participants = chatInfo.participants.filterActive(chatId),
+                    messagesWithSenders = chatInfo.messagesWithSenders,
+                    latestMessage = chatInfo.latestMessage,
+                )
+            }
             .map(ChatInfoEntity::toDomain)
 
     override suspend fun fetchChatById(chatId: String): EmptyEither<DataError.Remote> =
@@ -72,6 +97,11 @@ internal class OfflineFirstChatRepository(
             }
             .asEmptyEither()
 
+    override suspend fun leaveChat(chatId: String): EmptyEither<DataError.Remote> =
+        chatDataSource
+            .leaveChat(chatId)
+            .onSuccess { database.chatDao.deleteChatById(chatId) }
+
     private suspend fun upsertChatWithParticipantsAndCrossRefs(chat: Chat) {
         database.chatDao.upsertChatWithParticipantsAndCrossRefs(
             chat = chat.toEntity(),
@@ -81,4 +111,11 @@ internal class OfflineFirstChatRepository(
         )
     }
 
+    private suspend fun List<ChatParticipantEntity>.filterActive(chatId: String): List<ChatParticipantEntity> {
+        val activeParticipantIds = database.chatDao.getActiveParticipantsByChatId(chatId)
+            .first()
+            .map { it.userId }
+
+        return this.filter { it.userId in activeParticipantIds }
+    }
 }
