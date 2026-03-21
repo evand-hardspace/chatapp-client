@@ -55,6 +55,9 @@ internal class OfflineFirstChatRepository(
 
     override suspend fun createChat(otherUserIds: List<String>): Either<DataError.Remote, Chat> =
         chatDataSource.createChat(otherUserIds)
+            .onSuccess { chat ->
+                upsertChatWithParticipantsAndCrossRefs(chat)
+            }
 
     override fun getChatInfoById(chatId: String): Flow<ChatInfo> =
         database.chatDao.getChatInfoById(chatId)
@@ -65,13 +68,17 @@ internal class OfflineFirstChatRepository(
         chatDataSource
             .getChatById(chatId)
             .onSuccess { chat ->
-                database.chatDao.upsertChatWithParticipantsAndCrossRefs(
-                    chat = chat.toEntity(),
-                    participants = chat.participants.map(ChatParticipant::toEntity),
-                    participantDao = database.chatParticipantDao,
-                    crossRefDao = database.chatParticipantsCrossRefDao,
-                )
+                upsertChatWithParticipantsAndCrossRefs(chat)
             }
             .asEmptyEither()
+
+    private suspend fun upsertChatWithParticipantsAndCrossRefs(chat: Chat) {
+        database.chatDao.upsertChatWithParticipantsAndCrossRefs(
+            chat = chat.toEntity(),
+            participants = chat.participants.map(ChatParticipant::toEntity),
+            participantDao = database.chatParticipantDao,
+            crossRefDao = database.chatParticipantsCrossRefDao,
+        )
+    }
 
 }
