@@ -16,6 +16,8 @@
     <string name="no_chats_subtitle">Create new chat to start messaging</string>
     <string name="no_messages">No messages</string>
     <string name="no_messages_subtitle">Be the first one to send a message!</string>
+    <string name="chat_not_selected">Chat is not selected</string>
+    <string name="chat_not_selected_subtitle">Select chat to start messaging</string>
     <string name="sending">Sending...</string>
     <string name="sent">Sent</string>
     <string name="retry">Retry</string>

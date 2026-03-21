@@ -48,8 +48,7 @@ internal fun MessageBox(
 ) {
     ChatAppMultiLineTextField(
         state = messageTextFieldState,
-        modifier = modifier
-            .padding(MaterialTheme.paddings.quarter),
+        modifier = modifier,
         placeholder = stringResource(Res.string.send_a_message),
         enabled = isTextInputEnabled,
         keyboardOptions = KeyboardOptions(

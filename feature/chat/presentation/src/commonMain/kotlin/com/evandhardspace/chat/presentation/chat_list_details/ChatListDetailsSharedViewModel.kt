@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.update
 import org.koin.core.annotation.KoinViewModel
 
 @KoinViewModel
-class ChatListDetailsViewModel : ViewModel() {
+class ChatListDetailsSharedViewModel : ViewModel() {
 
     val state: StateFlow<ChatListDetailsState>
         field = MutableStateFlow(ChatListDetailsState())

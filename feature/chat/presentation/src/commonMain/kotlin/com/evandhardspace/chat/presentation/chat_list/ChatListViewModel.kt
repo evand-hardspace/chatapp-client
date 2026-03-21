@@ -17,7 +17,7 @@ import org.koin.core.annotation.KoinViewModel
 @KoinViewModel
 internal class ChatListViewModel(
     private val repository: ChatRepository,
-    private val sessionRepository: SessionRepository,
+    sessionRepository: SessionRepository,
 ) : ViewModel() {
 
     val state: StateFlow<ChatListState>
@@ -50,6 +50,11 @@ internal class ChatListViewModel(
             is ChatListAction.OnDismissUserMenu -> Unit
             is ChatListAction.OnLogout -> Unit
             is ChatListAction.OnUserAvatar -> Unit
+            is ChatListAction.OnSelectChat -> {
+                state.update {
+                    it.copy(selectedChatId = action.chat?.id)
+                }
+            }
         }
     }
 

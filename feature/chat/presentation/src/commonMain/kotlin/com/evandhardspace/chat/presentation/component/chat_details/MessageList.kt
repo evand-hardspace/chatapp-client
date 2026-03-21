@@ -28,18 +28,14 @@ internal fun MessageList(
     onDeleteMessageClick: (MessageUi.LocalUserMessage) -> Unit,
     onDismissMessageMenu: () -> Unit,
     modifier: Modifier = Modifier,
+    emptyContent: @Composable () -> Unit,
 ) {
     if (messages.isEmpty()) {
         Box(
             modifier = modifier
                 .padding(vertical = MaterialTheme.paddings.double),
             contentAlignment = Alignment.Center,
-        ) {
-            EmptyContentSection(
-                title = stringResource(Res.string.no_messages),
-                description = stringResource(Res.string.no_messages_subtitle),
-            )
-        }
+        ) { emptyContent() }
         return
     }
 

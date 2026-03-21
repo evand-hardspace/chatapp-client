@@ -16,7 +16,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.evandhardspace.chat.presentation.chat_details.ChatDetailsAction
 import com.evandhardspace.chat.presentation.chat_details.ChatDetailsScreen
 import com.evandhardspace.chat.presentation.chat_details.ChatDetailsViewModel
+import com.evandhardspace.chat.presentation.chat_list.ChatListAction
 import com.evandhardspace.chat.presentation.chat_list.ChatListScreen
+import com.evandhardspace.chat.presentation.chat_list.ChatListViewModel
 import com.evandhardspace.chat.presentation.create_chat.CreateChatScreen
 import com.evandhardspace.core.designsystem.component.layout.NavigableListDetailPaneScaffold
 import com.evandhardspace.core.designsystem.component.modifier.clipOnTransition
@@ -27,7 +29,7 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 internal fun ChatListDetailsScreen(
-    chatListDetailViewModel: ChatListDetailsViewModel = koinViewModel(),
+    chatListDetailViewModel: ChatListDetailsSharedViewModel = koinViewModel(),
     onLogout: () -> Unit,
 ) {
     val state by chatListDetailViewModel.state.collectAsStateWithLifecycle()
@@ -53,6 +55,12 @@ private fun ChatListDetailsContent(
 
     val scope = rememberCoroutineScope()
     val chatDetailViewModel = koinViewModel<ChatDetailsViewModel>()
+    val chatListViewModel = koinViewModel<ChatListViewModel>()
+
+    val onBack = {
+        chatDetailViewModel.onAction(ChatDetailsAction.OnSelectChat(null))
+        chatListViewModel.onAction(ChatListAction.OnSelectChat(null))
+    } // TODO: reorganize events
 
     LaunchedEffect(detailPaneValue, state.selectedChatId) {
         if (detailPaneValue == PaneAdaptedValue.Hidden && state.selectedChatId != null) {
@@ -64,14 +72,14 @@ private fun ChatListDetailsContent(
         navigator = scaffoldNavigator,
         modifier = Modifier
             .background(MaterialTheme.colorScheme.extended.surfaceLower),
-        onBackCompleted = {
-            chatDetailViewModel.onAction(ChatDetailsAction.OnSelectChat(null))
-        },
+        onBackCompleted = onBack,
         listPane = {
             AnimatedPane {
                 ChatListScreen(
-                    onChatClick = {
-                        action(ChatListDetailsAction.OnOpenChat(it.id))
+                    viewModel = chatListViewModel,
+                    onChatClick = { chat ->
+                        action(ChatListDetailsAction.OnOpenChat(chat.id))
+                        chatListViewModel.onAction(ChatListAction.OnSelectChat(chat))
                         scope.launch {
                             scaffoldNavigator.navigateTo(
                                 pane = ListDetailPaneScaffoldRole.Detail,
@@ -94,6 +102,7 @@ private fun ChatListDetailsContent(
                     onBack = {
                         scope.launch {
                             if (scaffoldNavigator.canNavigateBack()) {
+                                onBack()
                                 scaffoldNavigator.navigateBack()
                             }
                         }

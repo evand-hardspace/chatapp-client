@@ -41,15 +41,15 @@ internal fun ChatItemHeaderRow(
             verticalArrangement = Arrangement.spacedBy(MaterialTheme.paddings.quarter),
         ) {
             Text(
-                text = if(!isGroupChat) chat.otherParticipants.first().username
-                 else stringResource(Res.string.group_chat),
+                text = if (!isGroupChat) chat.otherParticipants.first().username
+                else stringResource(Res.string.group_chat),
                 style = MaterialTheme.typography.titleExtraSmall,
                 color = MaterialTheme.colorScheme.extended.textPrimary,
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1,
                 modifier = Modifier.fillMaxWidth()
             )
-            if(isGroupChat) {
+            if (isGroupChat) {
                 val you = stringResource(Res.string.you)
                 val formattedUsernames = remember(chat.otherParticipants) {
                     "$you, " + chat.otherParticipants.joinToString { it.username }

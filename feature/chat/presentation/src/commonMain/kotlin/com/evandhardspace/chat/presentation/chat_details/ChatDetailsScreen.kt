@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -22,13 +23,20 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import chatapp.feature.chat.presentation.generated.resources.Res
+import chatapp.feature.chat.presentation.generated.resources.chat_not_selected
+import chatapp.feature.chat.presentation.generated.resources.chat_not_selected_subtitle
+import chatapp.feature.chat.presentation.generated.resources.no_messages
+import chatapp.feature.chat.presentation.generated.resources.no_messages_subtitle
 import com.evandhardspace.chat.domain.model.ChatMessage
 import com.evandhardspace.chat.domain.model.DeliveryStatus
 import com.evandhardspace.chat.presentation.component.ChatHeaderContent
 import com.evandhardspace.chat.presentation.component.chat_details.ChatDetailHeader
+import com.evandhardspace.chat.presentation.component.chat_details.EmptyContentSection
 import com.evandhardspace.chat.presentation.component.chat_details.MessageBox
 import com.evandhardspace.chat.presentation.component.chat_details.MessageList
 import com.evandhardspace.chat.presentation.model.ChatUi
@@ -41,6 +49,7 @@ import com.evandhardspace.core.designsystem.theme.paddings
 import com.evandhardspace.core.presentation.util.asUiText
 import com.evandhardspace.core.presentation.util.compose.clearFocusOnTap
 import com.evandhardspace.core.presentation.util.currentDeviceConfiguration
+import org.jetbrains.compose.resources.stringResource
 import kotlin.time.Clock
 import kotlin.uuid.Uuid
 
@@ -120,6 +129,9 @@ private fun ChatDetailContent(
                     }
 
                     MessageList(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f),
                         messages = state.messages,
                         listState = messageListState,
                         onMessageLongClick = { message ->
@@ -134,13 +146,22 @@ private fun ChatDetailContent(
                         onDeleteMessageClick = { message ->
                             action(ChatDetailsAction.OnDeleteMessage(message))
                         },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .weight(1f)
+                        emptyContent = {
+                            EmptyContentSection(
+                                title = stringResource(
+                                    if (state.chatUi != null) Res.string.no_messages
+                                    else Res.string.chat_not_selected,
+                                ),
+                                description = stringResource(
+                                    if (state.chatUi != null) Res.string.no_messages_subtitle
+                                    else Res.string.chat_not_selected_subtitle,
+                                ),
+                            )
+                        }
                     )
 
                     AnimatedVisibility(
-                        visible = !configuration.isWideScreen && state.chatUi != null,
+                        visible = configuration.isWideScreen.not() && state.chatUi != null,
                     ) {
                         MessageBox(
                             messageTextFieldState = state.messageTextFieldState,
@@ -148,7 +169,8 @@ private fun ChatDetailContent(
                             connectionState = state.connectionState,
                             onSendClick = { action(ChatDetailsAction.OnSendMessage) },
                             modifier = Modifier
-                                .fillMaxWidth(),
+                                .fillMaxWidth()
+                                .padding(MaterialTheme.paddings.half),
                         )
                     }
                 }
@@ -160,14 +182,19 @@ private fun ChatDetailContent(
                 AnimatedVisibility(
                     visible = configuration.isWideScreen && state.chatUi != null,
                 ) {
-                    MessageBox(
-                        messageTextFieldState = state.messageTextFieldState,
-                        isTextInputEnabled = state.canSendMessage,
-                        connectionState = state.connectionState,
-                        onSendClick = { action(ChatDetailsAction.OnSendMessage) },
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                    )
+                    DynamicRoundedCornerColumn(
+                        isCornersRounded = configuration.isWideScreen
+                    ) {
+                        MessageBox(
+                            messageTextFieldState = state.messageTextFieldState,
+                            isTextInputEnabled = state.canSendMessage,
+                            connectionState = state.connectionState,
+                            onSendClick = { action(ChatDetailsAction.OnSendMessage) },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(MaterialTheme.paddings.half),
+                        )
+                    }
                 }
             }
         }
@@ -183,12 +210,13 @@ private fun DynamicRoundedCornerColumn(
     Column(
         modifier = modifier
             .shadow(
-                elevation = if (isCornersRounded) 4.dp else 0.dp,
-                shape = if (isCornersRounded) MaterialTheme.shapes.large else RectangleShape
+                elevation = if (isCornersRounded) 8.dp else 0.dp,
+                shape = if (isCornersRounded) RoundedCornerShape(24.dp) else RectangleShape,
+                spotColor = Color.Black.copy(alpha = 0.2f),
             )
             .background(
                 color = MaterialTheme.colorScheme.surface,
-                shape = if (isCornersRounded) MaterialTheme.shapes.large else RectangleShape
+                shape = if (isCornersRounded) RoundedCornerShape(24.dp) else RectangleShape,
             )
     ) { content() }
 }

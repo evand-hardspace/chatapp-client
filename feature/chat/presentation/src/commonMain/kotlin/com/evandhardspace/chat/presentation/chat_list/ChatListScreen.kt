@@ -45,11 +45,10 @@ import com.evandhardspace.core.designsystem.theme.ChatAppTheme
 import com.evandhardspace.core.designsystem.theme.extended
 import com.evandhardspace.core.designsystem.theme.paddings
 import org.jetbrains.compose.resources.stringResource
-import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 internal fun ChatListScreen(
-    viewModel: ChatListViewModel = koinViewModel(),
+    viewModel: ChatListViewModel,
     onChatClick: (ChatUi) -> Unit,
     onConfirmLogoutClick: () -> Unit,
     onCreateChatClick: () -> Unit,
