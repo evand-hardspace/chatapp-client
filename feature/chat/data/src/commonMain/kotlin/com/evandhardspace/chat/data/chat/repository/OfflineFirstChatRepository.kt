@@ -1,6 +1,7 @@
 package com.evandhardspace.chat.data.chat.repository
 
 import com.evandhardspace.chat.data.chat.ChatRemoteDataSource
+import com.evandhardspace.chat.data.lifecycle.AppLifecycleObserver
 import com.evandhardspace.chat.data.mapper.toDomain
 import com.evandhardspace.chat.data.mapper.toEntity
 import com.evandhardspace.chat.data.mapper.toLastMessageView
@@ -17,16 +18,21 @@ import com.evandhardspace.core.domain.util.Either
 import com.evandhardspace.core.domain.util.EmptyEither
 import com.evandhardspace.core.domain.util.asEmptyEither
 import com.evandhardspace.core.domain.util.onSuccess
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.supervisorScope
 import org.koin.core.annotation.Factory
+import org.koin.core.annotation.Single
 
-@Factory
+@Single
 internal class OfflineFirstChatRepository(
     private val chatDataSource: ChatRemoteDataSource,
     private val database: ChatAppDatabase,
