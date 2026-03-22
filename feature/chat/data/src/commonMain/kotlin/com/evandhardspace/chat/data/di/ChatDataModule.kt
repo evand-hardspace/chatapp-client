@@ -1,6 +1,7 @@
 package com.evandhardspace.chat.data.di
 
 import androidx.sqlite.driver.bundled.BundledSQLiteDriver
+import com.evandhardspace.chat.database.ChatAppDatabase
 import com.evandhardspace.chat.database.DatabaseFactory
 import org.koin.core.annotation.ComponentScan
 import org.koin.core.annotation.Module
@@ -16,7 +17,7 @@ internal expect val platformChatDataModule: KoinModule
 val chatDataModule: KoinModule = module {
     includes(platformChatDataModule)
 
-    single {
+    single<ChatAppDatabase> {
         get<DatabaseFactory>()
             .create()
             .setDriver(BundledSQLiteDriver())

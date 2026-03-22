@@ -1,7 +1,6 @@
 package com.evandhardspace.chat.data.chat.repository
 
 import com.evandhardspace.chat.data.chat.ChatRemoteDataSource
-import com.evandhardspace.chat.data.lifecycle.AppLifecycleObserver
 import com.evandhardspace.chat.data.mapper.toDomain
 import com.evandhardspace.chat.data.mapper.toEntity
 import com.evandhardspace.chat.data.mapper.toLastMessageView
@@ -9,27 +8,22 @@ import com.evandhardspace.chat.database.ChatAppDatabase
 import com.evandhardspace.chat.database.entity.ChatInfoEntity
 import com.evandhardspace.chat.database.entity.ChatParticipantEntity
 import com.evandhardspace.chat.database.entity.ChatWithParticipants
-import com.evandhardspace.chat.domain.repository.ChatRepository
 import com.evandhardspace.chat.domain.model.Chat
 import com.evandhardspace.chat.domain.model.ChatInfo
 import com.evandhardspace.chat.domain.model.ChatParticipant
+import com.evandhardspace.chat.domain.repository.ChatRepository
 import com.evandhardspace.core.domain.util.DataError
 import com.evandhardspace.core.domain.util.Either
 import com.evandhardspace.core.domain.util.EmptyEither
 import com.evandhardspace.core.domain.util.asEmptyEither
 import com.evandhardspace.core.domain.util.onSuccess
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.supervisorScope
-import org.koin.core.annotation.Factory
 import org.koin.core.annotation.Single
 
 @Single
