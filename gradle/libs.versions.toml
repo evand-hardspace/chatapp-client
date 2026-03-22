@@ -169,6 +169,7 @@ ksp-gradlePlugin = { group = "com.google.devtools.ksp", name = "com.google.devto
 
 androidx-compose-uiToolingPreview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 androidx-compose-uiTooling = { group = "androidx.compose.ui", name = "ui-tooling" }
+androidx-lifecycle-process = { module = "androidx.lifecycle:lifecycle-process", version.ref = "androidx-lifecycle" }
 
 koin-bom = { group = "io.insert-koin", name = "koin-bom", version.ref = "koin" }
 androidx-runner = { group = "androidx.test", name = "runner", version.ref = "runner" }
