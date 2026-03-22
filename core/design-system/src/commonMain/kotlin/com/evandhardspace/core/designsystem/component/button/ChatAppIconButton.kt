@@ -18,11 +18,13 @@ import com.evandhardspace.core.designsystem.theme.extended
 @Composable
 fun ChatAppIconButton(
     onClick: () -> Unit,
+    enabled: Boolean = true,
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit,
 ) {
     OutlinedIconButton(
         onClick = onClick,
+        enabled = enabled,
         modifier = modifier
             .size(45.dp),
         shape = MaterialTheme.shapes.small,

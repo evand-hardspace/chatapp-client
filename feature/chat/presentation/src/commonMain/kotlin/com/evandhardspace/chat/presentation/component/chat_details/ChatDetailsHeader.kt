@@ -67,6 +67,7 @@ internal fun ChatDetailHeader(
         if (isDetailPresent.not()) {
             ChatAppIconButton(
                 onClick = onBackClick,
+                enabled = chatUi != null,
             ) {
                 Icon(
                     imageVector = vectorResource(DesignSystemRes.drawable.arrow_left_icon),
@@ -93,6 +94,7 @@ internal fun ChatDetailHeader(
         Box {
             ChatAppIconButton(
                 onClick = onChatOptionsClick,
+                enabled = chatUi != null,
             ) {
                 Icon(
                     imageVector = vectorResource(DesignSystemRes.drawable.dots_icon),

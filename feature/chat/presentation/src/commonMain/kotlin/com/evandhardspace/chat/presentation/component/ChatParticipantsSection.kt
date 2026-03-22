@@ -74,7 +74,7 @@ internal fun ColumnScope.ChatParticipantsSelectionSection(
             verticalArrangement = Arrangement.spacedBy(MaterialTheme.paddings.default),
             contentPadding = PaddingValues(top = MaterialTheme.paddings.half),
         ) {
-            searchResult.participant.takeIf { searchResult.status == null }
+            searchResult.participant.takeIf { searchResult.status == Status.New }
                 ?.let { searchParticipant ->
                     stickyHeader {
                         Column(Modifier.animateItem()) {
