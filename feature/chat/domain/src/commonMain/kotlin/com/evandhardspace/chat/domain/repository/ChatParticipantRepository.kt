@@ -1,9 +1,8 @@
-package com.evandhardspace.chat.domain
+package com.evandhardspace.chat.domain.repository
 
 import com.evandhardspace.chat.domain.model.ChatParticipant
 import com.evandhardspace.core.domain.util.DataError
 import com.evandhardspace.core.domain.util.Either
-
 
 interface ChatParticipantRepository {
     suspend fun searchParticipant(

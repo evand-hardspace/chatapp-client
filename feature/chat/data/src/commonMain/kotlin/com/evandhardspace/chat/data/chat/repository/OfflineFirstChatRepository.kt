@@ -1,5 +1,6 @@
-package com.evandhardspace.chat.data.chat
+package com.evandhardspace.chat.data.chat.repository
 
+import com.evandhardspace.chat.data.chat.ChatRemoteDataSource
 import com.evandhardspace.chat.data.mapper.toDomain
 import com.evandhardspace.chat.data.mapper.toEntity
 import com.evandhardspace.chat.data.mapper.toLastMessageView
@@ -7,7 +8,7 @@ import com.evandhardspace.chat.database.ChatAppDatabase
 import com.evandhardspace.chat.database.entity.ChatInfoEntity
 import com.evandhardspace.chat.database.entity.ChatParticipantEntity
 import com.evandhardspace.chat.database.entity.ChatWithParticipants
-import com.evandhardspace.chat.domain.ChatRepository
+import com.evandhardspace.chat.domain.repository.ChatRepository
 import com.evandhardspace.chat.domain.model.Chat
 import com.evandhardspace.chat.domain.model.ChatInfo
 import com.evandhardspace.chat.domain.model.ChatParticipant

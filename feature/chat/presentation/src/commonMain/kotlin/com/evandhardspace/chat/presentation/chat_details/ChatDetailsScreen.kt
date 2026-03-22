@@ -62,6 +62,7 @@ internal fun ChatDetailsScreen(
     modifier: Modifier = Modifier,
     viewModel: ChatDetailsViewModel,
     onBack: () -> Unit,
+    onManageChat: () -> Unit,
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val snackbarState = LocalSnackbarHostState.current
@@ -86,6 +87,7 @@ internal fun ChatDetailsScreen(
         isDetailPresent = isDetailPresent,
         action = viewModel::onAction,
         onBack = onBack,
+        onManageChat = onManageChat,
         modifier = modifier,
     )
 }
@@ -96,6 +98,7 @@ private fun ChatDetailContent(
     isDetailPresent: Boolean,
     action: (ChatDetailsAction) -> Unit,
     onBack: () -> Unit,
+    onManageChat: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val configuration = currentDeviceConfiguration()
@@ -133,8 +136,8 @@ private fun ChatDetailContent(
                             isChatOptionsDropDownOpen = state.isChatOptionsOpen,
                             onChatOptionsClick = { action(ChatDetailsAction.OnChatOptions) },
                             onDismissChatOptions = { action(ChatDetailsAction.OnDismissChatOptions) },
-                            onManageChatClick = { action(ChatDetailsAction.OnChatMembers) },
-                            onLeaveChatClick = { action(ChatDetailsAction.OnLeaveChat) },
+                            onManageChatClick = { onManageChat() },
+                            onLeaveChatClick = { action(ChatDetailsAction.LeaveChat) },
                             onBackClick = onBack,
                             modifier = Modifier.fillMaxWidth()
                         )
@@ -242,6 +245,7 @@ private fun ChatDetailEmptyPreview() {
             isDetailPresent = false,
             action = {},
             onBack = {},
+            onManageChat = {},
         )
     }
 }
@@ -312,6 +316,7 @@ private fun ChatDetailMessagesPreview() {
             isDetailPresent = false,
             action = {},
             onBack = {},
+            onManageChat = {},
         )
     }
 }

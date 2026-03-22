@@ -20,6 +20,7 @@ import com.evandhardspace.chat.presentation.chat_list.ChatListAction
 import com.evandhardspace.chat.presentation.chat_list.ChatListScreen
 import com.evandhardspace.chat.presentation.chat_list.ChatListViewModel
 import com.evandhardspace.chat.presentation.create_chat.CreateChatScreen
+import com.evandhardspace.chat.presentation.manage_chat.ManageChatScreen
 import com.evandhardspace.core.designsystem.component.layout.NavigableListDetailPaneScaffold
 import com.evandhardspace.core.designsystem.component.modifier.clipOnTransition
 import com.evandhardspace.core.designsystem.theme.extended
@@ -106,6 +107,9 @@ private fun ChatListDetailsContent(
                                 scaffoldNavigator.navigateBack()
                             }
                         }
+                    },
+                    onManageChat = {
+                        action(ChatListDetailsAction.OnManageChat)
                     }
                 )
             }
@@ -124,6 +128,21 @@ private fun ChatListDetailsContent(
                     scaffoldNavigator.navigateTo(ListDetailPaneScaffoldRole.Detail)
                 }
             }
+        )
+    }
+
+    LaunchedEffect(state.dialogState) {
+        when(state.dialogState) {
+            is DialogState.ManageChat -> chatDetailViewModel.onAction(ChatDetailsAction.OnDismissChatOptions)
+            else -> Unit
+        }
+    }
+
+    DialogViewModelScope(
+        visible = state.dialogState is DialogState.ManageChat,
+    ) {
+        ManageChatScreen(
+            onDismiss = { action(ChatListDetailsAction.OnDismissCurrentDialog) },
         )
     }
 }

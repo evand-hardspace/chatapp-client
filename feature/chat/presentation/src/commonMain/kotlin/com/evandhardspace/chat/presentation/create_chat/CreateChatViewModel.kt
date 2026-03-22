@@ -6,9 +6,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import chatapp.feature.chat.presentation.generated.resources.Res
 import chatapp.feature.chat.presentation.generated.resources.error_participant_not_found
-import com.evandhardspace.chat.domain.ChatParticipantRepository
-import com.evandhardspace.chat.domain.ChatRepository
+import chatapp.feature.chat.presentation.generated.resources.participant_is_already_selected
+import com.evandhardspace.chat.domain.repository.ChatParticipantRepository
+import com.evandhardspace.chat.domain.repository.ChatRepository
+import com.evandhardspace.chat.presentation.component.manage_chat.CurrentSearchResultState
+import com.evandhardspace.chat.presentation.component.manage_chat.ManageChatAction
+import com.evandhardspace.chat.presentation.component.manage_chat.ManageChatState
 import com.evandhardspace.chat.presentation.mapper.toUi
+import com.evandhardspace.core.designsystem.component.avatar.ChatParticipantUi
 import com.evandhardspace.core.domain.util.DataError
 import com.evandhardspace.core.domain.util.onFailure
 import com.evandhardspace.core.domain.util.onSuccess
@@ -36,9 +41,8 @@ internal class CreateChatViewModel(
     private val _effects = Channel<CreateChatEffect>()
     val effects = _effects.receiveAsFlow()
 
-    val state: StateFlow<CreateChatState>
-        field = MutableStateFlow(CreateChatState())
-
+    val state: StateFlow<ManageChatState>
+        field = MutableStateFlow(ManageChatState())
 
     private val searchFlow = snapshotFlow { state.value.queryTextState.text.toString() }
         .debounce(DEFAULT_SEARCH_DEBOUNCE_SECONDS.seconds)
@@ -50,29 +54,40 @@ internal class CreateChatViewModel(
         searchFlow.launchIn(viewModelScope)
     }
 
-    fun onAction(action: CreateChatAction) {
+    fun onAction(action: ManageChatAction) {
         when (action) {
-            CreateChatAction.OnAdd -> addParticipant()
-            CreateChatAction.OnCreateChat -> createChat()
+            is ManageChatAction.SelectParticipant -> addParticipant(action.participant)
+            is ManageChatAction.Submit -> createChat()
+            is ManageChatAction.RemoveSelectedParticipant -> removeSelectedParticipant(action.participant)
         }
     }
 
-    private fun addParticipant() {
-        state.value.currentSearchResult?.let { participant ->
-            val isAlreadyPartOfChat = state.value.selectedChatParticipants.any {
-                it.id == participant.id
-            }
-            if (!isAlreadyPartOfChat) {
-                state.update {
-                    it.copy(
-                        selectedChatParticipants = it.selectedChatParticipants + participant,
-                        canAddParticipant = false,
-                        currentSearchResult = null
-                    )
-                }
-                state.value.queryTextState.clearText()
+    private fun removeSelectedParticipant(participant: ChatParticipantUi) {
+        viewModelScope.launch {
+            val newSelectedParticipants = state.value.selectedChatParticipants - participant
+            val isAlreadySelected = participant in newSelectedParticipants
+            state.update { latestState ->
+                latestState.copy(
+                    selectedChatParticipants = newSelectedParticipants,
+                    currentSearchResult = latestState.currentSearchResult.copy(
+                        isAlreadySelected = isAlreadySelected,
+                    ),
+                    searchError = latestState.searchError
+                        .takeUnless { latestState.currentSearchResult.isAlreadySelected },
+                )
             }
         }
+    }
+
+    private fun addParticipant(newParticipant: ChatParticipantUi) {
+        state.update { latestState ->
+            latestState.copy(
+                selectedChatParticipants = latestState.selectedChatParticipants + newParticipant,
+                currentSearchResult = CurrentSearchResultState.Empty,
+                searchError = null,
+            )
+        }
+        state.value.queryTextState.clearText()
     }
 
     private fun createChat() {
@@ -85,7 +100,6 @@ internal class CreateChatViewModel(
             state.update {
                 it.copy(
                     isCreatingChat = true,
-                    canAddParticipant = false,
                 )
             }
 
@@ -103,7 +117,6 @@ internal class CreateChatViewModel(
                     state.update { latestState ->
                         latestState.copy(
                             createChatError = error.asUiText(),
-                            canAddParticipant = latestState.currentSearchResult != null && latestState.isSearching.not(),
                             isCreatingChat = false,
                         )
                     }
@@ -113,10 +126,9 @@ internal class CreateChatViewModel(
 
     private fun performSearch(query: String) {
         if (query.isBlank()) {
-            state.update {
-                it.copy(
-                    currentSearchResult = null,
-                    canAddParticipant = false,
+            state.update { latestState ->
+                latestState.copy(
+                    currentSearchResult = CurrentSearchResultState.Empty,
                     searchError = null,
                 )
             }
@@ -124,39 +136,44 @@ internal class CreateChatViewModel(
         }
 
         viewModelScope.launch {
-            state.update {
-                it.copy(
+            state.update { latestState ->
+                latestState.copy(
                     isSearching = true,
-                    canAddParticipant = false,
                 )
             }
 
-            chatParticipantRepository
-                .searchParticipant(query)
-                .onSuccess { participant ->
-                    state.update {
-                        it.copy(
-                            currentSearchResult = participant.toUi(),
-                            isSearching = false,
-                            canAddParticipant = true,
-                            searchError = null
-                        )
-                    }
+            chatParticipantRepository.searchParticipant(
+                query = query,
+            ).onSuccess { participant ->
+                val isAlreadySelected =
+                    state.value.selectedChatParticipants.any { it.id == participant.userId }
+                val searchError =
+                    if (isAlreadySelected) Res.string.participant_is_already_selected.asUiText()
+                    else null
+
+                state.update { latestState ->
+                    latestState.copy(
+                        currentSearchResult = CurrentSearchResultState(
+                            participant = participant.toUi(),
+                            isAlreadySelected = isAlreadySelected,
+                        ),
+                        isSearching = false,
+                        searchError = searchError,
+                    )
                 }
-                .onFailure { error ->
-                    val errorMessage = when (error) {
-                        DataError.Remote.NotFound -> Res.string.error_participant_not_found.asUiText()
-                        else -> error.asUiText()
-                    }
-                    state.update {
-                        it.copy(
-                            searchError = errorMessage,
-                            isSearching = false,
-                            canAddParticipant = false,
-                            currentSearchResult = null,
-                        )
-                    }
+            }.onFailure { error ->
+                val errorMessage = when (error) {
+                    DataError.Remote.NotFound -> Res.string.error_participant_not_found.asUiText()
+                    else -> error.asUiText()
                 }
+                state.update {
+                    it.copy(
+                        searchError = errorMessage,
+                        isSearching = false,
+                        currentSearchResult = CurrentSearchResultState.Empty,
+                    )
+                }
+            }
         }
     }
 }

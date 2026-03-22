@@ -1,4 +1,4 @@
-package com.evandhardspace.chat.domain
+package com.evandhardspace.chat.domain.repository
 
 import com.evandhardspace.chat.domain.model.Chat
 import com.evandhardspace.chat.domain.model.ChatInfo

@@ -3,7 +3,7 @@ package com.evandhardspace.chat.presentation.chat_details
 import androidx.compose.foundation.text.input.clearText
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.evandhardspace.chat.domain.ChatRepository
+import com.evandhardspace.chat.domain.repository.ChatRepository
 import com.evandhardspace.chat.presentation.mapper.toUi
 import com.evandhardspace.core.common.stateInUi
 import com.evandhardspace.core.domain.auth.AuthState
@@ -62,12 +62,12 @@ internal class ChatDetailsViewModel(
 
     fun onAction(action: ChatDetailsAction) {
         when (action) {
-            is ChatDetailsAction.OnChatMembers -> Unit
+            is ChatDetailsAction.OnChatMembersSelected -> Unit
             is ChatDetailsAction.OnChatOptions -> onChatOptions()
             is ChatDetailsAction.OnDeleteMessage -> Unit
             is ChatDetailsAction.OnDismissChatOptions -> onDismissChatOptions()
             is ChatDetailsAction.OnDismissMessageMenu -> Unit
-            is ChatDetailsAction.OnLeaveChat -> onLeaveChat()
+            is ChatDetailsAction.LeaveChat -> onLeaveChat()
             is ChatDetailsAction.OnMessageLongClick -> Unit
             is ChatDetailsAction.OnRetry -> Unit
             is ChatDetailsAction.OnScrollToTop -> Unit

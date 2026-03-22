@@ -1,6 +1,6 @@
-package com.evandhardspace.chat.data.chat
+package com.evandhardspace.chat.data.chat.repository
 
-import com.evandhardspace.chat.domain.ChatParticipantRepository
+import com.evandhardspace.chat.domain.repository.ChatParticipantRepository
 import com.evandhardspace.chat.domain.model.ChatParticipant
 import com.evandhardspace.core.data.networking.get
 import com.evandhardspace.core.domain.util.DataError

@@ -1,5 +1,6 @@
 package com.evandhardspace.core.designsystem.component.textfield
 
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -63,7 +64,7 @@ fun ChatAppTextFieldLayout(
     Column(
         modifier = modifier,
     ) {
-        if(title != null) {
+        if (title != null) {
             Text(
                 text = title,
                 style = MaterialTheme.typography.labelSmall,
@@ -74,15 +75,16 @@ fun ChatAppTextFieldLayout(
 
         textField(textFieldStyleModifier, interactionSource)
 
-        if(supportingText != null) {
+        AnimatedContent(
+            modifier = Modifier.fillMaxWidth(),
+            targetState = isError to supportingText,
+        ) { (isError, supportingText) ->
+            if (supportingText == null) return@AnimatedContent
             Spacer(modifier = Modifier.height(MaterialTheme.paddings.quarter))
             Text(
                 text = supportingText,
-                color = if(isError) {
-                    MaterialTheme.colorScheme.error
-                } else {
-                    MaterialTheme.colorScheme.extended.textTertiary
-                },
+                color = if (isError) MaterialTheme.colorScheme.error
+                else MaterialTheme.colorScheme.extended.textTertiary,
                 style = MaterialTheme.typography.bodySmall,
             )
         }
