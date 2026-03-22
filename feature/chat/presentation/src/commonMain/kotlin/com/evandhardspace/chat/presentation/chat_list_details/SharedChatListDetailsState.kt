@@ -1,7 +1,7 @@
 package com.evandhardspace.chat.presentation.chat_list_details
 
 
-data class ChatListDetailsState(
+data class SharedChatListDetailsState(
     val selectedChatId: String? = null,
     val dialogState: DialogState = DialogState.Hidden,
 )

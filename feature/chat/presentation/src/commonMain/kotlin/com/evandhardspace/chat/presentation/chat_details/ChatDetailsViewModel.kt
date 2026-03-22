@@ -62,17 +62,17 @@ internal class ChatDetailsViewModel(
 
     fun onAction(action: ChatDetailsAction) {
         when (action) {
-            is ChatDetailsAction.OnChatMembersSelected -> Unit
-            is ChatDetailsAction.OnChatOptions -> onChatOptions()
-            is ChatDetailsAction.OnDeleteMessage -> Unit
-            is ChatDetailsAction.OnDismissChatOptions -> onDismissChatOptions()
-            is ChatDetailsAction.OnDismissMessageMenu -> Unit
+            is ChatDetailsAction.ChatMembersSelected -> Unit
+            is ChatDetailsAction.ShowChatOptions -> onChatOptions()
+            is ChatDetailsAction.DeleteMessage -> Unit
+            is ChatDetailsAction.DismissChatOptions -> onDismissChatOptions()
+            is ChatDetailsAction.DismissMessageMenu -> Unit
             is ChatDetailsAction.LeaveChat -> onLeaveChat()
             is ChatDetailsAction.OnMessageLongClick -> Unit
-            is ChatDetailsAction.OnRetry -> Unit
-            is ChatDetailsAction.OnScrollToTop -> Unit
-            is ChatDetailsAction.OnSelectChat -> switchChat(action.chatId)
-            is ChatDetailsAction.OnSendMessage -> Unit
+            is ChatDetailsAction.RetrySendMessage -> Unit
+            is ChatDetailsAction.ScrollToTop -> Unit
+            is ChatDetailsAction.SelectChat -> switchChat(action.chatId)
+            is ChatDetailsAction.SendMessage -> Unit
         }
     }
 

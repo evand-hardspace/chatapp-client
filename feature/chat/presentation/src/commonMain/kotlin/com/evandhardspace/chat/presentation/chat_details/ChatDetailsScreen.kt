@@ -69,7 +69,7 @@ internal fun ChatDetailsScreen(
 
     LaunchedEffect(chatId) {
         viewModel.onAction(
-            ChatDetailsAction.OnSelectChat(chatId),
+            ChatDetailsAction.SelectChat(chatId),
         )
     }
 
@@ -134,8 +134,8 @@ private fun ChatDetailContent(
                             chatUi = state.chatUi,
                             isDetailPresent = isDetailPresent,
                             isChatOptionsDropDownOpen = state.isChatOptionsOpen,
-                            onChatOptionsClick = { action(ChatDetailsAction.OnChatOptions) },
-                            onDismissChatOptions = { action(ChatDetailsAction.OnDismissChatOptions) },
+                            onChatOptionsClick = { action(ChatDetailsAction.ShowChatOptions) },
+                            onDismissChatOptions = { action(ChatDetailsAction.DismissChatOptions) },
                             onManageChatClick = { onManageChat() },
                             onLeaveChatClick = { action(ChatDetailsAction.LeaveChat) },
                             onBackClick = onBack,
@@ -153,13 +153,13 @@ private fun ChatDetailContent(
                             action(ChatDetailsAction.OnMessageLongClick(message))
                         },
                         onMessageRetryClick = { message ->
-                            action(ChatDetailsAction.OnRetry(message))
+                            action(ChatDetailsAction.RetrySendMessage(message))
                         },
                         onDismissMessageMenu = {
-                            action(ChatDetailsAction.OnDismissMessageMenu)
+                            action(ChatDetailsAction.DismissMessageMenu)
                         },
                         onDeleteMessageClick = { message ->
-                            action(ChatDetailsAction.OnDeleteMessage(message))
+                            action(ChatDetailsAction.DeleteMessage(message))
                         },
                         emptyContent = {
                             EmptyContentSection(
@@ -182,7 +182,7 @@ private fun ChatDetailContent(
                             messageTextFieldState = state.messageTextFieldState,
                             isTextInputEnabled = state.canSendMessage,
                             connectionState = state.connectionState,
-                            onSendClick = { action(ChatDetailsAction.OnSendMessage) },
+                            onSendClick = { action(ChatDetailsAction.SendMessage) },
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(MaterialTheme.paddings.half),
@@ -204,7 +204,7 @@ private fun ChatDetailContent(
                             messageTextFieldState = state.messageTextFieldState,
                             isTextInputEnabled = state.canSendMessage,
                             connectionState = state.connectionState,
-                            onSendClick = { action(ChatDetailsAction.OnSendMessage) },
+                            onSendClick = { action(ChatDetailsAction.SendMessage) },
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(MaterialTheme.paddings.half),

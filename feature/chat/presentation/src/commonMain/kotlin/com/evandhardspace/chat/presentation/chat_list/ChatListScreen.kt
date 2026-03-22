@@ -20,6 +20,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -45,10 +46,12 @@ import com.evandhardspace.core.designsystem.theme.ChatAppTheme
 import com.evandhardspace.core.designsystem.theme.extended
 import com.evandhardspace.core.designsystem.theme.paddings
 import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 internal fun ChatListScreen(
-    viewModel: ChatListViewModel,
+    viewModel: ChatListViewModel = koinViewModel(),
+    chatId: String?,
     onChatClick: (ChatUi) -> Unit,
     onConfirmLogoutClick: () -> Unit,
     onCreateChatClick: () -> Unit,
@@ -57,6 +60,10 @@ internal fun ChatListScreen(
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     val snackbarHostState = remember { SnackbarHostState() }
+
+    LaunchedEffect(chatId) {
+        viewModel.onAction(ChatListAction.SelectChat(chatId))
+    }
 
     ChatListContent(
         state = state,
@@ -107,8 +114,8 @@ private fun ChatListContent(
                 localParticipant = state.localParticipant,
                 isUserMenuOpen = state.isUserMenuOpen,
                 onUserAvatarClick = { onAction(ChatListAction.OnUserAvatar) },
-                onLogoutClick = { onAction(ChatListAction.OnLogout) },
-                onDismissMenu = { onAction(ChatListAction.OnDismissUserMenu) },
+                onLogoutClick = { onAction(ChatListAction.Logout) },
+                onDismissMenu = { onAction(ChatListAction.DismissUserMenu) },
                 onProfileSettingsClick = onProfileSettingsClick,
             )
             when {
@@ -161,8 +168,8 @@ private fun ChatListContent(
             description = stringResource(Res.string.do_you_want_to_logout_description),
             confirmButtonText = stringResource(Res.string.logout),
             cancelButtonText = stringResource(Res.string.cancel),
-            onDismiss = { onAction(ChatListAction.OnDismissLogoutDialog) },
-            onCancelClick = { onAction(ChatListAction.OnDismissLogoutDialog) },
+            onDismiss = { onAction(ChatListAction.DismissLogoutDialog) },
+            onCancelClick = { onAction(ChatListAction.DismissLogoutDialog) },
             onConfirmClick = onConfirmLogoutClick,
         )
     }

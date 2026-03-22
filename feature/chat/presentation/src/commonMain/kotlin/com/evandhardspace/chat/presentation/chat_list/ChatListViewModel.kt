@@ -46,13 +46,13 @@ internal class ChatListViewModel(
 
     fun onAction(action: ChatListAction) {
         when (action) {
-            is ChatListAction.OnDismissLogoutDialog -> Unit
-            is ChatListAction.OnDismissUserMenu -> Unit
-            is ChatListAction.OnLogout -> Unit
+            is ChatListAction.DismissLogoutDialog -> Unit
+            is ChatListAction.DismissUserMenu -> Unit
+            is ChatListAction.Logout -> Unit
             is ChatListAction.OnUserAvatar -> Unit
-            is ChatListAction.OnSelectChat -> {
+            is ChatListAction.SelectChat -> {
                 state.update {
-                    it.copy(selectedChatId = action.chat?.id)
+                    it.copy(selectedChatId = action.chatId)
                 }
             }
         }

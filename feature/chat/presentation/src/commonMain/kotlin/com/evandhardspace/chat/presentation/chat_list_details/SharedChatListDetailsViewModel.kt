@@ -7,22 +7,31 @@ import kotlinx.coroutines.flow.update
 import org.koin.core.annotation.KoinViewModel
 
 @KoinViewModel
-class ChatListDetailsSharedViewModel : ViewModel() {
+class SharedChatListDetailsViewModel : ViewModel() {
 
-    val state: StateFlow<ChatListDetailsState>
-        field = MutableStateFlow(ChatListDetailsState())
+    val state: StateFlow<SharedChatListDetailsState>
+        field = MutableStateFlow(SharedChatListDetailsState())
 
-    fun onAction(action: ChatListDetailsAction) {
+    fun onAction(action: SharedChatListDetailsAction) {
         when (action) {
-            is ChatListDetailsAction.OnOpenChat -> {
+            is SharedChatListDetailsAction.OpenChat -> {
                 state.update {
                     it.copy(
                         selectedChatId = action.chatId,
+                        dialogState = DialogState.Hidden,
                     )
                 }
             }
 
-            ChatListDetailsAction.OnCreateChat -> {
+            is SharedChatListDetailsAction.CloseChat -> {
+                state.update {
+                    it.copy(
+                        selectedChatId = null,
+                    )
+                }
+            }
+
+            is SharedChatListDetailsAction.CreateChat -> {
                 state.update {
                     it.copy(
                         dialogState = DialogState.CreateChat,
@@ -30,7 +39,7 @@ class ChatListDetailsSharedViewModel : ViewModel() {
                 }
             }
 
-            ChatListDetailsAction.OnDismissCurrentDialog -> {
+            is SharedChatListDetailsAction.DismissCurrentDialog -> {
                 state.update {
                     it.copy(
                         dialogState = DialogState.Hidden,
@@ -38,7 +47,7 @@ class ChatListDetailsSharedViewModel : ViewModel() {
                 }
             }
 
-            ChatListDetailsAction.OnManageChat -> {
+            is SharedChatListDetailsAction.ManageChat -> {
                 state.value.selectedChatId?.let { id ->
                     state.update {
                         it.copy(
@@ -48,7 +57,7 @@ class ChatListDetailsSharedViewModel : ViewModel() {
                 }
             }
 
-            ChatListDetailsAction.OnOpenProfileSettings -> {
+            is SharedChatListDetailsAction.OpenProfileSettings -> {
                 state.update {
                     it.copy(
                         dialogState = DialogState.Profile,

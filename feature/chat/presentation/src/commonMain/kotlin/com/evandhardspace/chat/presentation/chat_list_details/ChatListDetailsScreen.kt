@@ -16,9 +16,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.evandhardspace.chat.presentation.chat_details.ChatDetailsAction
 import com.evandhardspace.chat.presentation.chat_details.ChatDetailsScreen
 import com.evandhardspace.chat.presentation.chat_details.ChatDetailsViewModel
-import com.evandhardspace.chat.presentation.chat_list.ChatListAction
 import com.evandhardspace.chat.presentation.chat_list.ChatListScreen
-import com.evandhardspace.chat.presentation.chat_list.ChatListViewModel
 import com.evandhardspace.chat.presentation.create_chat.CreateChatScreen
 import com.evandhardspace.chat.presentation.manage_chat.ManageChatScreen
 import com.evandhardspace.core.designsystem.component.layout.NavigableListDetailPaneScaffold
@@ -29,12 +27,12 @@ import kotlinx.coroutines.launch
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
-internal fun ChatListDetailsScreen(
-    chatListDetailViewModel: ChatListDetailsSharedViewModel = koinViewModel(),
+internal fun ChatListDetailsScene(
+    chatListDetailViewModel: SharedChatListDetailsViewModel = koinViewModel(),
     onLogout: () -> Unit,
 ) {
     val state by chatListDetailViewModel.state.collectAsStateWithLifecycle()
-    ChatListDetailsContent(
+    ChatListDetailsSceneContent(
         state = state,
         action = chatListDetailViewModel::onAction,
         onLogout = onLogout,
@@ -42,9 +40,9 @@ internal fun ChatListDetailsScreen(
 }
 
 @Composable
-private fun ChatListDetailsContent(
-    state: ChatListDetailsState,
-    action: (ChatListDetailsAction) -> Unit,
+private fun ChatListDetailsSceneContent(
+    state: SharedChatListDetailsState,
+    action: (SharedChatListDetailsAction) -> Unit,
     onLogout: () -> Unit,
 ) {
     val scaffoldDirective = createNoSpacingPaneScaffoldDirective()
@@ -56,16 +54,10 @@ private fun ChatListDetailsContent(
 
     val scope = rememberCoroutineScope()
     val chatDetailViewModel = koinViewModel<ChatDetailsViewModel>()
-    val chatListViewModel = koinViewModel<ChatListViewModel>()
-
-    val onBack = {
-        chatDetailViewModel.onAction(ChatDetailsAction.OnSelectChat(null))
-        chatListViewModel.onAction(ChatListAction.OnSelectChat(null))
-    } // TODO: reorganize events
 
     LaunchedEffect(detailPaneValue, state.selectedChatId) {
         if (detailPaneValue == PaneAdaptedValue.Hidden && state.selectedChatId != null) {
-            action(ChatListDetailsAction.OnOpenChat(null))
+            action(SharedChatListDetailsAction.CloseChat)
         }
     }
 
@@ -73,14 +65,13 @@ private fun ChatListDetailsContent(
         navigator = scaffoldNavigator,
         modifier = Modifier
             .background(MaterialTheme.colorScheme.extended.surfaceLower),
-        onBackCompleted = onBack,
+        onBackCompleted = { action(SharedChatListDetailsAction.CloseChat) },
         listPane = {
             AnimatedPane {
                 ChatListScreen(
-                    viewModel = chatListViewModel,
+                    chatId = state.selectedChatId,
                     onChatClick = { chat ->
-                        action(ChatListDetailsAction.OnOpenChat(chat.id))
-                        chatListViewModel.onAction(ChatListAction.OnSelectChat(chat))
+                        action(SharedChatListDetailsAction.OpenChat(chat.id))
                         scope.launch {
                             scaffoldNavigator.navigateTo(
                                 pane = ListDetailPaneScaffoldRole.Detail,
@@ -88,8 +79,8 @@ private fun ChatListDetailsContent(
                         }
                     },
                     onConfirmLogoutClick = onLogout,
-                    onCreateChatClick = { action(ChatListDetailsAction.OnCreateChat) },
-                    onProfileSettingsClick = { action(ChatListDetailsAction.OnOpenProfileSettings) },
+                    onCreateChatClick = { action(SharedChatListDetailsAction.CreateChat) },
+                    onProfileSettingsClick = { action(SharedChatListDetailsAction.OpenProfileSettings) },
                 )
             }
         },
@@ -103,13 +94,13 @@ private fun ChatListDetailsContent(
                     onBack = {
                         scope.launch {
                             if (scaffoldNavigator.canNavigateBack()) {
-                                onBack()
+                                action(SharedChatListDetailsAction.CloseChat)
                                 scaffoldNavigator.navigateBack()
                             }
                         }
                     },
                     onManageChat = {
-                        action(ChatListDetailsAction.OnManageChat)
+                        action(SharedChatListDetailsAction.ManageChat)
                     }
                 )
             }
@@ -120,10 +111,9 @@ private fun ChatListDetailsContent(
         visible = state.dialogState is DialogState.CreateChat,
     ) {
         CreateChatScreen(
-            onDismiss = { action(ChatListDetailsAction.OnDismissCurrentDialog) },
+            onDismiss = { action(SharedChatListDetailsAction.DismissCurrentDialog) },
             onChatCreated = { chatId ->
-                action(ChatListDetailsAction.OnDismissCurrentDialog)
-                action(ChatListDetailsAction.OnOpenChat(chatId))
+                action(SharedChatListDetailsAction.OpenChat(chatId))
                 scope.launch {
                     scaffoldNavigator.navigateTo(ListDetailPaneScaffoldRole.Detail)
                 }
@@ -132,8 +122,8 @@ private fun ChatListDetailsContent(
     }
 
     LaunchedEffect(state.dialogState) {
-        when(state.dialogState) {
-            is DialogState.ManageChat -> chatDetailViewModel.onAction(ChatDetailsAction.OnDismissChatOptions)
+        when (state.dialogState) {
+            is DialogState.ManageChat -> chatDetailViewModel.onAction(ChatDetailsAction.DismissChatOptions)
             else -> Unit
         }
     }
@@ -143,7 +133,7 @@ private fun ChatListDetailsContent(
     ) {
         ManageChatScreen(
             chatId = state.selectedChatId,
-            onDismiss = { action(ChatListDetailsAction.OnDismissCurrentDialog) },
+            onDismiss = { action(SharedChatListDetailsAction.DismissCurrentDialog) },
         )
     }
 }
