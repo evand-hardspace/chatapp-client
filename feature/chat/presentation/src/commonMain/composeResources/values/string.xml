@@ -37,6 +37,7 @@
     <string name="search_result">Search result</string>
     <string name="participants">Participants</string>
     <string name="participant_is_already_selected">Participant is already selected</string>
+    <string name="participant_is_already_exists">Participant is already in chat</string>
     <string name="remove_participant">Remove participant</string>
     <string name="save">Save</string>
     <string name="create">Create</string>

@@ -41,7 +41,9 @@ internal class OfflineFirstChatRepository(
                             async {
                                 ChatWithParticipants(
                                     chat = chatWithParticipants.chat,
-                                    participants = chatWithParticipants.participants.filterActive(chatWithParticipants.chat.chatId),
+                                    participants = chatWithParticipants.participants.filterActive(
+                                        chatWithParticipants.chat.chatId
+                                    ),
                                     latestMessage = chatWithParticipants.latestMessage,
                                 )
                             }
@@ -49,6 +51,13 @@ internal class OfflineFirstChatRepository(
                         .map(ChatWithParticipants::toDomain)
                 }
             }
+
+    override fun getActiveParticipantsByChatId(
+        chatId: String,
+    ): Flow<List<ChatParticipant>> = database.chatDao.getActiveParticipantsByChatId(chatId)
+        .map { participants ->
+            participants.map(ChatParticipantEntity::toDomain)
+        }
 
     override suspend fun fetchChats(): Either<DataError.Remote, List<Chat>> {
         return chatDataSource
@@ -119,4 +128,15 @@ internal class OfflineFirstChatRepository(
 
         return this.filter { it.userId in activeParticipantIds }
     }
+
+    override suspend fun addParticipantsToChat(
+        chatId: String,
+        userIds: List<String>,
+    ): Either<DataError.Remote, Chat> =
+        chatDataSource.addParticipantsToChat(
+            chatId = chatId,
+            userIds = userIds,
+        ).onSuccess { chat ->
+            upsertChatWithParticipantsAndCrossRefs(chat)
+        }
 }

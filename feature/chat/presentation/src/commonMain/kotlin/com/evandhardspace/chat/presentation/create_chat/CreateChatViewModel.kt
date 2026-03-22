@@ -10,8 +10,11 @@ import chatapp.feature.chat.presentation.generated.resources.participant_is_alre
 import com.evandhardspace.chat.domain.repository.ChatParticipantRepository
 import com.evandhardspace.chat.domain.repository.ChatRepository
 import com.evandhardspace.chat.presentation.component.manage_chat.CurrentSearchResultState
+import com.evandhardspace.chat.presentation.component.manage_chat.CurrentSearchResultState.Status
 import com.evandhardspace.chat.presentation.component.manage_chat.ManageChatAction
 import com.evandhardspace.chat.presentation.component.manage_chat.ManageChatState
+import com.evandhardspace.chat.presentation.component.manage_chat.getOrNew
+import com.evandhardspace.chat.presentation.manage_chat.DEFAULT_SEARCH_DEBOUNCE_SECONDS
 import com.evandhardspace.chat.presentation.mapper.toUi
 import com.evandhardspace.core.designsystem.component.avatar.ChatParticipantUi
 import com.evandhardspace.core.domain.util.DataError
@@ -30,8 +33,6 @@ import kotlinx.coroutines.launch
 import org.koin.core.annotation.KoinViewModel
 import kotlin.time.Duration.Companion.seconds
 
-private const val DEFAULT_SEARCH_DEBOUNCE_SECONDS = 1
-
 @KoinViewModel
 internal class CreateChatViewModel(
     private val chatParticipantRepository: ChatParticipantRepository,
@@ -46,9 +47,7 @@ internal class CreateChatViewModel(
 
     private val searchFlow = snapshotFlow { state.value.queryTextState.text.toString() }
         .debounce(DEFAULT_SEARCH_DEBOUNCE_SECONDS.seconds)
-        .onEach { query ->
-            performSearch(query)
-        }
+        .onEach(::performSearch)
 
     init {
         searchFlow.launchIn(viewModelScope)
@@ -56,9 +55,10 @@ internal class CreateChatViewModel(
 
     fun onAction(action: ManageChatAction) {
         when (action) {
-            is ManageChatAction.SelectParticipant -> addParticipant(action.participant)
+            is ManageChatAction.SelectParticipant -> selectParticipant(action.participant)
             is ManageChatAction.Submit -> createChat()
             is ManageChatAction.RemoveSelectedParticipant -> removeSelectedParticipant(action.participant)
+            is ManageChatAction.SelectChat -> Unit
         }
     }
 
@@ -70,16 +70,16 @@ internal class CreateChatViewModel(
                 latestState.copy(
                     selectedChatParticipants = newSelectedParticipants,
                     currentSearchResult = latestState.currentSearchResult.copy(
-                        isAlreadySelected = isAlreadySelected,
+                        status = Status.AlreadySelected.takeIf { isAlreadySelected }.getOrNew(),
                     ),
                     searchError = latestState.searchError
-                        .takeUnless { latestState.currentSearchResult.isAlreadySelected },
+                        .takeUnless { latestState.currentSearchResult.status != null },
                 )
             }
         }
     }
 
-    private fun addParticipant(newParticipant: ChatParticipantUi) {
+    private fun selectParticipant(newParticipant: ChatParticipantUi) {
         state.update { latestState ->
             latestState.copy(
                 selectedChatParticipants = latestState.selectedChatParticipants + newParticipant,
@@ -99,7 +99,7 @@ internal class CreateChatViewModel(
         viewModelScope.launch {
             state.update {
                 it.copy(
-                    isCreatingChat = true,
+                    isSubmitting = true,
                 )
             }
 
@@ -108,7 +108,7 @@ internal class CreateChatViewModel(
                 .onSuccess { chat ->
                     state.update {
                         it.copy(
-                            isCreatingChat = false,
+                            isSubmitting = false,
                         )
                     }
                     _effects.send(CreateChatEffect.OnChatCreated(chat.id))
@@ -116,8 +116,8 @@ internal class CreateChatViewModel(
                 .onFailure { error ->
                     state.update { latestState ->
                         latestState.copy(
-                            createChatError = error.asUiText(),
-                            isCreatingChat = false,
+                            submitError = error.asUiText(),
+                            isSubmitting = false,
                         )
                     }
                 }
@@ -155,7 +155,7 @@ internal class CreateChatViewModel(
                     latestState.copy(
                         currentSearchResult = CurrentSearchResultState(
                             participant = participant.toUi(),
-                            isAlreadySelected = isAlreadySelected,
+                            status = Status.AlreadySelected.takeIf { isAlreadySelected }.getOrNew(),
                         ),
                         isSearching = false,
                         searchError = searchError,

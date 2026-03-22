@@ -2,6 +2,7 @@ package com.evandhardspace.chat.data.chat
 
 import com.evandhardspace.chat.data.dto.ChatDto
 import com.evandhardspace.chat.data.dto.request.CreateChatRequest
+import com.evandhardspace.chat.data.dto.request.ParticipantsRequest
 import com.evandhardspace.chat.data.mapper.toDomain
 import com.evandhardspace.chat.domain.model.Chat
 import com.evandhardspace.core.data.networking.delete
@@ -44,4 +45,14 @@ internal class ChatRemoteDataSource(
         httpClient.delete<Unit>(
             route = "/chat/$chatId/leave",
         ).asEmptyEither()
+
+    suspend fun addParticipantsToChat(
+        chatId: String,
+        userIds: List<String>,
+    ): Either<DataError.Remote, Chat> = httpClient.post<ParticipantsRequest, ChatDto>(
+        route = "/chat/$chatId/add",
+        body = ParticipantsRequest(
+            userIds = userIds,
+        ),
+    ).map(ChatDto::toDomain)
 }

@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -24,7 +25,9 @@ import chatapp.feature.chat.presentation.generated.resources.Res
 import chatapp.feature.chat.presentation.generated.resources.add
 import chatapp.feature.chat.presentation.generated.resources.participants
 import chatapp.feature.chat.presentation.generated.resources.search_result
+import chatapp.feature.chat.presentation.generated.resources.you
 import com.evandhardspace.chat.presentation.component.manage_chat.CurrentSearchResultState
+import com.evandhardspace.chat.presentation.component.manage_chat.CurrentSearchResultState.Status
 import com.evandhardspace.core.designsystem.annotations.ThemedPreview
 import com.evandhardspace.core.designsystem.component.ChatAppLoadingIndicator
 import com.evandhardspace.core.designsystem.component.avatar.ChatAppAvatarPhoto
@@ -43,10 +46,11 @@ import org.jetbrains.compose.resources.stringResource
 @Composable
 internal fun ColumnScope.ChatParticipantsSelectionSection(
     existingParticipants: List<ChatParticipantUi>,
-    modifier: Modifier = Modifier,
+    localParticipant: ChatParticipantUi?,
+    isLoading: Boolean,
     searchResult: CurrentSearchResultState,
     onSearchParticipant: (ChatParticipantUi) -> Unit,
-    isLoading: Boolean,
+    modifier: Modifier = Modifier,
 ) {
     val deviceConfiguration = currentDeviceConfiguration()
     val rootHeightModifier = when (deviceConfiguration) {
@@ -68,13 +72,13 @@ internal fun ColumnScope.ChatParticipantsSelectionSection(
             modifier = Modifier
                 .fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(MaterialTheme.paddings.default),
+            contentPadding = PaddingValues(top = MaterialTheme.paddings.half),
         ) {
-            searchResult.participant.takeUnless { searchResult.isAlreadySelected }
+            searchResult.participant.takeIf { searchResult.status == null }
                 ?.let { searchParticipant ->
                     stickyHeader {
                         Column(Modifier.animateItem()) {
                             Text(
-                                modifier = Modifier.padding(top = MaterialTheme.paddings.half),
                                 text = stringResource(Res.string.search_result),
                                 style = MaterialTheme.typography.titleSmall,
                                 color = MaterialTheme.colorScheme.extended.textSecondary,
@@ -94,7 +98,7 @@ internal fun ColumnScope.ChatParticipantsSelectionSection(
                     }
                 }
 
-            if (existingParticipants.isNotEmpty()) {
+            if (existingParticipants.isNotEmpty() || localParticipant != null) {
                 item {
                     Text(
                         modifier = Modifier.animateItem(),
@@ -104,16 +108,29 @@ internal fun ColumnScope.ChatParticipantsSelectionSection(
                     )
                 }
             }
-            items(
-                items = existingParticipants,
-                key = { it.id },
-            ) { participant ->
-                ChatParticipantListItem(
-                    participant = participant,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .animateItem(),
-                )
+
+            if (localParticipant != null) {
+                item {
+                    ChatParticipantListItem(
+                        modifier = Modifier.animateItem(),
+                        participant = localParticipant,
+                        isLocal = true,
+                    )
+                }
+            }
+
+            if (existingParticipants.isNotEmpty()) {
+                items(
+                    items = existingParticipants,
+                    key = { it.id },
+                ) { participant ->
+                    ChatParticipantListItem(
+                        participant = participant,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .animateItem(),
+                    )
+                }
             }
         }
     }
@@ -122,6 +139,7 @@ internal fun ColumnScope.ChatParticipantsSelectionSection(
 @Composable
 private fun ChatParticipantListItem(
     participant: ChatParticipantUi,
+    isLocal: Boolean = false,
     onSearchParticipant: ((ChatParticipantUi) -> Unit)? = null,
     isLoading: Boolean = false,
     modifier: Modifier = Modifier,
@@ -145,7 +163,16 @@ private fun ChatParticipantListItem(
             overflow = TextOverflow.Ellipsis,
         )
 
+        if (isLocal) {
+            Text(
+                text = "(${stringResource(Res.string.you)})",
+                style = MaterialTheme.typography.titleExtraSmall,
+                color = MaterialTheme.colorScheme.extended.textSecondary,
+            )
+        }
+
         if (isLoading) {
+            Spacer(Modifier.weight(1f))
             ChatAppLoadingIndicator()
         } else {
             onSearchParticipant?.let {
@@ -172,9 +199,10 @@ private fun ChatParticipantSelectionSectionPreview() {
         Column {
             ChatParticipantsSelectionSection(
                 existingParticipants = existingParticipants,
-                searchResult = CurrentSearchResultState(searchParticipant, false),
+                searchResult = CurrentSearchResultState(searchParticipant, Status.New),
                 onSearchParticipant = {},
                 isLoading = false,
+                localParticipant = null,
             )
         }
     }

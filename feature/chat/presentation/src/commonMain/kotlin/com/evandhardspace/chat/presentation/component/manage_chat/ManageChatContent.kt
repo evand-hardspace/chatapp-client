@@ -136,6 +136,7 @@ internal fun ManageChatContent(
             searchResult = state.currentSearchResult,
             onSearchParticipant = { action(ManageChatAction.SelectParticipant(it)) },
             isLoading = state.isSearching,
+            localParticipant = state.localUser,
         )
 
         ChatAppHorizontalDivider()
@@ -147,7 +148,7 @@ internal fun ManageChatContent(
                         action(ManageChatAction.Submit)
                     },
                     enabled = state.selectedChatParticipants.isNotEmpty(),
-                    isLoading = state.isCreatingChat,
+                    isLoading = state.isSubmitting,
                 )
             },
             secondaryButton = {
@@ -157,6 +158,7 @@ internal fun ManageChatContent(
                     style = ChatAppButtonStyle.Secondary,
                 )
             },
+            error = state.submitError?.asComposableString(),
             modifier = Modifier.fillMaxWidth(),
         )
     }
@@ -241,7 +243,7 @@ private fun ManageChatScreenPreview() {
             state = ManageChatState(
                 existingChatParticipants = existingParticipants,
                 selectedChatParticipants = selectedParticipants,
-                currentSearchResult = CurrentSearchResultState(searchParticipant, false),
+                currentSearchResult = CurrentSearchResultState(searchParticipant, CurrentSearchResultState.Status.New),
             ),
             action = {},
             onDismiss = {},

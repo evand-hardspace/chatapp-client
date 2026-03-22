@@ -142,6 +142,7 @@ private fun ChatListDetailsContent(
         visible = state.dialogState is DialogState.ManageChat,
     ) {
         ManageChatScreen(
+            chatId = state.selectedChatId,
             onDismiss = { action(ChatListDetailsAction.OnDismissCurrentDialog) },
         )
     }
