@@ -33,6 +33,11 @@ class BuildConfigConventionPlugin : Plugin<Project> {
                         name = "BASE_URL",
                         value = project.flavorStringProperty("baseUrl"),
                     )
+                    buildConfigField(
+                        type = FieldSpec.Type.STRING,
+                        name = "BASE_URL_WEB_SOCKET",
+                        value = project.flavorStringProperty("baseUrlWebSocket"),
+                    )
                 }
             }
         }
