@@ -33,7 +33,7 @@ class DataStoreSessionRepository(
         json.decodeFromString<AuthInfoPreferences>(authInfo).toDomain()
     }
 
-    override suspend fun saveAuthInfo(info: AuthState.Authenticated): AuthState.Authenticated {
+    override suspend fun saveAuthState(info: AuthState.Authenticated): AuthState.Authenticated {
         val serialized = json.encodeToString(info.toPreferences())
         // TODO(6): replace with updateData
         dataStore.edit { pref ->

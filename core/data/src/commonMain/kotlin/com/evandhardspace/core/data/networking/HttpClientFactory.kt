@@ -87,10 +87,10 @@ class HttpClientFactory(
                         ),
                     ) { markAsRefreshTokenRequest() }.fold(
                         onSuccess = { newAuthInfo ->
-                            val savedAuthInfo = sessionRepository.saveAuthInfo(newAuthInfo.toDomain())
+                            val savedAuthState = sessionRepository.saveAuthState(newAuthInfo.toDomain())
                             BearerTokens(
-                                savedAuthInfo.accessToken,
-                                savedAuthInfo.refreshToken,
+                                savedAuthState.accessToken,
+                                savedAuthState.refreshToken,
                             )
                         },
                         onFailure = {

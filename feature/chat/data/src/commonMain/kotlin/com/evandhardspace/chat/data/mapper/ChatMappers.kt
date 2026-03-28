@@ -3,6 +3,7 @@ package com.evandhardspace.chat.data.mapper
 import com.evandhardspace.chat.data.dto.ChatDto
 import com.evandhardspace.chat.data.dto.ChatMessageDto
 import com.evandhardspace.chat.data.dto.ChatParticipantDto
+import com.evandhardspace.chat.data.dto.websocket.IncomingWebSocketDto
 import com.evandhardspace.chat.data.dto.websocket.OutgoingWebSocketDto
 import com.evandhardspace.chat.database.entity.ChatEntity
 import com.evandhardspace.chat.database.entity.ChatInfoEntity
@@ -15,6 +16,8 @@ import com.evandhardspace.chat.domain.model.ChatInfo
 import com.evandhardspace.chat.domain.model.ChatMessage
 import com.evandhardspace.chat.domain.model.ChatParticipant
 import com.evandhardspace.chat.domain.model.DeliveryStatus
+import com.evandhardspace.chat.domain.model.OutgoingNewMessage
+import kotlin.time.Clock
 import kotlin.time.Instant
 import com.evandhardspace.chat.database.entity.MessageWithSender as DataMessageWithSender
 import com.evandhardspace.chat.domain.model.MessageWithSender as DomainMessageWithSender
@@ -132,3 +135,32 @@ fun ChatMessage.toNewMessage(): OutgoingWebSocketDto.NewMessage =
         chatId = chatId,
         content = content,
     )
+
+fun IncomingWebSocketDto.NewMessageDto.toEntity(): ChatMessageEntity =
+    ChatMessageEntity(
+        messageId = id,
+        chatId = chatId,
+        senderId = senderId,
+        content = content,
+        timestamp = Instant.parse(createdAt).toEpochMilliseconds(),
+        deliveryStatus = DeliveryStatus.Sent.name,
+    )
+
+fun OutgoingNewMessage.toWebSocketDto(): OutgoingWebSocketDto.NewMessage =
+    OutgoingWebSocketDto.NewMessage(
+        chatId = chatId,
+        messageId = messageId,
+        content = content,
+    )
+
+fun OutgoingWebSocketDto.NewMessage.toEntity(
+    senderId: String,
+    deliveryStatus: DeliveryStatus,
+): ChatMessageEntity = ChatMessageEntity(
+    messageId = messageId,
+    chatId = chatId,
+    content = content,
+    senderId = senderId,
+    deliveryStatus = deliveryStatus.name,
+    timestamp = Clock.System.now().toEpochMilliseconds(), // todo extract clock
+)

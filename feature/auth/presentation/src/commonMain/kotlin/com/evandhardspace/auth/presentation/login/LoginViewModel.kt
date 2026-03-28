@@ -101,7 +101,7 @@ internal class LoginViewModel(
                     password = password
                 )
                 .onSuccess { authInfo ->
-                    sessionRepository.saveAuthInfo(authInfo)
+                    sessionRepository.saveAuthState(authInfo)
                     state.update { it.copy(isLoading = false) }
                     _effects.send(LoginEffect.Success)
                 }
