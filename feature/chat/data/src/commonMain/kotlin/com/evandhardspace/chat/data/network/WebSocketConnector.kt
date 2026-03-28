@@ -50,7 +50,7 @@ import kotlin.time.Duration.Companion.seconds
 private const val DefaultConnectionDebounceSeconds = 1
 
 @Single
-internal class KtorWebSocketConnector(
+internal class WebSocketConnector(
     private val httpClient: HttpClient,
     private val applicationScope: CoroutineScope,
     private val sessionStorage: SessionRepository,

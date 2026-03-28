@@ -18,7 +18,7 @@ import chatapp.core.presentation.generated.resources.error_unknown
 import com.evandhardspace.core.domain.util.DataError
 
 fun DataError.asUiText(): UiText = when (this) {
-    DataError.Local.DistFull -> Res.string.error_disk_full
+    DataError.Local.DiskFull -> Res.string.error_disk_full
     DataError.Local.NotFound -> Res.string.error_not_found
     DataError.Local.Unknown -> Res.string.error_unknown
     DataError.Remote.BadRequest -> Res.string.error_bad_request

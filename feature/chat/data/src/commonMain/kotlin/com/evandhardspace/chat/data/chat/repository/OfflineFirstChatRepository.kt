@@ -3,7 +3,7 @@ package com.evandhardspace.chat.data.chat.repository
 import com.evandhardspace.chat.data.chat.ChatRemoteDataSource
 import com.evandhardspace.chat.data.mapper.toDomain
 import com.evandhardspace.chat.data.mapper.toEntity
-import com.evandhardspace.chat.data.mapper.toLastMessageView
+import com.evandhardspace.chat.data.mapper.toLatestMessageView
 import com.evandhardspace.chat.database.ChatAppDatabase
 import com.evandhardspace.chat.database.entity.ChatInfoEntity
 import com.evandhardspace.chat.database.entity.ChatParticipantEntity
@@ -67,7 +67,7 @@ internal class OfflineFirstChatRepository(
                     ChatWithParticipants(
                         chat = chat.toEntity(),
                         participants = chat.participants.map(ChatParticipant::toEntity),
-                        latestMessage = chat.latestMessage?.toLastMessageView(),
+                        latestMessage = chat.latestMessage?.toLatestMessageView(),
                     )
                 }
 

@@ -3,6 +3,7 @@ package com.evandhardspace.chat.data.mapper
 import com.evandhardspace.chat.data.dto.ChatDto
 import com.evandhardspace.chat.data.dto.ChatMessageDto
 import com.evandhardspace.chat.data.dto.ChatParticipantDto
+import com.evandhardspace.chat.data.dto.websocket.OutgoingWebSocketDto
 import com.evandhardspace.chat.database.entity.ChatEntity
 import com.evandhardspace.chat.database.entity.ChatInfoEntity
 import com.evandhardspace.chat.database.entity.ChatMessageEntity
@@ -64,7 +65,7 @@ fun ChatMessage.toEntity(): ChatMessageEntity = ChatMessageEntity(
     deliveryStatus = deliveryStatus.name,
 )
 
-fun ChatMessage.toLastMessageView(): LatestMessageView = LatestMessageView(
+fun ChatMessage.toLatestMessageView(): LatestMessageView = LatestMessageView(
     messageId = id,
     chatId = chatId,
     senderId = senderId,
@@ -124,3 +125,10 @@ fun ChatInfoEntity.toDomain(): ChatInfo = ChatInfo(
     ),
     messages = messagesWithSenders.map(DataMessageWithSender::toDomain),
 )
+
+fun ChatMessage.toNewMessage(): OutgoingWebSocketDto.NewMessage =
+    OutgoingWebSocketDto.NewMessage(
+        messageId = id,
+        chatId = chatId,
+        content = content,
+    )

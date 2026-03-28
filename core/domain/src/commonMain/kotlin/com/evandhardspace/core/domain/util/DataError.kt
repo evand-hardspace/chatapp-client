@@ -18,7 +18,7 @@ sealed interface DataError: DomainError {
     }
 
     enum class Local: DataError {
-        DistFull,
+        DiskFull,
         NotFound,
         Unknown,
     }
