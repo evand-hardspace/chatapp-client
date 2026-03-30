@@ -16,3 +16,4 @@ fun Chat.toUi(localParticipantId: String): ChatUi {
             ?.username,
     )
 }
+

@@ -1,4 +1,4 @@
-package com.evandhardspace.chat.data.chat
+package com.evandhardspace.chat.data.chat.repository
 
 import com.evandhardspace.chat.data.dto.websocket.IncomingWebSocketDto
 import com.evandhardspace.chat.data.dto.websocket.IncomingWebSocketType
@@ -10,9 +10,12 @@ import com.evandhardspace.chat.data.network.WebSocketConnector
 import com.evandhardspace.chat.database.ChatAppDatabase
 import com.evandhardspace.chat.domain.error.ConnectionError
 import com.evandhardspace.chat.domain.model.ChatMessage
+import com.evandhardspace.chat.domain.model.ConnectionState
 import com.evandhardspace.chat.domain.model.DeliveryStatus
+import com.evandhardspace.chat.domain.repository.ChatConnectionRepository
 import com.evandhardspace.chat.domain.repository.ChatRepository
 import com.evandhardspace.chat.domain.repository.MessageRepository
+import com.evandhardspace.core.common.di.ApplicationScope
 import com.evandhardspace.core.domain.auth.AuthState
 import com.evandhardspace.core.domain.auth.MutableSessionRepository
 import com.evandhardspace.core.domain.util.EmptyEither
@@ -20,6 +23,7 @@ import com.evandhardspace.core.domain.util.onFailure
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.mapNotNull
@@ -29,17 +33,17 @@ import kotlinx.serialization.json.Json
 import org.koin.core.annotation.Single
 
 @Single
-internal class WebSocketChatConnectionClient(
+internal class WebSocketChatConnectionRepository(
     private val webSocketConnector: WebSocketConnector,
     private val chatRepository: ChatRepository,
     private val database: ChatAppDatabase,
     private val sessionRepository: MutableSessionRepository,
     private val json: Json,
     private val messageRepository: MessageRepository,
-    private val applicationScope: CoroutineScope,
-) {
+    @param:ApplicationScope private val applicationScope: CoroutineScope,
+) : ChatConnectionRepository {
 
-    val chatMessages: Flow<ChatMessage> = webSocketConnector
+    override val chatMessages: Flow<ChatMessage> = webSocketConnector
         .messages
         .mapNotNull(::parseIncomingMessage)
         .onEach(::handleIncomingMessage)
@@ -52,9 +56,9 @@ internal class WebSocketChatConnectionClient(
             started = SharingStarted.WhileSubscribed(5000),
         )
 
-    val connectionState = webSocketConnector.connectionState
+    override val connectionState: StateFlow<ConnectionState> = webSocketConnector.connectionState
 
-    suspend fun sendChatMessage(message: ChatMessage): EmptyEither<ConnectionError> {
+    override suspend fun sendChatMessage(message: ChatMessage): EmptyEither<ConnectionError> {
         val outgoingDto = message.toNewMessage()
         val webSocketMessage = WebSocketMessageDto(
             type = outgoingDto.type.name,

@@ -1,4 +1,4 @@
-package com.evandhardspace.chat.data.chat
+package com.evandhardspace.chat.data.datasource
 
 import com.evandhardspace.chat.data.dto.ChatDto
 import com.evandhardspace.chat.data.dto.request.CreateChatRequest

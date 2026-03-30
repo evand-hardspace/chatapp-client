@@ -2,6 +2,7 @@ package com.evandhardspace.chat.presentation.chat_list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.evandhardspace.chat.domain.repository.ChatConnectionRepository
 import com.evandhardspace.chat.domain.repository.ChatRepository
 import com.evandhardspace.chat.presentation.mapper.toUi
 import com.evandhardspace.core.domain.auth.AuthState
@@ -18,6 +19,7 @@ import org.koin.core.annotation.KoinViewModel
 internal class ChatListViewModel(
     private val repository: ChatRepository,
     sessionRepository: SessionRepository,
+    private val chatConnectionRepository: ChatConnectionRepository,
 ) : ViewModel() {
 
     val state: StateFlow<ChatListState>
@@ -42,6 +44,7 @@ internal class ChatListViewModel(
             .launchIn(viewModelScope)
 
         loadChats()
+        observeConnectionState()
     }
 
     fun onAction(action: ChatListAction) {
@@ -62,5 +65,11 @@ internal class ChatListViewModel(
         viewModelScope.launch {
             repository.fetchChats()
         }
+    }
+
+    private fun observeConnectionState() {
+        chatConnectionRepository
+            .connectionState
+            .launchIn(viewModelScope)
     }
 }

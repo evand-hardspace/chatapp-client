@@ -2,12 +2,14 @@ package com.evandhardspace.chat.data.network
 
 import com.evandhardspace.chat.domain.model.ConnectionState
 import kotlinx.coroutines.CancellationException
+import org.koin.core.annotation.Single
 import platform.Foundation.NSError
 import platform.Foundation.NSURLErrorDomain
 import platform.Foundation.NSURLErrorNetworkConnectionLost
 import platform.Foundation.NSURLErrorNotConnectedToInternet
 import platform.Foundation.NSURLErrorTimedOut
 
+@Single
 actual class ConnectionErrorHandler {
     actual fun getConnectionStateForError(cause: Throwable): ConnectionState {
         val nsError = extractNsError(cause)

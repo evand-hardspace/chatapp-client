@@ -1,6 +1,6 @@
 package com.evandhardspace.chat.data.chat.repository
 
-import com.evandhardspace.chat.data.chat.ChatRemoteDataSource
+import com.evandhardspace.chat.data.datasource.ChatRemoteDataSource
 import com.evandhardspace.chat.data.mapper.toDomain
 import com.evandhardspace.chat.data.mapper.toEntity
 import com.evandhardspace.chat.data.mapper.toLatestMessageView

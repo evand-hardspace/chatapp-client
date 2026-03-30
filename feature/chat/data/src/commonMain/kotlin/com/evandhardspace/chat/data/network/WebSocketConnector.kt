@@ -4,6 +4,7 @@ import com.evandhardspace.chat.data.dto.websocket.WebSocketMessageDto
 import com.evandhardspace.chat.data.lifecycle.AppLifecycleObserver
 import com.evandhardspace.chat.domain.error.ConnectionError
 import com.evandhardspace.chat.domain.model.ConnectionState
+import com.evandhardspace.core.common.di.ApplicationScope
 import com.evandhardspace.core.data.networking.UrlConstants
 import com.evandhardspace.core.domain.auth.AuthState
 import com.evandhardspace.core.domain.auth.SessionRepository
@@ -52,7 +53,7 @@ private const val DefaultConnectionDebounceSeconds = 1
 @Single
 internal class WebSocketConnector(
     private val httpClient: HttpClient,
-    private val applicationScope: CoroutineScope,
+    @param:ApplicationScope private val applicationScope: CoroutineScope,
     private val sessionStorage: SessionRepository,
     private val json: Json,
     private val connectionErrorHandler: ConnectionErrorHandler,

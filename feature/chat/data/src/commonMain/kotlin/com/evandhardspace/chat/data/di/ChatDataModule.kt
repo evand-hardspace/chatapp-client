@@ -3,12 +3,13 @@ package com.evandhardspace.chat.data.di
 import androidx.sqlite.driver.bundled.BundledSQLiteDriver
 import com.evandhardspace.chat.database.ChatAppDatabase
 import com.evandhardspace.chat.database.DatabaseFactory
+import com.evandhardspace.core.common.di.CoroutineModule
 import org.koin.core.annotation.ComponentScan
 import org.koin.core.annotation.Module
 import org.koin.dsl.module
 import org.koin.core.module.Module as KoinModule
 
-@Module
+@Module(includes = [CoroutineModule::class])
 @ComponentScan("com.evandhardspace.chat.data")
 class ChatDataModule
 

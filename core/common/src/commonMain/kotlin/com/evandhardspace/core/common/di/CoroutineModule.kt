@@ -8,12 +8,12 @@ import kotlinx.coroutines.IO
 import kotlinx.coroutines.SupervisorJob
 import org.koin.core.annotation.Factory
 import org.koin.core.annotation.Module
-import org.koin.core.annotation.Singleton
+import org.koin.core.annotation.Single
 
 @Module
 class CoroutineModule {
     @ApplicationScope
-    @Singleton
+    @Single
     fun providesApplicationScope(): CoroutineScope =
         CoroutineScope(SupervisorJob() + Dispatchers.IO)
 

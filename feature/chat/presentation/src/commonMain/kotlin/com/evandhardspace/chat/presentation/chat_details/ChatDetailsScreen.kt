@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.input.rememberTextFieldState
@@ -20,6 +21,9 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -51,6 +55,8 @@ import com.evandhardspace.core.presentation.util.OnEffect
 import com.evandhardspace.core.presentation.util.asUiText
 import com.evandhardspace.core.presentation.util.compose.clearFocusOnTap
 import com.evandhardspace.core.presentation.util.currentDeviceConfiguration
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 import kotlin.time.Clock
 import kotlin.uuid.Uuid
@@ -66,11 +72,19 @@ internal fun ChatDetailsScreen(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val snackbarState = LocalSnackbarHostState.current
+    val messageListState = rememberLazyListState()
+    val scope = rememberCoroutineScope()
 
     LaunchedEffect(chatId) {
         viewModel.onAction(
             ChatDetailsAction.SelectChat(chatId),
         )
+    }
+
+    LaunchedEffect(chatId) {
+        if (chatId != null) {
+            messageListState.scrollToItem(0)
+        }
     }
 
     OnEffect(viewModel.effects) { effect ->
@@ -79,6 +93,12 @@ internal fun ChatDetailsScreen(
             is ChatDetailsEffect.Error -> snackbarState.show(
                 effect.error.asString(),
             )
+
+            ChatDetailsEffect.NewMessage -> {
+                scope.launch {
+                    messageListState.animateScrollToItem(0)
+                }
+            }
         }
     }
 
@@ -89,6 +109,7 @@ internal fun ChatDetailsScreen(
         onBack = onBack,
         onManageChat = onManageChat,
         modifier = modifier,
+        messageListState = messageListState,
     )
 }
 
@@ -100,9 +121,26 @@ private fun ChatDetailContent(
     onBack: () -> Unit,
     onManageChat: () -> Unit,
     modifier: Modifier = Modifier,
+    messageListState: LazyListState,
 ) {
     val configuration = currentDeviceConfiguration()
-    val messageListState = rememberLazyListState()
+
+    val realMessageItemCount = remember(state.messages) {
+        state
+            .messages
+            .filter { it is MessageUi.LocalUserMessage || it is MessageUi.OtherUserMessage }
+            .size
+    }
+
+    LaunchedEffect(messageListState) {
+        snapshotFlow {
+            messageListState.firstVisibleItemIndex to messageListState.layoutInfo.totalItemsCount
+        }.filter { (firstVisibleIndex, totalItemsCount) ->
+            firstVisibleIndex >= 0 && totalItemsCount > 0
+        }.collect { (firstVisibleItemIndex, _) ->
+            action(ChatDetailsAction.FirstVisibleIndexChanged(firstVisibleItemIndex))
+        }
+    }
 
     Scaffold(
         modifier = modifier
@@ -246,6 +284,7 @@ private fun ChatDetailEmptyPreview() {
             action = {},
             onBack = {},
             onManageChat = {},
+            messageListState = rememberLazyListState(),
         )
     }
 }
@@ -317,6 +356,7 @@ private fun ChatDetailMessagesPreview() {
             action = {},
             onBack = {},
             onManageChat = {},
+            messageListState = rememberLazyListState(),
         )
     }
 }

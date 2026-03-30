@@ -7,8 +7,9 @@ kotlin {
             dependencies {
                 api(projects.core.common)
                 implementation(projects.core.domain)
-                implementation(libs.kotlin.stdlib)
 
+                implementation(libs.kotlinx.datetime)
+                implementation(libs.kotlin.stdlib)
                 implementation(libs.jetbrains.compose.components.resources)
                 implementation(libs.material3.adaptive)
 

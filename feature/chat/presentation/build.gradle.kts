@@ -7,11 +7,11 @@ kotlin {
         commonMain {
             dependencies {
                 implementation(projects.core.domain)
-                implementation(projects.core.presentation)
                 implementation(projects.core.designSystem)
                 implementation(projects.feature.chat.domain)
 
                 implementation(libs.kotlin.stdlib)
+                implementation(libs.kotlinx.datetime)
 
                 implementation(libs.material3.adaptive)
                 implementation(libs.material3.adaptive.layout)

@@ -3,7 +3,10 @@ package com.evandhardspace.chat.presentation.chat_details
 import androidx.compose.foundation.text.input.clearText
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.evandhardspace.chat.domain.model.ConnectionState
+import com.evandhardspace.chat.domain.repository.ChatConnectionRepository
 import com.evandhardspace.chat.domain.repository.ChatRepository
+import com.evandhardspace.chat.domain.repository.MessageRepository
 import com.evandhardspace.chat.presentation.mapper.toUi
 import com.evandhardspace.core.common.stateInUi
 import com.evandhardspace.core.domain.auth.AuthState
@@ -15,8 +18,12 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -25,7 +32,9 @@ import org.koin.core.annotation.KoinViewModel
 @KoinViewModel
 internal class ChatDetailsViewModel(
     private val chatRepository: ChatRepository,
-    sessionRepository: SessionRepository,
+    private val sessionRepository: SessionRepository,
+    private val messageRepository: MessageRepository,
+    private val connectionRepository: ChatConnectionRepository,
 ) : ViewModel() {
 
     private val _effects = Channel<ChatDetailsEffect>()
@@ -60,6 +69,11 @@ internal class ChatDetailsViewModel(
         }
         .stateInUi(ChatDetailsState())
 
+    init {
+        observeConnectionState()
+        observeChatMessages()
+    }
+
     fun onAction(action: ChatDetailsAction) {
         when (action) {
             is ChatDetailsAction.ChatMembersSelected -> Unit
@@ -73,7 +87,74 @@ internal class ChatDetailsViewModel(
             is ChatDetailsAction.ScrollToTop -> Unit
             is ChatDetailsAction.SelectChat -> switchChat(action.chatId)
             is ChatDetailsAction.SendMessage -> Unit
+            is ChatDetailsAction.FirstVisibleIndexChanged -> updateNearBottom(action.index)
         }
+    }
+
+    private fun updateNearBottom(firstVisibleIndex: Int) {
+        _state.update {
+            it.copy(
+                isNearBottom = firstVisibleIndex <= 3,
+            )
+        }
+    }
+
+    private fun observeChatMessages() {
+        val currentMessages = state
+            .map { it.messages }
+            .distinctUntilChanged()
+
+        val newMessages = selectedChatId.flatMapLatest { chatId ->
+            if (chatId != null) messageRepository.getMessagesForChat(chatId)
+            else emptyFlow()
+        }
+            .combine(sessionRepository.authState) { messages, authState ->
+                if (authState !is AuthState.Authenticated) return@combine messages
+
+                _state.update { latestState ->
+                    latestState.copy(
+                        messages = messages.map { it.toUi(authState.user.id) },
+                    )
+                }
+                messages
+            }
+
+        val isNearBottom = state.map { it.isNearBottom }.distinctUntilChanged()
+
+        combine(
+            currentMessages,
+            newMessages,
+            isNearBottom,
+        ) { currentMessages, newMessages, isNearBottom ->
+            val lastNewId = newMessages.lastOrNull()?.message?.id
+            val lastCurrentId = currentMessages.lastOrNull()?.id
+
+            if (lastNewId != lastCurrentId && isNearBottom) {
+                _effects.send(ChatDetailsEffect.NewMessage)
+            }
+        }.launchIn(viewModelScope)
+    }
+
+    private fun observeConnectionState() {
+        connectionRepository
+            .connectionState
+            .onEach { connectionState ->
+                if (connectionState == ConnectionState.Connected) {
+                    selectedChatId.value?.let { chatId ->
+                        messageRepository.fetchMessages(
+                            chatId = chatId,
+                            before = null,
+                        )
+                    }
+                }
+
+                _state.update {
+                    it.copy(
+                        connectionState = connectionState,
+                    )
+                }
+            }
+            .launchIn(viewModelScope)
     }
 
     private fun switchChat(chatId: String?) {
@@ -111,11 +192,13 @@ internal class ChatDetailsViewModel(
 
                     selectedChatId.update { null }
 
-                    _state.update { it.copy(
-                        chatUi = null,
-                        messages = emptyList(),
-                        bannerState = BannerState(),
-                    ) }
+                    _state.update { latestState ->
+                        latestState.copy(
+                            chatUi = null,
+                            messages = emptyList(),
+                            bannerState = BannerState(),
+                        )
+                    }
                     _effects.send(
                         ChatDetailsEffect.ChatLeft,
                     )

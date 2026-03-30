@@ -5,10 +5,12 @@ import io.ktor.client.plugins.ClientRequestException
 import io.ktor.client.plugins.websocket.WebSocketException
 import io.ktor.network.sockets.SocketTimeoutException
 import kotlinx.io.EOFException
+import org.koin.core.annotation.Single
 import java.net.SocketException
 import java.net.UnknownHostException
 import javax.net.ssl.SSLException
 
+@Single
 actual class ConnectionErrorHandler {
     actual fun getConnectionStateForError(cause: Throwable): ConnectionState = when (cause) {
         is ClientRequestException,
