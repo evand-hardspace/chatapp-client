@@ -22,4 +22,9 @@ sealed interface DataError: DomainError {
         NotFound,
         Unknown,
     }
+
+    enum class ConnectionError: DataError {
+        NotConnected,
+        MessageSendFailed,
+    }
 }

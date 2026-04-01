@@ -2,19 +2,17 @@ package com.evandhardspace.chat.data.dto.websocket
 
 import kotlinx.serialization.Serializable
 
-enum class OutgoingWebSocketType {
-    NewMessage,
+enum class OutgoingWebSocketType(val value: String) {
+    NewMessage("NEW_MESSAGE"),
 }
 
 @Serializable
-sealed class OutgoingWebSocketDto(
-    val type: OutgoingWebSocketType,
-) {
-
+sealed interface OutgoingWebSocketDto {
     @Serializable
     data class NewMessage(
         val chatId: String,
         val messageId: String,
         val content: String,
-    ): OutgoingWebSocketDto(OutgoingWebSocketType.NewMessage)
+        val type: OutgoingWebSocketType = OutgoingWebSocketType.NewMessage,
+    ) : OutgoingWebSocketDto
 }

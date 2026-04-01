@@ -41,7 +41,7 @@ internal fun ChatItemHeaderRow(
             verticalArrangement = Arrangement.spacedBy(MaterialTheme.paddings.quarter),
         ) {
             Text(
-                text = if (!isGroupChat) chat.otherParticipants.first().username
+                text = if (isGroupChat.not()) chat.otherParticipants.firstOrNull()?.username ?: "_" // todoo
                 else stringResource(Res.string.group_chat),
                 style = MaterialTheme.typography.titleExtraSmall,
                 color = MaterialTheme.colorScheme.extended.textPrimary,

@@ -2,13 +2,13 @@ package com.evandhardspace.chat.data.network
 
 import com.evandhardspace.chat.data.dto.websocket.WebSocketMessageDto
 import com.evandhardspace.chat.data.lifecycle.AppLifecycleObserver
-import com.evandhardspace.chat.domain.error.ConnectionError
 import com.evandhardspace.chat.domain.model.ConnectionState
 import com.evandhardspace.core.common.di.ApplicationScope
 import com.evandhardspace.core.data.networking.UrlConstants
 import com.evandhardspace.core.domain.auth.AuthState
 import com.evandhardspace.core.domain.auth.SessionRepository
 import com.evandhardspace.core.domain.logging.ChatAppLogger
+import com.evandhardspace.core.domain.util.DataError
 import com.evandhardspace.core.domain.util.EmptyEither
 import com.evandhardspace.core.domain.util.asSuccess
 import com.evandhardspace.core.domain.util.either
@@ -164,11 +164,11 @@ internal class WebSocketConnector(
             }
     }
 
-    suspend fun sendMessage(message: String): EmptyEither<ConnectionError> = either {
+    suspend fun sendMessage(message: String): EmptyEither<DataError.ConnectionError> = either {
         val connectionState = connectionState.value
 
         if (currentSession == null || connectionState != ConnectionState.Connected) {
-            ConnectionError.NotConnected.raise()
+            DataError.ConnectionError.NotConnected.raise()
         }
 
         return try {
@@ -177,7 +177,7 @@ internal class WebSocketConnector(
         } catch (e: Exception) {
             currentCoroutineContext().ensureActive()
             logger.error("Unable to send WebSocket message", e)
-            ConnectionError.MessageSendFailed.raise()
+            DataError.ConnectionError.MessageSendFailed.raise()
         }
     }
 

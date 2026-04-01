@@ -218,7 +218,7 @@ private fun ChatDetailContent(
                     ) {
                         MessageBox(
                             messageTextFieldState = state.messageTextFieldState,
-                            isTextInputEnabled = state.canSendMessage,
+                            isSendEnabled = state.canSendMessage,
                             connectionState = state.connectionState,
                             onSendClick = { action(ChatDetailsAction.SendMessage) },
                             modifier = Modifier
@@ -240,7 +240,7 @@ private fun ChatDetailContent(
                     ) {
                         MessageBox(
                             messageTextFieldState = state.messageTextFieldState,
-                            isTextInputEnabled = state.canSendMessage,
+                            isSendEnabled = state.canSendMessage,
                             connectionState = state.connectionState,
                             onSendClick = { action(ChatDetailsAction.SendMessage) },
                             modifier = Modifier

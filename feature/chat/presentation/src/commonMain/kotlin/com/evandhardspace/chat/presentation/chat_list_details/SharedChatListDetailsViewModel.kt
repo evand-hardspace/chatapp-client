@@ -1,17 +1,25 @@
 package com.evandhardspace.chat.presentation.chat_list_details
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.evandhardspace.chat.domain.repository.ChatConnectionRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.update
 import org.koin.core.annotation.KoinViewModel
 
 @KoinViewModel
-class SharedChatListDetailsViewModel : ViewModel() {
+class SharedChatListDetailsViewModel(
+    private val connectionRepository: ChatConnectionRepository,
+) : ViewModel() {
 
     val state: StateFlow<SharedChatListDetailsState>
         field = MutableStateFlow(SharedChatListDetailsState())
 
+    init {
+        connectionRepository.chatMessages.launchIn(viewModelScope)
+    }
     fun onAction(action: SharedChatListDetailsAction) {
         when (action) {
             is SharedChatListDetailsAction.OpenChat -> {

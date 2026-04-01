@@ -1,9 +1,11 @@
 package com.evandhardspace.chat.presentation.chat_details
 
 import androidx.compose.foundation.text.input.clearText
+import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.evandhardspace.chat.domain.model.ConnectionState
+import com.evandhardspace.chat.domain.model.OutgoingNewMessage
 import com.evandhardspace.chat.domain.repository.ChatConnectionRepository
 import com.evandhardspace.chat.domain.repository.ChatRepository
 import com.evandhardspace.chat.domain.repository.MessageRepository
@@ -28,6 +30,7 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.koin.core.annotation.KoinViewModel
+import kotlin.uuid.Uuid
 
 @KoinViewModel
 internal class ChatDetailsViewModel(
@@ -49,6 +52,12 @@ internal class ChatDetailsViewModel(
         }
 
     private val _state = MutableStateFlow(ChatDetailsState())
+
+    private val canSendMessage = snapshotFlow { _state.value.messageTextFieldState.text.toString() }
+        .map(CharSequence::isBlank)
+        .combine(connectionRepository.connectionState) { isMessageBlank, connectionState ->
+            isMessageBlank.not() && connectionState == ConnectionState.Connected
+        }
 
     private val stateWithMessages: Flow<ChatDetailsState> = combine(
         _state,
@@ -72,6 +81,7 @@ internal class ChatDetailsViewModel(
     init {
         observeConnectionState()
         observeChatMessages()
+        observeCanSendMessage()
     }
 
     fun onAction(action: ChatDetailsAction) {
@@ -86,7 +96,7 @@ internal class ChatDetailsViewModel(
             is ChatDetailsAction.RetrySendMessage -> Unit
             is ChatDetailsAction.ScrollToTop -> Unit
             is ChatDetailsAction.SelectChat -> switchChat(action.chatId)
-            is ChatDetailsAction.SendMessage -> Unit
+            is ChatDetailsAction.SendMessage -> onSendMessage()
             is ChatDetailsAction.FirstVisibleIndexChanged -> updateNearBottom(action.index)
         }
     }
@@ -157,6 +167,14 @@ internal class ChatDetailsViewModel(
             .launchIn(viewModelScope)
     }
 
+    private fun observeCanSendMessage() {
+        canSendMessage.onEach { canSend ->
+            _state.update { it.copy(
+                canSendMessage = canSend,
+            ) }
+        }.launchIn(viewModelScope)
+    }
+
     private fun switchChat(chatId: String?) {
         selectedChatId.update { chatId }
         viewModelScope.launch {
@@ -177,6 +195,30 @@ internal class ChatDetailsViewModel(
             it.copy(isChatOptionsOpen = false)
         }
     }
+
+    private fun onSendMessage() {
+        val currentChatId = selectedChatId.value
+        val content = state.value.messageTextFieldState.text.toString().trim()
+        if(content.isBlank() || currentChatId == null) return
+
+        viewModelScope.launch {
+            val message = OutgoingNewMessage(
+                chatId = currentChatId,
+                messageId = Uuid.random().toString(),
+                content = content,
+            )
+
+            messageRepository
+                .sendMessage(message)
+                .onSuccess {
+                    state.value.messageTextFieldState.clearText()
+                }
+                .onFailure { error ->
+                    _effects.send(ChatDetailsEffect.Error(error.asUiText()))
+                }
+        }
+    }
+
 
     private fun onLeaveChat() {
         val chatId = selectedChatId.value ?: return

@@ -8,7 +8,6 @@ import com.evandhardspace.chat.data.mapper.toEntity
 import com.evandhardspace.chat.data.mapper.toNewMessage
 import com.evandhardspace.chat.data.network.WebSocketConnector
 import com.evandhardspace.chat.database.ChatAppDatabase
-import com.evandhardspace.chat.domain.error.ConnectionError
 import com.evandhardspace.chat.domain.model.ChatMessage
 import com.evandhardspace.chat.domain.model.ConnectionState
 import com.evandhardspace.chat.domain.model.DeliveryStatus
@@ -18,6 +17,7 @@ import com.evandhardspace.chat.domain.repository.MessageRepository
 import com.evandhardspace.core.common.di.ApplicationScope
 import com.evandhardspace.core.domain.auth.AuthState
 import com.evandhardspace.core.domain.auth.MutableSessionRepository
+import com.evandhardspace.core.domain.util.DataError
 import com.evandhardspace.core.domain.util.EmptyEither
 import com.evandhardspace.core.domain.util.onFailure
 import kotlinx.coroutines.CoroutineScope
@@ -58,10 +58,10 @@ internal class WebSocketChatConnectionRepository(
 
     override val connectionState: StateFlow<ConnectionState> = webSocketConnector.connectionState
 
-    override suspend fun sendChatMessage(message: ChatMessage): EmptyEither<ConnectionError> {
+    override suspend fun sendChatMessage(message: ChatMessage): EmptyEither<DataError.ConnectionError> {
         val outgoingDto = message.toNewMessage()
         val webSocketMessage = WebSocketMessageDto(
-            type = outgoingDto.type.name,
+            type = outgoingDto.type.value,
             payload = json.encodeToString(outgoingDto),
         )
         val rawJsonPayload = json.encodeToString(webSocketMessage)
@@ -78,16 +78,16 @@ internal class WebSocketChatConnectionRepository(
 
     private fun parseIncomingMessage(message: WebSocketMessageDto): IncomingWebSocketDto? {
         val deserializer = when (message.type) {
-            IncomingWebSocketType.NewMessage.name ->
+            IncomingWebSocketType.NewMessage.value ->
                 IncomingWebSocketDto.NewMessageDto.serializer()
 
-            IncomingWebSocketType.MessageDeleted.name ->
+            IncomingWebSocketType.MessageDeleted.value ->
                 IncomingWebSocketDto.MessageDeletedDto.serializer()
 
-            IncomingWebSocketType.ProfilePictureUpdated.name ->
+            IncomingWebSocketType.ProfilePictureUpdated.value ->
                 IncomingWebSocketDto.ProfilePictureUpdated.serializer()
 
-            IncomingWebSocketType.ChatParticipantsChanged.name ->
+            IncomingWebSocketType.ChatParticipantsChanged.value ->
                 IncomingWebSocketDto.ChatParticipantsChangedDto.serializer()
 
             else -> return null

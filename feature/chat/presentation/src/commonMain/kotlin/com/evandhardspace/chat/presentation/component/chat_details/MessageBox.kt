@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.input.TextFieldState
@@ -41,7 +40,7 @@ import chatapp.core.design_system.generated.resources.Res as DesignSystemRes
 @Composable
 internal fun MessageBox(
     messageTextFieldState: TextFieldState,
-    isTextInputEnabled: Boolean,
+    isSendEnabled: Boolean,
     connectionState: ConnectionState,
     onSendClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -50,7 +49,7 @@ internal fun MessageBox(
         state = messageTextFieldState,
         modifier = modifier,
         placeholder = stringResource(Res.string.send_a_message),
-        enabled = isTextInputEnabled,
+        enabled = true,
         keyboardOptions = KeyboardOptions(
             imeAction = ImeAction.Send,
         ),
@@ -81,7 +80,7 @@ internal fun MessageBox(
             ChatAppButton(
                 text = stringResource(Res.string.send),
                 onClick = onSendClick,
-                enabled = connectionState.isConnected && isTextInputEnabled,
+                enabled = connectionState.isConnected && isSendEnabled,
             )
         }
     )
@@ -99,7 +98,7 @@ private fun MessageBoxPreview() {
         ) {
             MessageBox(
                 messageTextFieldState = rememberTextFieldState(),
-                isTextInputEnabled = true,
+                isSendEnabled = true,
                 connectionState = ConnectionState.Disconnected,
                 onSendClick = {},
                 modifier = Modifier

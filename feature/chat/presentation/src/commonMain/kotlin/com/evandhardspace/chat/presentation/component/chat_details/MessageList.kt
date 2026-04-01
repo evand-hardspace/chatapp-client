@@ -47,8 +47,7 @@ internal fun MessageList(
         verticalArrangement = Arrangement.spacedBy(MaterialTheme.paddings.default),
     ) {
         items(
-            items = messages,
-            key = MessageUi::id,
+            items = messages, // TODO: add key
         ) { message ->
             MessageListItemUi(
                 messageUi = message,

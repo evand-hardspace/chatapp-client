@@ -13,6 +13,7 @@ import chatapp.core.presentation.generated.resources.error_serialization
 import chatapp.core.presentation.generated.resources.error_server
 import chatapp.core.presentation.generated.resources.error_service_unavailable
 import chatapp.core.presentation.generated.resources.error_too_many_requests
+import chatapp.core.presentation.generated.resources.error_unable_to_send_message
 import chatapp.core.presentation.generated.resources.error_unauthorized
 import chatapp.core.presentation.generated.resources.error_unknown
 import com.evandhardspace.core.domain.util.DataError
@@ -34,4 +35,6 @@ fun DataError.asUiText(): UiText = when (this) {
     DataError.Remote.ServiceUnavailable -> Res.string.error_service_unavailable
     DataError.Remote.Serialization -> Res.string.error_serialization
     DataError.Remote.Unknown -> Res.string.error_unknown
+    DataError.ConnectionError.NotConnected -> Res.string.error_no_internet
+    DataError.ConnectionError.MessageSendFailed -> Res.string.error_unable_to_send_message
 }.asUiText()

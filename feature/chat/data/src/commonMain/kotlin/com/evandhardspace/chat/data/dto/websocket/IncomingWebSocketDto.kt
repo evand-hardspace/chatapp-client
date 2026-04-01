@@ -2,18 +2,15 @@ package com.evandhardspace.chat.data.dto.websocket
 
 import kotlinx.serialization.Serializable
 
-enum class IncomingWebSocketType {
-    NewMessage,
-    MessageDeleted,
-    ProfilePictureUpdated,
-    ChatParticipantsChanged,
+enum class IncomingWebSocketType(val value: String) {
+    NewMessage("NEW_MESSAGE"),
+    MessageDeleted("MESSAGE_DELETED"),
+    ProfilePictureUpdated("PROFILE_PICTURE_UPDATED"),
+    ChatParticipantsChanged("CHAT_PARTICIPANTS_CHANGED"),
 }
 
 @Serializable
-sealed class IncomingWebSocketDto(
-    val type: IncomingWebSocketType,
-) {
-
+sealed interface IncomingWebSocketDto {
     @Serializable
     data class NewMessageDto(
         val id: String,
@@ -21,22 +18,26 @@ sealed class IncomingWebSocketDto(
         val content: String,
         val senderId: String,
         val createdAt: String,
-    ): IncomingWebSocketDto(IncomingWebSocketType.NewMessage)
+        val type: IncomingWebSocketType = IncomingWebSocketType.NewMessage,
+    ) : IncomingWebSocketDto
 
     @Serializable
     data class MessageDeletedDto(
         val messageId: String,
         val chatId: String,
-    ): IncomingWebSocketDto(IncomingWebSocketType.MessageDeleted)
+        val type: IncomingWebSocketType = IncomingWebSocketType.MessageDeleted,
+    ) : IncomingWebSocketDto
 
     @Serializable
     data class ProfilePictureUpdated(
         val userId: String,
         val newUrl: String?,
-    ): IncomingWebSocketDto(IncomingWebSocketType.ProfilePictureUpdated)
+        val type: IncomingWebSocketType = IncomingWebSocketType.ProfilePictureUpdated,
+    ) : IncomingWebSocketDto
 
     @Serializable
     data class ChatParticipantsChangedDto(
         val chatId: String,
-    ): IncomingWebSocketDto(IncomingWebSocketType.ChatParticipantsChanged)
+        val type: IncomingWebSocketType = IncomingWebSocketType.ChatParticipantsChanged,
+    ) : IncomingWebSocketDto
 }
