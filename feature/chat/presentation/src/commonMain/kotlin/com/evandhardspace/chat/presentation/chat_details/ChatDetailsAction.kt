@@ -15,4 +15,5 @@ internal sealed interface ChatDetailsAction {
     data object LeaveChat : ChatDetailsAction
     data object DismissChatOptions : ChatDetailsAction
     data class FirstVisibleIndexChanged(val index: Int) : ChatDetailsAction
+    data object RetryPagination : ChatDetailsAction
 }

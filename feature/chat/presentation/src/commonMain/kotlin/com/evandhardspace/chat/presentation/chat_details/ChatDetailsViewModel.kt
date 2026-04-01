@@ -11,6 +11,7 @@ import com.evandhardspace.chat.domain.repository.ChatConnectionRepository
 import com.evandhardspace.chat.domain.repository.ChatRepository
 import com.evandhardspace.chat.domain.repository.MessageRepository
 import com.evandhardspace.chat.presentation.mapper.toUi
+import com.evandhardspace.chat.presentation.mapper.toUiList
 import com.evandhardspace.chat.presentation.model.MessageUi
 import com.evandhardspace.core.common.stateInUi
 import com.evandhardspace.core.domain.auth.AuthState
@@ -81,7 +82,7 @@ internal class ChatDetailsViewModel(
 
         currentState.copy(
             chatUi = chatInfo.chat.toUi(authState.user.id),
-            messages = chatInfo.messages.map { it.toUi(authState.user.id) }
+            messages = chatInfo.messages.toUiList(authState.user.id),
         )
     }
 
@@ -108,10 +109,21 @@ internal class ChatDetailsViewModel(
             is ChatDetailsAction.LeaveChat -> onLeaveChat()
             is ChatDetailsAction.MessageLongClick -> onMessageLongClick(action.message)
             is ChatDetailsAction.RetrySendMessage -> onRetryMessage(action.message)
-            is ChatDetailsAction.ScrollToTop -> Unit
+            is ChatDetailsAction.ScrollToTop -> onScrollToTop()
             is ChatDetailsAction.SelectChat -> switchChat(action.chatId)
             is ChatDetailsAction.SendMessage -> onSendMessage()
             is ChatDetailsAction.FirstVisibleIndexChanged -> updateNearBottom(action.index)
+            is ChatDetailsAction.RetryPagination -> retryPagination()
+        }
+    }
+
+    private fun retryPagination() = loadNextItems()
+
+    private fun onScrollToTop() = loadNextItems()
+
+    private fun loadNextItems() {
+        viewModelScope.launch {
+            currentPaginator?.loadNextItems()
         }
     }
 
@@ -190,12 +202,7 @@ internal class ChatDetailsViewModel(
             .connectionState
             .onEach { connectionState ->
                 if (connectionState == ConnectionState.Connected) {
-                    selectedChatId.value?.let { chatId ->
-                        messageRepository.fetchMessages(
-                            chatId = chatId,
-                            before = null,
-                        )
-                    }
+                    currentPaginator?.loadNextItems()
                 }
 
                 _state.update {
@@ -315,15 +322,18 @@ internal class ChatDetailsViewModel(
             },
             onError = { throwable ->
                 if (throwable is DataErrorException) {
-                    _effects.send(
-                        ChatDetailsEffect.Error(throwable.error.asUiText())
-                    )
+                    _state.update { latestState ->
+                        latestState.copy(
+                            paginationError = throwable.error.asUiText(),
+                        )
+                    }
                 }
             },
             onSuccess = { messages, _ ->
                 _state.update { latestState ->
                     latestState.copy(
                         endReached = messages.isEmpty(),
+                        paginationError = null,
                     )
                 }
             }
@@ -334,10 +344,6 @@ internal class ChatDetailsViewModel(
                 endReached = false,
                 isPaginationLoading = false,
             )
-        }
-
-        viewModelScope.launch {
-            currentPaginator?.loadNextItems()
         }
     }
 }

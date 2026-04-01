@@ -39,6 +39,7 @@ import chatapp.feature.chat.presentation.generated.resources.no_messages_subtitl
 import com.evandhardspace.chat.domain.model.ChatMessage
 import com.evandhardspace.chat.domain.model.DeliveryStatus
 import com.evandhardspace.chat.presentation.component.ChatHeaderContent
+import com.evandhardspace.chat.presentation.component.PaginationScrollListener
 import com.evandhardspace.chat.presentation.component.chat_details.ChatDetailHeader
 import com.evandhardspace.chat.presentation.component.chat_details.EmptyContentSection
 import com.evandhardspace.chat.presentation.component.chat_details.MessageBox
@@ -132,6 +133,14 @@ private fun ChatDetailContent(
             .size
     }
 
+    PaginationScrollListener(
+        lazyListState = messageListState,
+        itemCount = realMessageItemCount,
+        isPaginationLoading = state.isPaginationLoading,
+        isEndReached = state.endReached,
+        onNearTop = { action(ChatDetailsAction.ScrollToTop) },
+    )
+
     LaunchedEffect(messageListState) {
         snapshotFlow {
             messageListState.firstVisibleItemIndex to messageListState.layoutInfo.totalItemsCount
@@ -188,6 +197,9 @@ private fun ChatDetailContent(
                         messages = state.messages,
                         messageWithOpenMenu = state.messageWithOpenMenu,
                         listState = messageListState,
+                        isPaginationLoading = state.isPaginationLoading,
+                        paginationError = state.paginationError?.asComposableString(),
+                        onRetryPagination = { action(ChatDetailsAction.RetryPagination) },
                         onMessageLongClick = { message ->
                             action(ChatDetailsAction.MessageLongClick(message))
                         },
