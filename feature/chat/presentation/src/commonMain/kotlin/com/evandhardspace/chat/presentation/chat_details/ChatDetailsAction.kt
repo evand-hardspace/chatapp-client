@@ -7,7 +7,7 @@ internal sealed interface ChatDetailsAction {
     data object ScrollToTop : ChatDetailsAction
     data class SelectChat(val chatId: String?) : ChatDetailsAction
     data class DeleteMessage(val message: MessageUi.LocalUserMessage) : ChatDetailsAction
-    data class OnMessageLongClick(val message: MessageUi.LocalUserMessage) : ChatDetailsAction
+    data class MessageLongClick(val message: MessageUi.LocalUserMessage) : ChatDetailsAction
     data object DismissMessageMenu : ChatDetailsAction
     data class RetrySendMessage(val message: MessageUi.LocalUserMessage) : ChatDetailsAction
     data object ShowChatOptions : ChatDetailsAction

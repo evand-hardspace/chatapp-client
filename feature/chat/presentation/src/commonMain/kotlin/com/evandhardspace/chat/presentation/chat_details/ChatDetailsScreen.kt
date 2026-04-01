@@ -186,9 +186,10 @@ private fun ChatDetailContent(
                             .fillMaxWidth()
                             .weight(1f),
                         messages = state.messages,
+                        messageWithOpenMenu = state.messageWithOpenMenu,
                         listState = messageListState,
                         onMessageLongClick = { message ->
-                            action(ChatDetailsAction.OnMessageLongClick(message))
+                            action(ChatDetailsAction.MessageLongClick(message))
                         },
                         onMessageRetryClick = { message ->
                             action(ChatDetailsAction.RetrySendMessage(message))
@@ -335,7 +336,6 @@ private fun ChatDetailMessagesPreview() {
                             id = it.toString(),
                             content = "Hello world!",
                             deliveryStatus = DeliveryStatus.Sent,
-                            isMenuOpen = false,
                             formattedSentTime = "Friday, Aug 20".asUiText(),
                         )
                     } else {

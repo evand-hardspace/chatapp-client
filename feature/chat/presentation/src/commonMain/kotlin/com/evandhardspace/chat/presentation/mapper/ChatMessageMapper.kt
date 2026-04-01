@@ -13,7 +13,6 @@ internal fun MessageWithSender.toUi(
             id = message.id,
             content = message.content,
             deliveryStatus = message.deliveryStatus,
-            isMenuOpen = false,
             formattedSentTime = message.createdAt.formatMessageTime(),
         )
     } else {

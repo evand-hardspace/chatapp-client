@@ -30,6 +30,7 @@ import chatapp.core.design_system.generated.resources.Res as DesignSystemRes
 @Composable
 internal fun LocalUserMessage(
     message: MessageUi.LocalUserMessage,
+    showMenu: Boolean,
     onMessageLongClick: () -> Unit,
     onDismissMessageMenu: () -> Unit,
     onDeleteClick: () -> Unit,
@@ -61,7 +62,7 @@ internal fun LocalUserMessage(
             )
 
             ChatAppDropdownMenu(
-                expanded = message.isMenuOpen,
+                expanded = showMenu,
                 onDismiss = onDismissMessageMenu,
                 items = listOf(
                     DropdownItem(

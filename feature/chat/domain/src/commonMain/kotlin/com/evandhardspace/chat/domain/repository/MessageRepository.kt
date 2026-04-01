@@ -25,4 +25,6 @@ interface MessageRepository {
     suspend fun sendMessage(message: OutgoingNewMessage): EmptyEither<DataError>
 
     suspend fun retryMessage(messageId: String): EmptyEither<DataError>
+
+    suspend fun deleteMessage(messageId: String): EmptyEither<DataError.Remote>
 }

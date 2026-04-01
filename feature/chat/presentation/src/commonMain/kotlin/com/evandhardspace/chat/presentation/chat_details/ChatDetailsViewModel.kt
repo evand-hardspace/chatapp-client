@@ -90,16 +90,42 @@ internal class ChatDetailsViewModel(
         when (action) {
             is ChatDetailsAction.ChatMembersSelected -> Unit
             is ChatDetailsAction.ShowChatOptions -> onChatOptions()
-            is ChatDetailsAction.DeleteMessage -> Unit
+            is ChatDetailsAction.DeleteMessage -> onDeleteMessage(action.message)
             is ChatDetailsAction.DismissChatOptions -> onDismissChatOptions()
-            is ChatDetailsAction.DismissMessageMenu -> Unit
+            is ChatDetailsAction.DismissMessageMenu -> onDismissMessageMenu()
             is ChatDetailsAction.LeaveChat -> onLeaveChat()
-            is ChatDetailsAction.OnMessageLongClick -> Unit
+            is ChatDetailsAction.MessageLongClick -> onMessageLongClick(action.message)
             is ChatDetailsAction.RetrySendMessage -> onRetryMessage(action.message)
             is ChatDetailsAction.ScrollToTop -> Unit
             is ChatDetailsAction.SelectChat -> switchChat(action.chatId)
             is ChatDetailsAction.SendMessage -> onSendMessage()
             is ChatDetailsAction.FirstVisibleIndexChanged -> updateNearBottom(action.index)
+        }
+    }
+
+    private fun onDismissMessageMenu() {
+        _state.update { latestState ->
+            latestState.copy(
+                messageWithOpenMenu = null,
+            )
+        }
+    }
+
+    private fun onMessageLongClick(message: MessageUi.LocalUserMessage) {
+        _state.update { latestState ->
+            latestState.copy(
+                messageWithOpenMenu = message,
+            )
+        }
+    }
+
+    private fun onDeleteMessage(message: MessageUi.LocalUserMessage) {
+        viewModelScope.launch {
+            messageRepository
+                .deleteMessage(message.id)
+                .onFailure { error ->
+                    _effects.send(ChatDetailsEffect.Error(error.asUiText()))
+                }
         }
     }
 
@@ -171,9 +197,11 @@ internal class ChatDetailsViewModel(
 
     private fun observeCanSendMessage() {
         canSendMessage.onEach { canSend ->
-            _state.update { it.copy(
-                canSendMessage = canSend,
-            ) }
+            _state.update {
+                it.copy(
+                    canSendMessage = canSend,
+                )
+            }
         }.launchIn(viewModelScope)
     }
 
@@ -201,7 +229,7 @@ internal class ChatDetailsViewModel(
     private fun onSendMessage() {
         val currentChatId = selectedChatId.value
         val content = state.value.messageTextFieldState.text.toString().trim()
-        if(content.isBlank() || currentChatId == null) return
+        if (content.isBlank() || currentChatId == null) return
 
         viewModelScope.launch {
             val message = OutgoingNewMessage(

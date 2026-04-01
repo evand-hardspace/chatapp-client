@@ -4,9 +4,11 @@ import com.evandhardspace.chat.data.chat.constant.ChatMessageConstants
 import com.evandhardspace.chat.data.dto.ChatMessageDto
 import com.evandhardspace.chat.data.mapper.toDomain
 import com.evandhardspace.chat.domain.model.ChatMessage
+import com.evandhardspace.core.data.networking.delete
 import com.evandhardspace.core.data.networking.get
 import com.evandhardspace.core.domain.util.DataError
 import com.evandhardspace.core.domain.util.Either
+import com.evandhardspace.core.domain.util.EmptyEither
 import com.evandhardspace.core.domain.util.map
 import io.ktor.client.HttpClient
 import org.koin.core.annotation.Single
@@ -33,5 +35,11 @@ internal class ChatMessageDataSource(
                 message.toDomain()
             }
         }
+    }
+
+    suspend fun deleteMessage(messageId: String): EmptyEither<DataError.Remote> {
+        return httpClient.delete(
+            route = "/messages/$messageId",
+        )
     }
 }

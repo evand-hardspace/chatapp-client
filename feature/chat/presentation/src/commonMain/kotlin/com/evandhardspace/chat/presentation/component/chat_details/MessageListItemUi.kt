@@ -24,6 +24,7 @@ import com.evandhardspace.core.presentation.util.asUiText
 @Composable
 internal fun MessageListItemUi(
     messageUi: MessageUi,
+    showMenu: Boolean,
     onMessageLongClick: (MessageUi.LocalUserMessage) -> Unit,
     onDeleteClick: (MessageUi.LocalUserMessage) -> Unit,
     onRetryClick: (MessageUi.LocalUserMessage) -> Unit,
@@ -44,10 +45,11 @@ internal fun MessageListItemUi(
             is MessageUi.LocalUserMessage -> {
                 LocalUserMessage(
                     message = messageUi,
+                    showMenu = showMenu,
                     onMessageLongClick = { onMessageLongClick(messageUi) },
                     onDismissMessageMenu = onDismissMessageMenu,
                     onDeleteClick = { onDeleteClick(messageUi) },
-                    onRetryClick = { onRetryClick(messageUi) }
+                    onRetryClick = { onRetryClick(messageUi) },
                 )
             }
 
@@ -92,9 +94,9 @@ private fun MessageListItemLocalMessageUiPreview() {
                 id = "1",
                 content = "Hello world, this is a preview message that spans multiple lines",
                 deliveryStatus = DeliveryStatus.Sent,
-                isMenuOpen = true,
                 formattedSentTime = "Friday 2:20pm".asUiText(),
             ),
+            showMenu = false,
             onRetryClick = {},
             onMessageLongClick = {},
             onDismissMessageMenu = {},
@@ -115,9 +117,9 @@ private fun MessageListItemLocalMessageRetryUiPreview() {
                 id = "1",
                 content = "Hello world, this is a preview message that spans multiple lines",
                 deliveryStatus = DeliveryStatus.Failed,
-                isMenuOpen = false,
                 formattedSentTime = "Friday 2:20pm".asUiText(),
             ),
+            showMenu = true,
             onRetryClick = {},
             onMessageLongClick = {},
             onDismissMessageMenu = {},
@@ -143,6 +145,7 @@ private fun MessageListItemOtherMessageUiPreview() {
                     initials = "IV",
                 )
             ),
+            showMenu = false,
             onRetryClick = {},
             onMessageLongClick = {},
             onDismissMessageMenu = {},

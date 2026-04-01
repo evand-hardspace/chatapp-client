@@ -12,7 +12,6 @@ sealed interface MessageUi {
         override val id: String,
         val content: String,
         val deliveryStatus: DeliveryStatus,
-        val isMenuOpen: Boolean,
         val formattedSentTime: UiText,
     ): MessageUi
 

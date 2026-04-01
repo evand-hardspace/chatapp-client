@@ -18,6 +18,7 @@ import com.evandhardspace.core.designsystem.theme.paddings
 @Composable
 internal fun MessageList(
     messages: List<MessageUi>,
+    messageWithOpenMenu: MessageUi.LocalUserMessage?,
     listState: LazyListState,
     onMessageLongClick: (MessageUi.LocalUserMessage) -> Unit,
     onMessageRetryClick: (MessageUi.LocalUserMessage) -> Unit,
@@ -48,6 +49,7 @@ internal fun MessageList(
         ) { message ->
             MessageListItemUi(
                 messageUi = message,
+                showMenu = message == messageWithOpenMenu,
                 onMessageLongClick = onMessageLongClick,
                 onDeleteClick = onDeleteMessageClick,
                 onRetryClick = onMessageRetryClick,

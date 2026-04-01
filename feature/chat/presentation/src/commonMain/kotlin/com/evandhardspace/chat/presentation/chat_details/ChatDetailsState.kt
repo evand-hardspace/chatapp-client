@@ -20,6 +20,7 @@ internal data class ChatDetailsState(
     val isChatOptionsOpen: Boolean = false,
     val isNearBottom: Boolean = false,
     val connectionState: ConnectionState = ConnectionState.Disconnected,
+    val messageWithOpenMenu: MessageUi.LocalUserMessage? = null,
 )
 
 internal data class BannerState(
