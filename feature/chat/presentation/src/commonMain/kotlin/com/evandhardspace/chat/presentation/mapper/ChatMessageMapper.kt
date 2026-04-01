@@ -2,11 +2,23 @@ package com.evandhardspace.chat.presentation.mapper
 
 import com.evandhardspace.chat.domain.model.MessageWithSender
 import com.evandhardspace.chat.presentation.model.MessageUi
+import com.evandhardspace.core.presentation.util.datetime.formatDateSeparator
 import com.evandhardspace.core.presentation.util.datetime.formatMessageTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 
-fun List<MessageWithSender>.toUiList(localUserId: String): List<MessageUi> =
+fun List<MessageWithSender>.toUiList(
+    localUserId: String,
+    timeZone: TimeZone = TimeZone.currentSystemDefault(),
+): List<MessageUi> =
     sortedByDescending { it.message.createdAt }
-        .map { it.toUi(localUserId) }
+        .groupBy { it.message.createdAt.toLocalDateTime(timeZone).date }
+        .flatMap { (date, messages) ->
+            messages.map { it.toUi(localUserId) } + MessageUi.DateSeparator(
+                id = date.toString(),
+                date = date.formatDateSeparator(),
+            )
+        }
 
 internal fun MessageWithSender.toUi(
     localUserId: String,

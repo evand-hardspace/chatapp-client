@@ -1,11 +1,14 @@
 package com.evandhardspace.core.presentation.util.datetime
 
 import chatapp.core.presentation.generated.resources.Res
+import chatapp.core.presentation.generated.resources.today
+import chatapp.core.presentation.generated.resources.yesterday
 import chatapp.core.presentation.generated.resources.today_time
 import chatapp.core.presentation.generated.resources.yesterday_time
 import com.evandhardspace.core.presentation.util.UiText
 import com.evandhardspace.core.presentation.util.asUiText
 import kotlinx.datetime.DateTimeUnit
+import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.format
@@ -46,5 +49,31 @@ fun Instant.formatMessageTime(
         todayDate -> Res.string.today_time.asUiText(formattedTime)
         yesterdayDate -> Res.string.yesterday_time.asUiText(formattedTime)
         else -> formattedDateTime.asUiText()
+    }
+}
+
+fun LocalDate.formatDateSeparator(
+    clock: Clock = Clock.System,
+    timeZone: TimeZone = TimeZone.currentSystemDefault(),
+): UiText {
+    val date = this
+    val today = clock.now().toLocalDateTime(timeZone).date
+    val yesterday = today.minus(1, DateTimeUnit.DAY)
+
+    return when (date) {
+        today -> Res.string.today.asUiText()
+        yesterday -> Res.string.yesterday.asUiText()
+        else -> {
+            val formatted = date.format(
+                LocalDate.Format {
+                    day()
+                    char('/')
+                    monthNumber()
+                    char('/')
+                    year()
+                }
+            )
+            formatted.asUiText()
+        }
     }
 }
