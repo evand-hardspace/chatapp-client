@@ -99,11 +99,41 @@ internal class OfflineFirstMessageRepository(
                 .sendMessage(dto.toJsonPayload())
                 .onFailure {
                     applicationScope.launch {
-                        database.chatMessageDao.upsertMessage(
-                            dto.toEntity(
-                                senderId = localUser.id,
-                                deliveryStatus = DeliveryStatus.Failed,
-                            )
+                        database.chatMessageDao.updateDeliveryStatus(
+                            messageId = entity.messageId,
+                            status = DeliveryStatus.Failed.name,
+                            timestamp = Clock.System.now().toEpochMilliseconds(),
+                        )
+                    }.join()
+                }
+        }
+    }
+
+    override suspend fun retryMessage(messageId: String): EmptyEither<DataError> {
+        return safeDatabaseUpdate {
+            println("Message ID retry $messageId")
+            val message = database.chatMessageDao.getMessageById(messageId)
+                ?: return DataError.Local.NotFound.asFailure()
+
+            database.chatMessageDao.updateDeliveryStatus(
+                messageId = messageId,
+                timestamp = Clock.System.now().toEpochMilliseconds(),
+                status = DeliveryStatus.Sending.name,
+            )
+
+            val outgoingNewMessage = OutgoingWebSocketDto.NewMessage(
+                chatId = message.chatId,
+                messageId = messageId,
+                content = message.content,
+            )
+            return webSocketConnector
+                .sendMessage(outgoingNewMessage.toJsonPayload())
+                .onFailure {
+                    applicationScope.launch {
+                        database.chatMessageDao.updateDeliveryStatus(
+                            messageId = messageId,
+                            status = DeliveryStatus.Failed.name,
+                            timestamp = Clock.System.now().toEpochMilliseconds(),
                         )
                     }.join()
                 }

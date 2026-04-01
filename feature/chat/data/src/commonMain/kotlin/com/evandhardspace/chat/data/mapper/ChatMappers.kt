@@ -108,12 +108,12 @@ fun ChatEntity.toDomain(
 }
 
 fun ChatMessageEntity.toDomain(): ChatMessage = ChatMessage(
-    id = chatId,
+    id = messageId,
     chatId = chatId,
     content = content,
     createdAt = Instant.fromEpochMilliseconds(timestamp),
     senderId = senderId,
-    deliveryStatus = DeliveryStatus.Sent,
+    deliveryStatus = DeliveryStatus.valueOf(deliveryStatus),
 )
 
 fun DataMessageWithSender.toDomain(): DomainMessageWithSender = DomainMessageWithSender(

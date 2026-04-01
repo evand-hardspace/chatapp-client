@@ -43,7 +43,8 @@ internal fun MessageList(
         verticalArrangement = Arrangement.spacedBy(MaterialTheme.paddings.default),
     ) {
         items(
-            items = messages, // TODO: add key and animation
+            items = messages,
+            key = MessageUi::id,
         ) { message ->
             MessageListItemUi(
                 messageUi = message,
@@ -53,6 +54,7 @@ internal fun MessageList(
                 onDismissMessageMenu = onDismissMessageMenu,
                 modifier = Modifier
                     .fillMaxWidth()
+                    .animateItem()
             )
         }
     }

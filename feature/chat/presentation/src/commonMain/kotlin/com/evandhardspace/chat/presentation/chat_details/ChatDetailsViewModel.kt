@@ -10,6 +10,7 @@ import com.evandhardspace.chat.domain.repository.ChatConnectionRepository
 import com.evandhardspace.chat.domain.repository.ChatRepository
 import com.evandhardspace.chat.domain.repository.MessageRepository
 import com.evandhardspace.chat.presentation.mapper.toUi
+import com.evandhardspace.chat.presentation.model.MessageUi
 import com.evandhardspace.core.common.stateInUi
 import com.evandhardspace.core.domain.auth.AuthState
 import com.evandhardspace.core.domain.auth.SessionRepository
@@ -68,6 +69,7 @@ internal class ChatDetailsViewModel(
 
         currentState.copy(
             chatUi = chatInfo.chat.toUi(authState.user.id),
+            messages = chatInfo.messages.map { it.toUi(authState.user.id) }
         )
     }
 
@@ -93,11 +95,21 @@ internal class ChatDetailsViewModel(
             is ChatDetailsAction.DismissMessageMenu -> Unit
             is ChatDetailsAction.LeaveChat -> onLeaveChat()
             is ChatDetailsAction.OnMessageLongClick -> Unit
-            is ChatDetailsAction.RetrySendMessage -> Unit
+            is ChatDetailsAction.RetrySendMessage -> onRetryMessage(action.message)
             is ChatDetailsAction.ScrollToTop -> Unit
             is ChatDetailsAction.SelectChat -> switchChat(action.chatId)
             is ChatDetailsAction.SendMessage -> onSendMessage()
             is ChatDetailsAction.FirstVisibleIndexChanged -> updateNearBottom(action.index)
+        }
+    }
+
+    private fun onRetryMessage(message: MessageUi.LocalUserMessage) {
+        viewModelScope.launch {
+            messageRepository
+                .retryMessage(message.id)
+                .onFailure { error ->
+                    _effects.send(ChatDetailsEffect.Error(error.asUiText()))
+                }
         }
     }
 
@@ -118,16 +130,6 @@ internal class ChatDetailsViewModel(
             if (chatId != null) messageRepository.getMessagesForChat(chatId)
             else emptyFlow()
         }
-            .combine(sessionRepository.authState) { messages, authState ->
-                if (authState !is AuthState.Authenticated) return@combine messages
-
-                _state.update { latestState ->
-                    latestState.copy(
-                        messages = messages.map { it.toUi(authState.user.id) },
-                    )
-                }
-                messages
-            }
 
         val isNearBottom = state.map { it.isNearBottom }.distinctUntilChanged()
 
