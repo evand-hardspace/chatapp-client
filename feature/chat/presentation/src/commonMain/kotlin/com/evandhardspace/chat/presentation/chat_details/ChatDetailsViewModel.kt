@@ -4,6 +4,7 @@ import androidx.compose.foundation.text.input.clearText
 import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.evandhardspace.chat.domain.model.ChatMessage
 import com.evandhardspace.chat.domain.model.ConnectionState
 import com.evandhardspace.chat.domain.model.OutgoingNewMessage
 import com.evandhardspace.chat.domain.repository.ChatConnectionRepository
@@ -14,6 +15,8 @@ import com.evandhardspace.chat.presentation.model.MessageUi
 import com.evandhardspace.core.common.stateInUi
 import com.evandhardspace.core.domain.auth.AuthState
 import com.evandhardspace.core.domain.auth.SessionRepository
+import com.evandhardspace.core.domain.util.DataErrorException
+import com.evandhardspace.core.domain.util.Paginator
 import com.evandhardspace.core.domain.util.onFailure
 import com.evandhardspace.core.domain.util.onSuccess
 import com.evandhardspace.core.presentation.util.asUiText
@@ -44,9 +47,18 @@ internal class ChatDetailsViewModel(
     private val _effects = Channel<ChatDetailsEffect>()
     val effects = _effects.receiveAsFlow()
 
+    private var currentPaginator: Paginator<String?, ChatMessage>? = null
+
     private val selectedChatId = MutableStateFlow<String?>(null)
 
     private val chatInfoFlow = selectedChatId
+        .onEach { chatId ->
+            if (chatId != null) {
+                setupPaginatorForChat(chatId)
+            } else {
+                currentPaginator = null
+            }
+        }
         .flatMapLatest { chatId ->
             if (chatId != null) chatRepository.getChatInfoById(chatId)
             else emptyFlow()
@@ -282,6 +294,50 @@ internal class ChatDetailsViewModel(
                         ),
                     )
                 }
+        }
+    }
+
+    private fun setupPaginatorForChat(chatId: String) {
+        currentPaginator = Paginator(
+            initialKey = null,
+            onLoadUpdated = { isLoading ->
+                _state.update { latestState ->
+                    latestState.copy(
+                        isPaginationLoading = isLoading,
+                    )
+                }
+            },
+            onRequest = { beforeTimestamp ->
+                messageRepository.fetchMessages(chatId, beforeTimestamp)
+            },
+            getNextKey = { messages ->
+                messages.minOfOrNull { it.createdAt }?.toString()
+            },
+            onError = { throwable ->
+                if (throwable is DataErrorException) {
+                    _effects.send(
+                        ChatDetailsEffect.Error(throwable.error.asUiText())
+                    )
+                }
+            },
+            onSuccess = { messages, _ ->
+                _state.update { latestState ->
+                    latestState.copy(
+                        endReached = messages.isEmpty(),
+                    )
+                }
+            }
+        )
+
+        _state.update {
+            it.copy(
+                endReached = false,
+                isPaginationLoading = false,
+            )
+        }
+
+        viewModelScope.launch {
+            currentPaginator?.loadNextItems()
         }
     }
 }
