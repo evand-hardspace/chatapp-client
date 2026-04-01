@@ -4,6 +4,7 @@ import com.evandhardspace.chat.domain.model.MessageWithSender
 import com.evandhardspace.chat.presentation.model.MessageUi
 import com.evandhardspace.core.presentation.util.datetime.formatDateSeparator
 import com.evandhardspace.core.presentation.util.datetime.formatMessageTime
+import com.evandhardspace.core.presentation.util.datetime.isToday
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
@@ -17,6 +18,7 @@ fun List<MessageWithSender>.toUiList(
             messages.map { it.toUi(localUserId) } + MessageUi.DateSeparator(
                 id = date.toString(),
                 date = date.formatDateSeparator(),
+                isToday = date.isToday(),
             )
         }
 

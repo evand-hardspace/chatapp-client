@@ -25,5 +25,6 @@ sealed interface MessageUi {
     data class DateSeparator(
         override val id: String,
         val date: UiText,
+        val isToday: Boolean,
     ): MessageUi
 }

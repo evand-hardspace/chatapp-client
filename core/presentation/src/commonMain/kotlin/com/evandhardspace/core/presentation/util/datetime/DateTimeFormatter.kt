@@ -77,3 +77,8 @@ fun LocalDate.formatDateSeparator(
         }
     }
 }
+
+fun LocalDate.isToday(
+    clock: Clock = Clock.System,
+    timeZone: TimeZone = TimeZone.currentSystemDefault(),
+): Boolean = this == clock.now().toLocalDateTime(timeZone).date

@@ -1,6 +1,8 @@
 package com.evandhardspace.chat.presentation.chat_details
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,14 +23,18 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import chatapp.feature.chat.presentation.generated.resources.Res
@@ -39,8 +45,10 @@ import chatapp.feature.chat.presentation.generated.resources.no_messages_subtitl
 import com.evandhardspace.chat.domain.model.ChatMessage
 import com.evandhardspace.chat.domain.model.DeliveryStatus
 import com.evandhardspace.chat.presentation.component.ChatHeaderContent
+import com.evandhardspace.chat.presentation.component.MessageBannerListener
 import com.evandhardspace.chat.presentation.component.PaginationScrollListener
 import com.evandhardspace.chat.presentation.component.chat_details.ChatDetailHeader
+import com.evandhardspace.chat.presentation.component.chat_details.DateChip
 import com.evandhardspace.chat.presentation.component.chat_details.EmptyContentSection
 import com.evandhardspace.chat.presentation.component.chat_details.MessageBox
 import com.evandhardspace.chat.presentation.component.chat_details.MessageList
@@ -125,13 +133,24 @@ private fun ChatDetailContent(
     messageListState: LazyListState,
 ) {
     val configuration = currentDeviceConfiguration()
-
     val realMessageItemCount = remember(state.messages) {
         state
             .messages
             .filter { it is MessageUi.LocalUserMessage || it is MessageUi.OtherUserMessage }
             .size
     }
+
+    MessageBannerListener(
+        lazyListState = messageListState,
+        messages = state.messages,
+        isBannerVisible = state.bannerState.isVisible,
+        onShowBanner = { index ->
+            action(ChatDetailsAction.TopVisibleIndexChanged(index))
+        },
+        onHide = {
+            action(ChatDetailsAction.HideBanner)
+        }
+    )
 
     PaginationScrollListener(
         lazyListState = messageListState,
@@ -150,6 +169,11 @@ private fun ChatDetailContent(
             action(ChatDetailsAction.FirstVisibleIndexChanged(firstVisibleItemIndex))
         }
     }
+
+    var headerHeight by remember {
+        mutableStateOf(0.dp)
+    }
+    val density = LocalDensity.current
 
     Scaffold(
         modifier = modifier
@@ -176,7 +200,13 @@ private fun ChatDetailContent(
                         .weight(1f)
                         .fillMaxWidth()
                 ) {
-                    ChatHeaderContent {
+                    ChatHeaderContent(
+                        modifier = Modifier.onSizeChanged {
+                            headerHeight = with(density) {
+                                it.height.toDp()
+                            }
+                        },
+                    ) {
                         ChatDetailHeader(
                             chatUi = state.chatUi,
                             isDetailPresent = isDetailPresent,
@@ -261,6 +291,21 @@ private fun ChatDetailContent(
                                 .padding(MaterialTheme.paddings.half),
                         )
                     }
+                }
+            }
+
+            AnimatedVisibility(
+                visible = state.bannerState.isVisible,
+                modifier =
+                    Modifier.align(Alignment.TopCenter)
+                        .padding(top = headerHeight + MaterialTheme.paddings.default),
+                enter = fadeIn(),
+                exit = fadeOut(),
+            ) {
+                if (state.bannerState.formattedDate != null) {
+                    DateChip(
+                        date = state.bannerState.formattedDate.asComposableString(),
+                    )
                 }
             }
         }

@@ -11,9 +11,10 @@ internal sealed interface ChatDetailsAction {
     data object DismissMessageMenu : ChatDetailsAction
     data class RetrySendMessage(val message: MessageUi.LocalUserMessage) : ChatDetailsAction
     data object ShowChatOptions : ChatDetailsAction
-    data object ChatMembersSelected : ChatDetailsAction
     data object LeaveChat : ChatDetailsAction
     data object DismissChatOptions : ChatDetailsAction
     data class FirstVisibleIndexChanged(val index: Int) : ChatDetailsAction
     data object RetryPagination : ChatDetailsAction
+    data object HideBanner : ChatDetailsAction
+    data class TopVisibleIndexChanged(val topVisibleIndex: Int) : ChatDetailsAction
 }

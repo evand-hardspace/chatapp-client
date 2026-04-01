@@ -20,6 +20,7 @@ import com.evandhardspace.core.domain.util.DataErrorException
 import com.evandhardspace.core.domain.util.Paginator
 import com.evandhardspace.core.domain.util.onFailure
 import com.evandhardspace.core.domain.util.onSuccess
+import com.evandhardspace.core.presentation.util.UiText
 import com.evandhardspace.core.presentation.util.asUiText
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
@@ -80,6 +81,7 @@ internal class ChatDetailsViewModel(
     ) { currentState, chatInfo, authState ->
         if (authState !is AuthState.Authenticated) return@combine ChatDetailsState()
 
+        // TODO: reduce update frequency on date banner state
         currentState.copy(
             chatUi = chatInfo.chat.toUi(authState.user.id),
             messages = chatInfo.messages.toUiList(authState.user.id),
@@ -101,7 +103,6 @@ internal class ChatDetailsViewModel(
 
     fun onAction(action: ChatDetailsAction) {
         when (action) {
-            is ChatDetailsAction.ChatMembersSelected -> Unit
             is ChatDetailsAction.ShowChatOptions -> onChatOptions()
             is ChatDetailsAction.DeleteMessage -> onDeleteMessage(action.message)
             is ChatDetailsAction.DismissChatOptions -> onDismissChatOptions()
@@ -114,8 +115,50 @@ internal class ChatDetailsViewModel(
             is ChatDetailsAction.SendMessage -> onSendMessage()
             is ChatDetailsAction.FirstVisibleIndexChanged -> updateNearBottom(action.index)
             is ChatDetailsAction.RetryPagination -> retryPagination()
+            is ChatDetailsAction.HideBanner -> onHideBanner()
+            is ChatDetailsAction.TopVisibleIndexChanged -> updateBanner(action.topVisibleIndex)
         }
     }
+
+    private fun updateBanner(topVisibleIndex: Int) {
+        val visibleDate = calculateBannerDateFromIndex(
+            messages = state.value.messages,
+            index = topVisibleIndex
+        )
+
+        _state.update {
+            it.copy(
+                bannerState = BannerState(
+                    formattedDate = visibleDate,
+                    isVisible = visibleDate != null
+                )
+            )
+        }
+    }
+
+    private fun calculateBannerDateFromIndex(
+        messages: List<MessageUi>,
+        index: Int
+    ): UiText? {
+        if (messages.isEmpty() || index < 0 || index >= messages.size) return null
+
+        return (index until messages.size)
+            .firstNotNullOfOrNull { index ->
+            val item = messages.getOrNull(index)
+            if (item is MessageUi.DateSeparator) item.date else null
+        }
+    }
+
+    private fun onHideBanner() {
+        _state.update {
+            it.copy(
+                bannerState = it.bannerState.copy(
+                    isVisible = false,
+                )
+            )
+        }
+    }
+
 
     private fun retryPagination() = loadNextItems()
 
