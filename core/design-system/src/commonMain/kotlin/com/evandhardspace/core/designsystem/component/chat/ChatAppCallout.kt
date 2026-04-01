@@ -5,6 +5,7 @@ import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -43,6 +44,13 @@ fun ChatAppCallout(
 
     Column(
         modifier = modifier
+            .clip(
+                ChatBubbleShape(
+                    calloutPosition = calloutPosition,
+                    tailSize = tailSize,
+                    cornerRadius = tailCornerRadius,
+                )
+            )
             .then(
                 if (onLongClick != null) {
                     Modifier.combinedClickable(
@@ -55,13 +63,6 @@ fun ChatAppCallout(
                     )
                 } else Modifier,
             )
-            .clip(
-                ChatBubbleShape(
-                    calloutPosition = calloutPosition,
-                    tailSize = tailSize,
-                    cornerRadius = tailCornerRadius,
-                )
-            )
             .background(color)
             .padding(
                 start = if (calloutPosition == CalloutPosition.Start) {
@@ -72,7 +73,7 @@ fun ChatAppCallout(
                 } else messageContentPadding,
                 top = messageContentPadding,
                 bottom = messageContentPadding,
-            ),
+            ).width(IntrinsicSize.Max),
         verticalArrangement = Arrangement.spacedBy(MaterialTheme.paddings.half),
     ) {
         Row(

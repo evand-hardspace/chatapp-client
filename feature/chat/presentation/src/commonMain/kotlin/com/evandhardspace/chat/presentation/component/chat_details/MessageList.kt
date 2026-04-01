@@ -12,12 +12,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import chatapp.feature.chat.presentation.generated.resources.Res
-import chatapp.feature.chat.presentation.generated.resources.no_messages
-import chatapp.feature.chat.presentation.generated.resources.no_messages_subtitle
 import com.evandhardspace.chat.presentation.model.MessageUi
 import com.evandhardspace.core.designsystem.theme.paddings
-import org.jetbrains.compose.resources.stringResource
 
 @Composable
 internal fun MessageList(
@@ -47,7 +43,7 @@ internal fun MessageList(
         verticalArrangement = Arrangement.spacedBy(MaterialTheme.paddings.default),
     ) {
         items(
-            items = messages, // TODO: add key
+            items = messages, // TODO: add key and animation
         ) { message ->
             MessageListItemUi(
                 messageUi = message,
@@ -57,7 +53,6 @@ internal fun MessageList(
                 onDismissMessageMenu = onDismissMessageMenu,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .animateItem(),
             )
         }
     }

@@ -46,9 +46,7 @@ internal fun LocalUserMessage(
         verticalAlignment = Alignment.Bottom,
         horizontalArrangement = Arrangement.spacedBy(MaterialTheme.paddings.half, Alignment.End),
     ) {
-        Box(
-            modifier = Modifier.weight(1f)
-        ) {
+        Box {
             ChatAppCallout(
                 messageContent = message.content,
                 sender = stringResource(Res.string.you),

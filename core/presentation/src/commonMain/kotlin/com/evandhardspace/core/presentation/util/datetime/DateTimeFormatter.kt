@@ -1,8 +1,8 @@
 package com.evandhardspace.core.presentation.util.datetime
 
 import chatapp.core.presentation.generated.resources.Res
-import chatapp.core.presentation.generated.resources.today
-import chatapp.core.presentation.generated.resources.yesterday
+import chatapp.core.presentation.generated.resources.today_time
+import chatapp.core.presentation.generated.resources.yesterday_time
 import com.evandhardspace.core.presentation.util.UiText
 import com.evandhardspace.core.presentation.util.asUiText
 import kotlinx.datetime.DateTimeUnit
@@ -16,13 +16,21 @@ import kotlin.time.Clock
 import kotlin.time.Instant
 
 fun Instant.formatMessageTime(
-    clock: Clock = Clock.System, // TODO: Inject
-    timeZone: TimeZone = TimeZone.currentSystemDefault(), // TODO: Inject
+    clock: Clock = Clock.System,
+    timeZone: TimeZone = TimeZone.currentSystemDefault(),
 ): UiText {
     val messageDateTime = toLocalDateTime(timeZone)
     val todayDate = clock.now().toLocalDateTime(timeZone).date
     val yesterdayDate = todayDate.minus(1, DateTimeUnit.DAY)
 
+    val formattedTime = messageDateTime.format(
+        format = LocalDateTime.Format {
+            amPmHour()
+            char(':')
+            minute()
+            amPmMarker("am", "pm")
+        }
+    )
     val formattedDateTime = messageDateTime.format(
         LocalDateTime.Format {
             day()
@@ -30,17 +38,13 @@ fun Instant.formatMessageTime(
             monthNumber()
             char('/')
             year()
-            char(' ')
-            amPmHour()
-            char(':')
-            minute()
-            amPmMarker("am", "pm")
+            chars(", $formattedTime")
         }
     )
 
     return when (messageDateTime.date) {
-        todayDate -> Res.string.today.asUiText()
-        yesterdayDate -> Res.string.yesterday.asUiText()
+        todayDate -> Res.string.today_time.asUiText(formattedTime)
+        yesterdayDate -> Res.string.yesterday_time.asUiText(formattedTime)
         else -> formattedDateTime.asUiText()
     }
 }
