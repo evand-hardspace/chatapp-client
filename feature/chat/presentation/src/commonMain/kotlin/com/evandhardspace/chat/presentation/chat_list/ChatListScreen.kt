@@ -67,7 +67,7 @@ internal fun ChatListScreen(
 
     ChatListContent(
         state = state,
-        onAction = viewModel::onAction,
+        action = viewModel::onAction,
         onChatClick = onChatClick,
         onConfirmLogoutClick = onConfirmLogoutClick,
         onCreateChatClick = onCreateChatClick,
@@ -79,7 +79,7 @@ internal fun ChatListScreen(
 @Composable
 private fun ChatListContent(
     state: ChatListState,
-    onAction: (ChatListAction) -> Unit,
+    action: (ChatListAction) -> Unit,
     onChatClick: (ChatUi) -> Unit,
     onConfirmLogoutClick: () -> Unit,
     onCreateChatClick: () -> Unit,
@@ -113,10 +113,16 @@ private fun ChatListContent(
                 modifier = Modifier.padding(top = innerPadding.calculateTopPadding()),
                 localParticipant = state.localParticipant,
                 isUserMenuOpen = state.isUserMenuOpen,
-                onUserAvatarClick = { onAction(ChatListAction.OnUserAvatar) },
-                onLogoutClick = { onAction(ChatListAction.Logout) },
-                onDismissMenu = { onAction(ChatListAction.DismissUserMenu) },
-                onProfileSettingsClick = onProfileSettingsClick,
+                onUserAvatarClick = { action(ChatListAction.OpenUserMenu) },
+                onLogoutClick = {
+                    action(ChatListAction.DismissUserMenu)
+                    action(ChatListAction.Logout)
+                },
+                onDismissMenu = { action(ChatListAction.DismissUserMenu) },
+                onProfileSettingsClick = {
+                    action(ChatListAction.DismissUserMenu)
+                    onProfileSettingsClick()
+                },
             )
             when {
                 state.isLoading -> {
@@ -168,8 +174,8 @@ private fun ChatListContent(
             description = stringResource(Res.string.do_you_want_to_logout_description),
             confirmButtonText = stringResource(Res.string.logout),
             cancelButtonText = stringResource(Res.string.cancel),
-            onDismiss = { onAction(ChatListAction.DismissLogoutDialog) },
-            onCancelClick = { onAction(ChatListAction.DismissLogoutDialog) },
+            onDismiss = { action(ChatListAction.DismissLogoutDialog) },
+            onCancelClick = { action(ChatListAction.DismissLogoutDialog) },
             onConfirmClick = onConfirmLogoutClick,
         )
     }
@@ -181,7 +187,7 @@ private fun ChatListContentPreview() {
     ChatAppTheme {
         ChatListContent(
             state = ChatListState(),
-            onAction = {},
+            action = {},
             snackbarHostState = remember { SnackbarHostState() },
             onChatClick = {},
             onConfirmLogoutClick = {},

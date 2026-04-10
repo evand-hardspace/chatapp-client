@@ -2,6 +2,7 @@ package com.evandhardspace.core.designsystem.component.dialog
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -27,6 +28,7 @@ fun ChatAppDialogContent(
         Surface(
             modifier = modifier
                 .fillMaxWidth()
+                .heightIn(max = ChatAppDialogDefaults.DEFAULT_MAX_HEIGHT_DP.dp)
                 .clip(MaterialTheme.shapes.medium),
             color = MaterialTheme.colorScheme.surface,
             content = content,

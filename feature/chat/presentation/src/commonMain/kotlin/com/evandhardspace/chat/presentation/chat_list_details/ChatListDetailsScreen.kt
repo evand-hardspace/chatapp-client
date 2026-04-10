@@ -19,6 +19,7 @@ import com.evandhardspace.chat.presentation.chat_details.ChatDetailsViewModel
 import com.evandhardspace.chat.presentation.chat_list.ChatListScreen
 import com.evandhardspace.chat.presentation.create_chat.CreateChatScreen
 import com.evandhardspace.chat.presentation.manage_chat.ManageChatScreen
+import com.evandhardspace.chat.presentation.profile.ProfileScreen
 import com.evandhardspace.core.designsystem.component.layout.NavigableListDetailPaneScaffold
 import com.evandhardspace.core.designsystem.component.modifier.clipOnTransition
 import com.evandhardspace.core.designsystem.theme.extended
@@ -118,6 +119,14 @@ private fun ChatListDetailsSceneContent(
                     scaffoldNavigator.navigateTo(ListDetailPaneScaffoldRole.Detail)
                 }
             }
+        )
+    }
+
+    DialogViewModelScope(
+        visible = state.dialogState is DialogState.Profile,
+    ) {
+        ProfileScreen(
+            onDismiss = { action(SharedChatListDetailsAction.DismissCurrentDialog) },
         )
     }
 

@@ -80,8 +80,8 @@ fun ChatAppTextFieldLayout(
             targetState = isError to supportingText,
         ) { (isError, supportingText) ->
             if (supportingText == null) return@AnimatedContent
-            Spacer(modifier = Modifier.height(MaterialTheme.paddings.quarter))
             Text(
+                modifier = Modifier.padding(top = MaterialTheme.paddings.quarter, start = MaterialTheme.paddings.quarter),
                 text = supportingText,
                 color = if (isError) MaterialTheme.colorScheme.error
                 else MaterialTheme.colorScheme.extended.textTertiary,

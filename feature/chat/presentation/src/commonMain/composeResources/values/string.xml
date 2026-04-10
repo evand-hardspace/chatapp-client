@@ -23,6 +23,7 @@
     <string name="retry">Retry</string>
     <string name="failed">Failed</string>
     <string name="delete_for_everyone">Delete for everyone</string>
+    <string name="delete">Delete</string>
     <string name="leave_chat">Leave chat</string>
     <string name="chat_members">Chat members</string>
     <string name="open_chat_options_menu">Open chat options menu</string>
@@ -41,4 +42,14 @@
     <string name="remove_participant">Remove participant</string>
     <string name="save">Save</string>
     <string name="create">Create</string>
+    <string name="profile_image">Profile image</string>
+    <string name="upload_image">Upload image</string>
+    <string name="email">Email</string>
+    <string name="changing_email_is_not_supported">Changing email is not supported.</string>
+    <string name="password">Password</string>
+    <string name="current_password">Current password</string>
+    <string name="new_password">New password</string>
+    <string name="password_hint">Use 9+ characters, at least one digit and one uppercase letter.</string>
+    <string name="delete_profile_picture">Delete profile picture</string>
+    <string name="delete_profile_picture_description">Are you sure you want to delete your profile picture? This action cannot be undone.</string>
 </resources>

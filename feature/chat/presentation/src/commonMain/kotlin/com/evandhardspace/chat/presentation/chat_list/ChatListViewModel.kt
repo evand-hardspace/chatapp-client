@@ -50,12 +50,20 @@ internal class ChatListViewModel(
     fun onAction(action: ChatListAction) {
         when (action) {
             is ChatListAction.DismissLogoutDialog -> Unit
-            is ChatListAction.DismissUserMenu -> Unit
+            is ChatListAction.DismissUserMenu -> state.update { latestState ->
+                latestState.copy(
+                    isUserMenuOpen = false,
+                )
+            }
             is ChatListAction.Logout -> Unit
-            is ChatListAction.OnUserAvatar -> Unit
+            is ChatListAction.OpenUserMenu -> state.update { latestState ->
+                latestState.copy(
+                    isUserMenuOpen = true,
+                )
+            }
             is ChatListAction.SelectChat -> {
-                state.update {
-                    it.copy(selectedChatId = action.chatId)
+                state.update { latestState ->
+                    latestState.copy(selectedChatId = action.chatId)
                 }
             }
         }

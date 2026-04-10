@@ -31,6 +31,7 @@ import chatapp.core.design_system.generated.resources.show_password
 import com.evandhardspace.core.designsystem.annotations.ThemedPreview
 import com.evandhardspace.core.designsystem.theme.ChatAppPreview
 import com.evandhardspace.core.designsystem.theme.extended
+import com.evandhardspace.core.designsystem.theme.paddings
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
 
@@ -108,7 +109,7 @@ fun ChatAppPasswordTextField(
                         },
                         tint = MaterialTheme.colorScheme.extended.textDisabled,
                         modifier = Modifier
-                            .size(24.dp)
+                            .size(MaterialTheme.paddings.fiveQuarters)
                             .clickable(
                                 interactionSource = remember { MutableInteractionSource() },
                                 indication = ripple(

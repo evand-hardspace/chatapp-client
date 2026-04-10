@@ -31,7 +31,10 @@ import com.evandhardspace.core.designsystem.theme.extended
 import com.evandhardspace.core.designsystem.theme.paddings
 import org.jetbrains.compose.resources.stringResource
 
-private const val DEFAULT_MAX_WIDTH_DP = 480
+internal object ChatAppDialogDefaults {
+    const val DEFAULT_MAX_WIDTH_DP = 480
+    const val DEFAULT_MAX_HEIGHT_DP = 540
+}
 
 @Composable
 fun ChatAppDialog(
@@ -55,7 +58,7 @@ fun ChatAppDialog(
                     horizontal = MaterialTheme.paddings.threeQuarters,
                     vertical = MaterialTheme.paddings.default,
                 )
-                .widthIn(max = DEFAULT_MAX_WIDTH_DP.dp)
+                .widthIn(max = ChatAppDialogDefaults.DEFAULT_MAX_WIDTH_DP.dp)
                 .background(
                     color = MaterialTheme.colorScheme.surface,
                     shape = MaterialTheme.shapes.large,
