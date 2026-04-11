@@ -1,6 +1,7 @@
 package com.evandhardspace.core.data.auth
 
 import com.evandhardspace.core.data.dto.AuthInfoDto
+import com.evandhardspace.core.data.dto.request.ChangePasswordRequest
 import com.evandhardspace.core.data.dto.request.EmailRequest
 import com.evandhardspace.core.data.dto.request.LoginRequest
 import com.evandhardspace.core.data.dto.request.RegisterRequest
@@ -74,6 +75,17 @@ internal class KtorAuthRepository(
         body = ResetPasswordRequest(
             newPassword = newPassword,
             token = token,
+        )
+    )
+
+    override suspend fun changePassword(
+        currentPassword: String,
+        newPassword: String
+    ): EmptyEither<DataError.Remote> = client.post(
+        route = "/auth/change-password",
+        body = ChangePasswordRequest(
+            oldPassword = currentPassword,
+            newPassword = newPassword,
         )
     )
 }

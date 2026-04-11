@@ -20,4 +20,5 @@ internal data class ProfileState(
     val currentPasswordError: UiText? = null,
     val newPasswordError: UiText? = null,
     val canChangePassword: Boolean = false,
+    val isPasswordChangeSuccessful: Boolean = false,
 )

@@ -1,16 +1,35 @@
 package com.evandhardspace.chat.presentation.profile
 
+import androidx.compose.foundation.text.input.clearText
+import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import chatapp.feature.chat.presentation.generated.resources.Res
+import chatapp.feature.chat.presentation.generated.resources.error_current_password_equal_to_new_one
+import chatapp.feature.chat.presentation.generated.resources.error_current_password_incorrect
+import com.evandhardspace.core.domain.auth.AuthRepository
+import com.evandhardspace.core.domain.util.DataError
+import com.evandhardspace.core.domain.util.onFailure
+import com.evandhardspace.core.domain.util.onSuccess
+import com.evandhardspace.core.domain.validation.rule.password.PasswordValidator
+import com.evandhardspace.core.presentation.util.asUiText
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.koin.core.annotation.KoinViewModel
 
 @KoinViewModel
-internal class ProfileViewModel : ViewModel() {
+internal class ProfileViewModel(
+    private val authRepository: AuthRepository,
+    private val passwordValidator: PasswordValidator,
+) : ViewModel() {
 
     private val _effects = Channel<ProfileEffect>()
     val effects = _effects.receiveAsFlow()
@@ -18,9 +37,13 @@ internal class ProfileViewModel : ViewModel() {
     val state: StateFlow<ProfileState>
         field = MutableStateFlow(ProfileState())
 
+    init {
+        observeCanChangePassword()
+    }
+
     fun onAction(action: ProfileAction) {
         when (action) {
-            is ProfileAction.OnChangePasswordClick -> Unit
+            is ProfileAction.OnChangePasswordClick -> changePassword()
             is ProfileAction.OnConfirmDeleteClick -> Unit
             is ProfileAction.OnDeletePictureClick -> Unit
             is ProfileAction.OnDismiss -> {
@@ -30,10 +53,96 @@ internal class ProfileViewModel : ViewModel() {
             is ProfileAction.OnDismissDeleteConfirmationDialogClick -> Unit
             is ProfileAction.OnErrorImagePicker -> Unit
             is ProfileAction.OnPictureSelected -> Unit
-            is ProfileAction.OnToggleCurrentPasswordVisibility -> Unit
-            is ProfileAction.OnToggleNewPasswordVisibility -> Unit
+            is ProfileAction.OnToggleCurrentPasswordVisibility -> toggleCurrentPasswordVisibility()
+            is ProfileAction.OnToggleNewPasswordVisibility -> toggleNewPasswordVisibility()
             is ProfileAction.OnUploadPictureClick -> Unit
             is ProfileAction.OnUriSelected -> Unit
+        }
+    }
+
+    private fun observeCanChangePassword() {
+        val isCurrentPasswordValidFlow = snapshotFlow {
+            state.value.currentPasswordTextState.text.toString()
+        }.map(String::isNotBlank).distinctUntilChanged()
+
+        val isNewPasswordValidFlow = snapshotFlow {
+            state.value.newPasswordTextState.text.toString()
+        }.map(passwordValidator::validate).distinctUntilChanged()
+
+        combine(
+            isCurrentPasswordValidFlow,
+            isNewPasswordValidFlow,
+        ) { isCurrentValid, isNewValid ->
+            state.update { latestState ->
+                latestState.copy(
+                    canChangePassword = isCurrentValid && isNewValid,
+                )
+            }
+        }.launchIn(viewModelScope)
+    }
+
+    private fun toggleCurrentPasswordVisibility() {
+        state.update { latestState ->
+            latestState.copy(
+                isCurrentPasswordVisible = latestState.isCurrentPasswordVisible.not(),
+            )
+        }
+    }
+
+    private fun toggleNewPasswordVisibility() {
+        state.update { latestState ->
+            latestState.copy(
+                isNewPasswordVisible = latestState.isNewPasswordVisible.not(),
+            )
+        }
+    }
+
+    private fun changePassword() {
+        val latestState = state.value
+        if (latestState.canChangePassword.not() && latestState.isChangingPassword) return
+
+        state.update { latestState ->
+            latestState.copy(
+                isChangingPassword = true,
+                isPasswordChangeSuccessful = false,
+            )
+        }
+        viewModelScope.launch {
+            val currentPassword = state.value.currentPasswordTextState.text.toString()
+            val newPassword = state.value.newPasswordTextState.text.toString()
+            authRepository
+                .changePassword(
+                    currentPassword = currentPassword,
+                    newPassword = newPassword,
+                )
+                .onSuccess {
+                    state.value.currentPasswordTextState.clearText()
+                    state.value.newPasswordTextState.clearText()
+
+                    state.update {
+                        it.copy(
+                            isChangingPassword = false,
+                            newPasswordError = null,
+                            isNewPasswordVisible = false,
+                            isCurrentPasswordVisible = false,
+                            isPasswordChangeSuccessful = true,
+                        )
+                    }
+                }
+                .onFailure { error ->
+                    val errorMessage = when (error) {
+                        DataError.Remote.Unauthorized -> Res.string.error_current_password_incorrect.asUiText()
+                        DataError.Remote.Conflict -> Res.string.error_current_password_equal_to_new_one.asUiText()
+                        else -> error.asUiText()
+                    }
+
+                    state.update { latestState ->
+                        latestState.copy(
+                            newPasswordError = errorMessage,
+                            isChangingPassword = false,
+                        )
+                    }
+                }
         }
     }
 }

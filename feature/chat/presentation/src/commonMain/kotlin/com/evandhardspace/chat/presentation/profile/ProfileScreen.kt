@@ -22,6 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import chatapp.core.design_system.generated.resources.upload_icon
 import chatapp.feature.chat.presentation.generated.resources.Res
@@ -34,6 +35,7 @@ import chatapp.feature.chat.presentation.generated.resources.delete_profile_pict
 import chatapp.feature.chat.presentation.generated.resources.email
 import chatapp.feature.chat.presentation.generated.resources.new_password
 import chatapp.feature.chat.presentation.generated.resources.password
+import chatapp.feature.chat.presentation.generated.resources.password_changed_successfully
 import chatapp.feature.chat.presentation.generated.resources.password_hint
 import chatapp.feature.chat.presentation.generated.resources.profile_image
 import chatapp.feature.chat.presentation.generated.resources.save
@@ -52,6 +54,7 @@ import com.evandhardspace.core.designsystem.component.dialog.rememberAdaptiveDia
 import com.evandhardspace.core.designsystem.component.textfield.ChatAppPasswordTextField
 import com.evandhardspace.core.designsystem.component.textfield.ChatAppTextField
 import com.evandhardspace.core.designsystem.theme.ChatAppPreview
+import com.evandhardspace.core.designsystem.theme.extended
 import com.evandhardspace.core.designsystem.theme.paddings
 import com.evandhardspace.core.presentation.util.DeviceConfiguration
 import com.evandhardspace.core.presentation.util.OnEffect
@@ -203,6 +206,15 @@ private fun ProfileContent(
                 supportingText = state.newPasswordError?.asComposableString()
                     ?: stringResource(Res.string.password_hint),
             )
+            if(state.isPasswordChangeSuccessful) {
+                Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = stringResource(Res.string.password_changed_successfully),
+                    color = MaterialTheme.colorScheme.extended.success,
+                    style = MaterialTheme.typography.labelSmall,
+                    textAlign = TextAlign.End,
+                )
+            }
             Row(
                 modifier = Modifier
                     .fillMaxWidth(),

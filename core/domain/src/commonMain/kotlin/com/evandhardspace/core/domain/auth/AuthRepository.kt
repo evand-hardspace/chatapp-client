@@ -31,4 +31,9 @@ interface AuthRepository {
         newPassword: String,
         token: String,
     ): EmptyEither<DataError.Remote>
+
+    suspend fun changePassword(
+        currentPassword: String,
+        newPassword: String,
+    ): EmptyEither<DataError.Remote>
 }
