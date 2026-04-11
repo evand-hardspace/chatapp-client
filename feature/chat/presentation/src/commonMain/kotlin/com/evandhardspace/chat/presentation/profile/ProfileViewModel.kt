@@ -52,15 +52,12 @@ internal class ProfileViewModel(
     fun onAction(action: ProfileAction) {
         when (action) {
             is ProfileAction.OnChangePasswordClick -> changePassword()
-            is ProfileAction.OnConfirmDeleteClick -> Unit
-            is ProfileAction.OnDeletePictureClick -> Unit
-            is ProfileAction.OnDismissDeleteConfirmationDialogClick -> Unit
-            is ProfileAction.OnErrorImagePicker -> Unit
+            is ProfileAction.OnConfirmDeleteClick -> deleteProfilePicture()
+            is ProfileAction.OnDeletePictureClick -> showDeleteConfirmation()
+            is ProfileAction.OnDismissDeleteConfirmationDialogClick -> dismissDeleteConfirmation()
             is ProfileAction.PictureSelected -> uploadProfilePicture(action.bytes, action.mimeType)
             is ProfileAction.OnToggleCurrentPasswordVisibility -> toggleCurrentPasswordVisibility()
             is ProfileAction.OnToggleNewPasswordVisibility -> toggleNewPasswordVisibility()
-            is ProfileAction.OnUriSelected -> Unit
-
             is ProfileAction.OnUploadPicture -> {
                 viewModelScope.launch { _effects.send(ProfileEffect.SelectPickture) }
             }
@@ -98,6 +95,7 @@ internal class ProfileViewModel(
                 state.update { latestState ->
                     latestState.copy(
                         username = user.username,
+                        userInitials = user.username.take(2),
                         emailTextState = TextFieldState(initialText = user.email),
                         profilePictureUrl = user.profilePictureUrl,
                     )
@@ -214,6 +212,54 @@ internal class ProfileViewModel(
     private fun fetchLocalParticipantDetails() {
         viewModelScope.launch {
             chatParticipantRepository.fetchLocalParticipant()
+        }
+    }
+
+    private fun showDeleteConfirmation() {
+        state.update { latestState ->
+            latestState.copy(
+                showDeleteConfirmationDialog = true,
+            )
+        }
+    }
+
+    private fun deleteProfilePicture() {
+        if (state.value.isDeletingImage && state.value.profilePictureUrl == null) return
+
+        state.update { latestState ->
+            latestState.copy(
+                isDeletingImage = true,
+                imageError = null,
+                showDeleteConfirmationDialog = false,
+            )
+        }
+
+        viewModelScope.launch {
+            chatParticipantRepository
+                .deleteProfilePicture()
+                .onSuccess {
+                    state.update { latestState ->
+                        latestState.copy(
+                            isDeletingImage = false,
+                        )
+                    }
+                }
+                .onFailure { error ->
+                    state.update { latestState ->
+                        latestState.copy(
+                            imageError = error.asUiText(),
+                            isDeletingImage = false,
+                        )
+                    }
+                }
+        }
+    }
+
+    private fun dismissDeleteConfirmation() {
+        state.update { latestState ->
+            latestState.copy(
+                showDeleteConfirmationDialog = false,
+            )
         }
     }
 }

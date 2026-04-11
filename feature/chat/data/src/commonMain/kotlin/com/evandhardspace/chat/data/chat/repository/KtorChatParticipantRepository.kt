@@ -62,4 +62,17 @@ class DefaultChatParticipantRepository(
                 }
             }
     }
+
+    override suspend fun deleteProfilePicture(): EmptyEither<DataError.Remote> =
+        chatParticipantDataSource.deleteProfilePicture()
+            .onSuccess {
+                sessionRepository.updateAuthState { authState ->
+                    authState.copy(
+                        user = authState.user.copy(
+                            profilePictureUrl = null,
+                        ),
+                    )
+                }
+            }
+
 }

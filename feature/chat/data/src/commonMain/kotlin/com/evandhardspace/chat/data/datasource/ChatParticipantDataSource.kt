@@ -6,9 +6,9 @@ import com.evandhardspace.chat.data.dto.response.ProfilePictureUploadUrlsRespons
 import com.evandhardspace.chat.data.mapper.toDomain
 import com.evandhardspace.chat.domain.model.ChatParticipant
 import com.evandhardspace.chat.domain.model.ProfilePictureUploadUrls
+import com.evandhardspace.core.data.networking.delete
 import com.evandhardspace.core.data.networking.get
 import com.evandhardspace.core.data.networking.post
-import com.evandhardspace.core.data.networking.put
 import com.evandhardspace.core.data.networking.safeCall
 import com.evandhardspace.core.domain.util.DataError
 import com.evandhardspace.core.domain.util.Either
@@ -16,7 +16,6 @@ import com.evandhardspace.core.domain.util.EmptyEither
 import com.evandhardspace.core.domain.util.map
 import io.ktor.client.HttpClient
 import io.ktor.client.request.header
-import io.ktor.client.request.post
 import io.ktor.client.request.put
 import io.ktor.client.request.setBody
 import io.ktor.client.request.url
@@ -68,4 +67,10 @@ class ChatParticipantDataSource(
             route = "/participants/confirm-profile-picture",
             body = ConfirmProfilePictureRequest(publicUrl),
         )
+
+    suspend fun deleteProfilePicture(): EmptyEither<DataError.Remote> =
+        httpClient.delete(
+            route = "/participants/profile-picture",
+        )
+
 }

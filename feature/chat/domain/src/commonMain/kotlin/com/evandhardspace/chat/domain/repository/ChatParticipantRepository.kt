@@ -16,4 +16,6 @@ interface ChatParticipantRepository {
         imageBytes: ByteArray,
         mimeType: String,
     ): EmptyEither<DataError.Remote>
+
+    suspend fun deleteProfilePicture(): EmptyEither<DataError.Remote>
 }
