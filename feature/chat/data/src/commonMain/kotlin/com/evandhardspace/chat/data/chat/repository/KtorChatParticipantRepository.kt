@@ -1,26 +1,34 @@
 package com.evandhardspace.chat.data.chat.repository
 
+import com.evandhardspace.chat.data.datasource.ChatParticipantDataSource
 import com.evandhardspace.chat.domain.repository.ChatParticipantRepository
 import com.evandhardspace.chat.domain.model.ChatParticipant
-import com.evandhardspace.core.data.networking.get
 import com.evandhardspace.core.domain.util.DataError
 import com.evandhardspace.core.domain.util.Either
-import com.evandhardspace.core.domain.util.map
-import com.evandhardspace.chat.data.dto.ChatParticipantDto
-import com.evandhardspace.chat.data.mapper.toDomain
-import io.ktor.client.HttpClient
+import com.evandhardspace.core.domain.auth.MutableSessionRepository
+import com.evandhardspace.core.domain.util.onSuccess
 import org.koin.core.annotation.Factory
 
 @Factory
-class KtorChatParticipantRepository(
-    private val httpClient: HttpClient,
+class DefaultChatParticipantRepository(
+    private val chatParticipantDataSource: ChatParticipantDataSource,
+    private val sessionRepository: MutableSessionRepository,
 ) : ChatParticipantRepository {
 
     override suspend fun searchParticipant(query: String): Either<DataError.Remote, ChatParticipant> =
-        httpClient.get<ChatParticipantDto>(
-            route = "/participants",
-            queryParams = mapOf(
-                "query" to query,
-            )
-        ).map { it.toDomain() }
+        chatParticipantDataSource.searchParticipant(query)
+
+    override suspend fun fetchLocalParticipant(): Either<DataError, ChatParticipant> =
+        chatParticipantDataSource.getLocalParticipant()
+            .onSuccess { participant ->
+                sessionRepository.updateAuthState { authState ->
+                    authState.copy(
+                        user = authState.user.copy(
+                            id = participant.userId,
+                            username = participant.username,
+                            profilePictureUrl = participant.profilePictureUrl,
+                        ),
+                    )
+                }
+            }
 }

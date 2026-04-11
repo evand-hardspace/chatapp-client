@@ -28,16 +28,12 @@ internal class ChatListViewModel(
     init {
         combine(
             repository.chats,
-            sessionRepository.authState,
-        ) { chats, authState ->
-            if (authState !is AuthState.Authenticated) {
-                return@combine ChatListState()
-            }
-
+            sessionRepository.user,
+        ) { chats, user ->
             state.update {
                 it.copy(
-                    chats = chats.map { chat -> chat.toUi(authState.user.id) },
-                    localParticipant = authState.user.toUi(),
+                    chats = chats.map { chat -> chat.toUi(user.id) },
+                    localParticipant = user.toUi(),
                 )
             }
         }
@@ -55,12 +51,14 @@ internal class ChatListViewModel(
                     isUserMenuOpen = false,
                 )
             }
+
             is ChatListAction.Logout -> Unit
             is ChatListAction.OpenUserMenu -> state.update { latestState ->
                 latestState.copy(
                     isUserMenuOpen = true,
                 )
             }
+
             is ChatListAction.SelectChat -> {
                 state.update { latestState ->
                     latestState.copy(selectedChatId = action.chatId)

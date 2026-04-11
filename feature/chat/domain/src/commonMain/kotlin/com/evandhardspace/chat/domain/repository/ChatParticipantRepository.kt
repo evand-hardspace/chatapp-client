@@ -8,4 +8,6 @@ interface ChatParticipantRepository {
     suspend fun searchParticipant(
         query: String,
     ): Either<DataError.Remote, ChatParticipant>
+
+    suspend fun fetchLocalParticipant(): Either<DataError, ChatParticipant>
 }

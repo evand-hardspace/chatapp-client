@@ -1,5 +1,6 @@
 package com.evandhardspace.chat.presentation.profile
 
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.clearText
 import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.ViewModel
@@ -7,7 +8,9 @@ import androidx.lifecycle.viewModelScope
 import chatapp.feature.chat.presentation.generated.resources.Res
 import chatapp.feature.chat.presentation.generated.resources.error_current_password_equal_to_new_one
 import chatapp.feature.chat.presentation.generated.resources.error_current_password_incorrect
+import com.evandhardspace.chat.domain.repository.ChatParticipantRepository
 import com.evandhardspace.core.domain.auth.AuthRepository
+import com.evandhardspace.core.domain.auth.SessionRepository
 import com.evandhardspace.core.domain.util.DataError
 import com.evandhardspace.core.domain.util.onFailure
 import com.evandhardspace.core.domain.util.onSuccess
@@ -29,6 +32,8 @@ import org.koin.core.annotation.KoinViewModel
 internal class ProfileViewModel(
     private val authRepository: AuthRepository,
     private val passwordValidator: PasswordValidator,
+    private val chatParticipantRepository: ChatParticipantRepository,
+    private val sessionRepository: SessionRepository,
 ) : ViewModel() {
 
     private val _effects = Channel<ProfileEffect>()
@@ -39,6 +44,8 @@ internal class ProfileViewModel(
 
     init {
         observeCanChangePassword()
+        observeLocalParticipant()
+        fetchLocalParticipantDetails()
     }
 
     fun onAction(action: ProfileAction) {
@@ -79,6 +86,20 @@ internal class ProfileViewModel(
                 )
             }
         }.launchIn(viewModelScope)
+    }
+
+    private fun observeLocalParticipant() {
+        viewModelScope.launch {
+            sessionRepository.user.collect { user ->
+                state.update {  latestState ->
+                    latestState.copy(
+                        username = user.username,
+                        emailTextState = TextFieldState(initialText = user.email),
+                        profilePictureUrl = user.profilePictureUrl,
+                    )
+                }
+            }
+        }
     }
 
     private fun toggleCurrentPasswordVisibility() {
@@ -143,6 +164,12 @@ internal class ProfileViewModel(
                         )
                     }
                 }
+        }
+    }
+
+    private fun fetchLocalParticipantDetails() {
+        viewModelScope.launch {
+            chatParticipantRepository.fetchLocalParticipant()
         }
     }
 }

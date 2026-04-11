@@ -77,14 +77,13 @@ internal class ChatDetailsViewModel(
     private val stateWithMessages: Flow<ChatDetailsState> = combine(
         _state,
         chatInfoFlow,
-        sessionRepository.authState,
-    ) { currentState, chatInfo, authState ->
-        if (authState !is AuthState.Authenticated) return@combine ChatDetailsState()
+        sessionRepository.user,
+    ) { currentState, chatInfo, user ->
 
         // TODO: reduce update frequency on date banner state
         currentState.copy(
-            chatUi = chatInfo.chat.toUi(authState.user.id),
-            messages = chatInfo.messages.toUiList(authState.user.id),
+            chatUi = chatInfo.chat.toUi(user.id),
+            messages = chatInfo.messages.toUiList(user.id),
         )
     }
 

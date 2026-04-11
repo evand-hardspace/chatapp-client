@@ -10,12 +10,16 @@ import com.evandhardspace.core.data.preferences.AuthInfoPreferences
 import com.evandhardspace.core.domain.auth.AuthState
 import com.evandhardspace.core.domain.auth.MutableSessionRepository
 import com.evandhardspace.core.domain.auth.SessionEvents
+import com.evandhardspace.core.domain.auth.User
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.serialization.json.Json
 
 private val AuthInfoKey = stringPreferencesKey("AUTH_INFO_KEY")
@@ -26,6 +30,8 @@ class DataStoreSessionRepository(
     private val json: Json,
 ) : MutableSessionRepository {
 
+    private val mutex = Mutex()
+
     private val _events = MutableSharedFlow<SessionEvents>()
     override val events: SharedFlow<SessionEvents> = _events.asSharedFlow()
     override val authState: Flow<AuthState> = dataStore.data.map { prefs ->
@@ -33,18 +39,44 @@ class DataStoreSessionRepository(
         json.decodeFromString<AuthInfoPreferences>(authInfo).toDomain()
     }
 
-    override suspend fun saveAuthState(info: AuthState.Authenticated): AuthState.Authenticated {
-        val serialized = json.encodeToString(info.toPreferences())
-        // TODO(6): replace with updateData
-        dataStore.edit { pref ->
-            pref[AuthInfoKey] = serialized
+    override val user: Flow<User> = authState
+        .filterIsInstance<AuthState.Authenticated>()
+        .map { it.user }
+
+    override suspend fun saveAuthState(info: AuthState.Authenticated): AuthState.Authenticated =
+        mutex.withLock {
+            val serialized = json.encodeToString(info.toPreferences())
+            // TODO(6): replace with updateData
+            dataStore.edit { pref ->
+                pref[AuthInfoKey] = serialized
+            }
+            val result = authState.first()
+            require(result is AuthState.Authenticated) { "authState should emit a state that was just saved" }
+            return result
         }
-        val result = authState.first()
-        require(result is AuthState.Authenticated) { "authState should emit a state that was just saved" }
-        return result
+
+    override suspend fun updateAuthState(action: (AuthState.Authenticated) -> AuthState) {
+        mutex.withLock {
+            val oldState = authState.first()
+            if (oldState !is AuthState.Authenticated) {
+                nonLockedLogout()
+                return@withLock
+            }
+
+            val updatedState = action(oldState)
+            if (updatedState !is AuthState.Authenticated) {
+                nonLockedLogout()
+                return@withLock
+            }
+            saveAuthState(
+                info = updatedState,
+            )
+        }
     }
 
-    override suspend fun logout() {
+    override suspend fun logout() = mutex.withLock { nonLockedLogout() }
+
+    private suspend fun nonLockedLogout() {
         dataStore.edit { it.clear() }
         _events.emit(SessionEvents.LoggedOut)
     }
