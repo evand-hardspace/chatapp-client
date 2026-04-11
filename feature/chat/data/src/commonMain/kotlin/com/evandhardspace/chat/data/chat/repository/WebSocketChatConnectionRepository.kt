@@ -128,15 +128,14 @@ internal class WebSocketChatConnectionRepository(
             newUrl = message.newUrl,
         )
 
-        val authState = sessionRepository.authState.firstOrNull() as? AuthState.Authenticated
-        if (authState != null) {
-            sessionRepository.saveAuthState(
-                info = authState.copy(
+        sessionRepository.updateAuthState { authState ->
+            if (authState.user.id == message.userId) {
+                authState.copy(
                     user = authState.user.copy(
                         profilePictureUrl = message.newUrl,
                     )
                 )
-            )
+            } else authState
         }
     }
 }

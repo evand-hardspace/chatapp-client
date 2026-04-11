@@ -6,6 +6,7 @@ import com.evandhardspace.chat.domain.model.ChatParticipant
 import com.evandhardspace.core.domain.util.DataError
 import com.evandhardspace.core.domain.util.Either
 import com.evandhardspace.core.domain.auth.MutableSessionRepository
+import com.evandhardspace.core.domain.util.EmptyEither
 import com.evandhardspace.core.domain.util.onSuccess
 import org.koin.core.annotation.Factory
 
@@ -31,4 +32,34 @@ class DefaultChatParticipantRepository(
                     )
                 }
             }
+
+    override suspend fun uploadProfilePicture(
+        imageBytes: ByteArray,
+        mimeType: String
+    ): EmptyEither<DataError.Remote> {
+        val result = chatParticipantDataSource.getProfilePictureUploadUrl(mimeType)
+
+        if (result is Either.Failure) return result
+
+        val uploadUrls = (result as Either.Success).data
+        val uploadResult = chatParticipantDataSource.uploadProfilePicture(
+            uploadUrl = uploadUrls.uploadUrl,
+            imageBytes = imageBytes,
+            headers = uploadUrls.headers,
+        )
+
+        if (uploadResult is Either.Failure) return uploadResult
+
+        return chatParticipantDataSource
+            .confirmProfilePictureUpload(uploadUrls.publicUrl)
+            .onSuccess {
+                sessionRepository.updateAuthState { authState ->
+                    authState.copy(
+                        user = authState.user.copy(
+                            profilePictureUrl = uploadUrls.publicUrl,
+                        ),
+                    )
+                }
+            }
+    }
 }

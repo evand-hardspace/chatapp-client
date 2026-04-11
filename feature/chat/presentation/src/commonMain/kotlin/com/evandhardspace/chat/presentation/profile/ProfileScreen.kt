@@ -40,6 +40,7 @@ import chatapp.feature.chat.presentation.generated.resources.password_hint
 import chatapp.feature.chat.presentation.generated.resources.profile_image
 import chatapp.feature.chat.presentation.generated.resources.save
 import chatapp.feature.chat.presentation.generated.resources.upload_image
+import com.evandhardspace.chat.presentation.media_picker.rememberImagePickerLauncher
 import com.evandhardspace.chat.presentation.profile.component.ProfileHeaderSection
 import com.evandhardspace.chat.presentation.profile.component.ProfileSectionLayout
 import com.evandhardspace.core.designsystem.annotations.ThemedPreview
@@ -72,10 +73,19 @@ internal fun ProfileScreen(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val dialogSheetController = rememberAdaptiveDialogSheetController(onDismiss)
+    val imagePickerLauncher = rememberImagePickerLauncher { imageData ->
+        viewModel.onAction(
+            ProfileAction.PictureSelected(
+                bytes = imageData.bytes,
+                mimeType = imageData.mimeType,
+            ),
+        )
+    }
 
     OnEffect(viewModel.effects) { effect ->
         when (effect) {
-            ProfileEffect.Dismiss -> dialogSheetController.dismiss()
+            is ProfileEffect.Dismiss -> dialogSheetController.dismiss()
+            is ProfileEffect.SelectPickture -> imagePickerLauncher.launch()
         }
     }
 
@@ -123,7 +133,7 @@ private fun ProfileContent(
                     displayText = state.userInitials,
                     size = AvatarSize.Large,
                     imageUrl = state.profilePictureUrl,
-                    onClick = { action(ProfileAction.OnUploadPictureClick) },
+                    onClick = { action(ProfileAction.OnUploadPicture) },
                 )
                 Spacer(modifier = Modifier.width(MaterialTheme.paddings.fourQuarters))
                 FlowRow(
@@ -134,9 +144,9 @@ private fun ProfileContent(
                 ) {
                     ChatAppButton(
                         text = stringResource(Res.string.upload_image),
-                        onClick = { action(ProfileAction.OnUploadPictureClick) },
+                        onClick = { action(ProfileAction.OnUploadPicture) },
                         style = ChatAppButtonStyle.Secondary,
-                        enabled = !state.isUploadingImage && !state.isDeletingImage,
+                        enabled = state.isUploadingImage.not() && state.isDeletingImage.not(),
                         isLoading = state.isUploadingImage,
                         leadingIcon = {
                             Icon(
@@ -206,7 +216,7 @@ private fun ProfileContent(
                 supportingText = state.newPasswordError?.asComposableString()
                     ?: stringResource(Res.string.password_hint),
             )
-            if(state.isPasswordChangeSuccessful) {
+            if (state.isPasswordChangeSuccessful) {
                 Text(
                     modifier = Modifier.fillMaxWidth(),
                     text = stringResource(Res.string.password_changed_successfully),

@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import chatapp.feature.chat.presentation.generated.resources.Res
 import chatapp.feature.chat.presentation.generated.resources.error_current_password_equal_to_new_one
 import chatapp.feature.chat.presentation.generated.resources.error_current_password_incorrect
+import chatapp.feature.chat.presentation.generated.resources.error_invalid_file_type
 import com.evandhardspace.chat.domain.repository.ChatParticipantRepository
 import com.evandhardspace.core.domain.auth.AuthRepository
 import com.evandhardspace.core.domain.auth.SessionRepository
@@ -53,17 +54,20 @@ internal class ProfileViewModel(
             is ProfileAction.OnChangePasswordClick -> changePassword()
             is ProfileAction.OnConfirmDeleteClick -> Unit
             is ProfileAction.OnDeletePictureClick -> Unit
+            is ProfileAction.OnDismissDeleteConfirmationDialogClick -> Unit
+            is ProfileAction.OnErrorImagePicker -> Unit
+            is ProfileAction.PictureSelected -> uploadProfilePicture(action.bytes, action.mimeType)
+            is ProfileAction.OnToggleCurrentPasswordVisibility -> toggleCurrentPasswordVisibility()
+            is ProfileAction.OnToggleNewPasswordVisibility -> toggleNewPasswordVisibility()
+            is ProfileAction.OnUriSelected -> Unit
+
+            is ProfileAction.OnUploadPicture -> {
+                viewModelScope.launch { _effects.send(ProfileEffect.SelectPickture) }
+            }
+
             is ProfileAction.OnDismiss -> {
                 viewModelScope.launch { _effects.send(ProfileEffect.Dismiss) }
             }
-
-            is ProfileAction.OnDismissDeleteConfirmationDialogClick -> Unit
-            is ProfileAction.OnErrorImagePicker -> Unit
-            is ProfileAction.OnPictureSelected -> Unit
-            is ProfileAction.OnToggleCurrentPasswordVisibility -> toggleCurrentPasswordVisibility()
-            is ProfileAction.OnToggleNewPasswordVisibility -> toggleNewPasswordVisibility()
-            is ProfileAction.OnUploadPictureClick -> Unit
-            is ProfileAction.OnUriSelected -> Unit
         }
     }
 
@@ -91,7 +95,7 @@ internal class ProfileViewModel(
     private fun observeLocalParticipant() {
         viewModelScope.launch {
             sessionRepository.user.collect { user ->
-                state.update {  latestState ->
+                state.update { latestState ->
                     latestState.copy(
                         username = user.username,
                         emailTextState = TextFieldState(initialText = user.email),
@@ -164,6 +168,46 @@ internal class ProfileViewModel(
                         )
                     }
                 }
+        }
+    }
+
+    private fun uploadProfilePicture(bytes: ByteArray, mimeType: String?) {
+        if (state.value.isUploadingImage) return
+
+        if (mimeType == null) {
+            state.update { latestState ->
+                latestState.copy(
+                    imageError = Res.string.error_invalid_file_type.asUiText(),
+                )
+            }
+            return
+        }
+
+        state.update { latestState ->
+            latestState.copy(
+                isUploadingImage = true,
+                imageError = null,
+            )
+        }
+
+        viewModelScope.launch {
+            chatParticipantRepository.uploadProfilePicture(
+                imageBytes = bytes,
+                mimeType = mimeType,
+            ).onSuccess {
+                state.update {
+                    it.copy(
+                        isUploadingImage = false,
+                    )
+                }
+            }.onFailure { error ->
+                state.update {
+                    it.copy(
+                        imageError = error.asUiText(),
+                        isUploadingImage = false,
+                    )
+                }
+            }
         }
     }
 

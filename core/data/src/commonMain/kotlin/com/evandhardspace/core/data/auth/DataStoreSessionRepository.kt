@@ -45,14 +45,7 @@ class DataStoreSessionRepository(
 
     override suspend fun saveAuthState(info: AuthState.Authenticated): AuthState.Authenticated =
         mutex.withLock {
-            val serialized = json.encodeToString(info.toPreferences())
-            // TODO(6): replace with updateData
-            dataStore.edit { pref ->
-                pref[AuthInfoKey] = serialized
-            }
-            val result = authState.first()
-            require(result is AuthState.Authenticated) { "authState should emit a state that was just saved" }
-            return result
+            nonLockedSaveAuthState(info)
         }
 
     override suspend fun updateAuthState(action: (AuthState.Authenticated) -> AuthState) {
@@ -68,13 +61,24 @@ class DataStoreSessionRepository(
                 nonLockedLogout()
                 return@withLock
             }
-            saveAuthState(
+            nonLockedSaveAuthState(
                 info = updatedState,
             )
         }
     }
 
     override suspend fun logout() = mutex.withLock { nonLockedLogout() }
+
+    private suspend fun nonLockedSaveAuthState(info: AuthState.Authenticated): AuthState.Authenticated {
+        val serialized = json.encodeToString(info.toPreferences())
+        // TODO(6): replace with updateData
+        dataStore.edit { pref ->
+            pref[AuthInfoKey] = serialized
+        }
+        val result = authState.first()
+        require(result is AuthState.Authenticated) { "authState should emit a state that was just saved" }
+        return result
+    }
 
     private suspend fun nonLockedLogout() {
         dataStore.edit { it.clear() }
