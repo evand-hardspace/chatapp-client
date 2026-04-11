@@ -42,9 +42,11 @@ import com.evandhardspace.core.designsystem.annotations.ThemedPreview
 import com.evandhardspace.core.designsystem.component.brand.ChatAppHorizontalDivider
 import com.evandhardspace.core.designsystem.component.button.ChatAppFloatingActionButton
 import com.evandhardspace.core.designsystem.component.dialog.ChatAppDialog
+import com.evandhardspace.core.designsystem.component.snackbar.LocalSnackbarHostState
 import com.evandhardspace.core.designsystem.theme.ChatAppTheme
 import com.evandhardspace.core.designsystem.theme.extended
 import com.evandhardspace.core.designsystem.theme.paddings
+import com.evandhardspace.core.presentation.util.OnEffect
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -53,13 +55,23 @@ internal fun ChatListScreen(
     viewModel: ChatListViewModel = koinViewModel(),
     chatId: String?,
     onChatClick: (ChatUi) -> Unit,
-    onConfirmLogoutClick: () -> Unit,
     onCreateChatClick: () -> Unit,
     onProfileSettingsClick: () -> Unit,
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     val snackbarHostState = remember { SnackbarHostState() }
+    val globalSnackbarHostState = LocalSnackbarHostState.current
+
+    OnEffect(viewModel.effects) { effect ->
+        when (effect) {
+            is ChatListEffect.LoggedOutFailed -> {
+                globalSnackbarHostState.show(
+                    message = effect.error.asString(),
+                )
+            }
+        }
+    }
 
     LaunchedEffect(chatId) {
         viewModel.onAction(ChatListAction.SelectChat(chatId))
@@ -69,7 +81,6 @@ internal fun ChatListScreen(
         state = state,
         action = viewModel::onAction,
         onChatClick = onChatClick,
-        onConfirmLogoutClick = onConfirmLogoutClick,
         onCreateChatClick = onCreateChatClick,
         onProfileSettingsClick = onProfileSettingsClick,
         snackbarHostState = snackbarHostState,
@@ -81,7 +92,6 @@ private fun ChatListContent(
     state: ChatListState,
     action: (ChatListAction) -> Unit,
     onChatClick: (ChatUi) -> Unit,
-    onConfirmLogoutClick: () -> Unit,
     onCreateChatClick: () -> Unit,
     onProfileSettingsClick: () -> Unit,
     snackbarHostState: SnackbarHostState,
@@ -116,7 +126,7 @@ private fun ChatListContent(
                 onUserAvatarClick = { action(ChatListAction.OpenUserMenu) },
                 onLogoutClick = {
                     action(ChatListAction.DismissUserMenu)
-                    action(ChatListAction.Logout)
+                    action(ChatListAction.OpenLogout)
                 },
                 onDismissMenu = { action(ChatListAction.DismissUserMenu) },
                 onProfileSettingsClick = {
@@ -176,7 +186,7 @@ private fun ChatListContent(
             cancelButtonText = stringResource(Res.string.cancel),
             onDismiss = { action(ChatListAction.DismissLogoutDialog) },
             onCancelClick = { action(ChatListAction.DismissLogoutDialog) },
-            onConfirmClick = onConfirmLogoutClick,
+            onConfirmClick = { action(ChatListAction.Logout) },
         )
     }
 }
@@ -190,7 +200,6 @@ private fun ChatListContentPreview() {
             action = {},
             snackbarHostState = remember { SnackbarHostState() },
             onChatClick = {},
-            onConfirmLogoutClick = {},
             onCreateChatClick = {},
             onProfileSettingsClick = {},
         )

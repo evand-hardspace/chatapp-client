@@ -4,13 +4,17 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.evandhardspace.chat.domain.repository.ChatConnectionRepository
 import com.evandhardspace.chat.domain.repository.ChatRepository
+import com.evandhardspace.chat.domain.usercase.LogoutUseCase
 import com.evandhardspace.chat.presentation.mapper.toUi
-import com.evandhardspace.core.domain.auth.AuthState
 import com.evandhardspace.core.domain.auth.SessionRepository
+import com.evandhardspace.core.domain.util.onFailure
+import com.evandhardspace.core.presentation.util.asUiText
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.koin.core.annotation.KoinViewModel
@@ -20,7 +24,11 @@ internal class ChatListViewModel(
     private val repository: ChatRepository,
     sessionRepository: SessionRepository,
     private val chatConnectionRepository: ChatConnectionRepository,
+    private val logoutUseCase: LogoutUseCase,
 ) : ViewModel() {
+
+    private val _effects = Channel<ChatListEffect>()
+    val effects = _effects.receiveAsFlow()
 
     val state: StateFlow<ChatListState>
         field = MutableStateFlow(ChatListState())
@@ -45,14 +53,20 @@ internal class ChatListViewModel(
 
     fun onAction(action: ChatListAction) {
         when (action) {
-            is ChatListAction.DismissLogoutDialog -> Unit
+            is ChatListAction.DismissLogoutDialog -> state.update { latestState ->
+                latestState.copy(
+                    showLogoutConfirmation = false,
+                )
+            }
+
             is ChatListAction.DismissUserMenu -> state.update { latestState ->
                 latestState.copy(
                     isUserMenuOpen = false,
                 )
             }
 
-            is ChatListAction.Logout -> Unit
+            is ChatListAction.Logout -> logout()
+            is ChatListAction.OpenLogout -> showLogoutConfirmation()
             is ChatListAction.OpenUserMenu -> state.update { latestState ->
                 latestState.copy(
                     isUserMenuOpen = true,
@@ -63,6 +77,32 @@ internal class ChatListViewModel(
                 state.update { latestState ->
                     latestState.copy(selectedChatId = action.chatId)
                 }
+            }
+        }
+    }
+
+    private fun showLogoutConfirmation() {
+        state.update { latestState ->
+            latestState.copy(
+                showLogoutConfirmation = true,
+            )
+        }
+    }
+
+    private fun logout() {
+        state.update { latestState ->
+            latestState.copy(
+                showLogoutConfirmation = false,
+            )
+        }
+
+        viewModelScope.launch {
+            logoutUseCase().onFailure { error ->
+                _effects.send(
+                    ChatListEffect.LoggedOutFailed(
+                        error = error.asUiText(),
+                    )
+                )
             }
         }
     }

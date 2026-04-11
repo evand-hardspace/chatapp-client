@@ -33,6 +33,6 @@ fun NavigationRoot(
                 }
             },
         )
-        chatNavGraph(navController)
+        chatNavGraph()
     }
 }

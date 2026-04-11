@@ -1,5 +1,6 @@
 package com.evandhardspace.chat.domain.repository
 
+import com.evandhardspace.chat.domain.Clearable
 import com.evandhardspace.chat.domain.model.Chat
 import com.evandhardspace.chat.domain.model.ChatInfo
 import com.evandhardspace.chat.domain.model.ChatParticipant
@@ -8,7 +9,7 @@ import com.evandhardspace.core.domain.util.Either
 import com.evandhardspace.core.domain.util.EmptyEither
 import kotlinx.coroutines.flow.Flow
 
-interface ChatRepository {
+interface ChatRepository: Clearable {
     val chats: Flow<List<Chat>>
 
     suspend fun fetchChats(): Either<DataError.Remote, List<Chat>>

@@ -139,4 +139,8 @@ internal class OfflineFirstChatRepository(
         ).onSuccess { chat ->
             upsertChatWithParticipantsAndCrossRefs(chat)
         }
+
+    override suspend fun clear() {
+        database.chatDao.deleteAllChats()
+    }
 }

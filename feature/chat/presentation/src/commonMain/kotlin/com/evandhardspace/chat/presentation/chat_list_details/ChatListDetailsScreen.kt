@@ -30,13 +30,11 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 internal fun ChatListDetailsScene(
     chatListDetailViewModel: SharedChatListDetailsViewModel = koinViewModel(),
-    onLogout: () -> Unit,
 ) {
     val state by chatListDetailViewModel.state.collectAsStateWithLifecycle()
     ChatListDetailsSceneContent(
         state = state,
         action = chatListDetailViewModel::onAction,
-        onLogout = onLogout,
     )
 }
 
@@ -44,7 +42,6 @@ internal fun ChatListDetailsScene(
 private fun ChatListDetailsSceneContent(
     state: SharedChatListDetailsState,
     action: (SharedChatListDetailsAction) -> Unit,
-    onLogout: () -> Unit,
 ) {
     val scaffoldDirective = createNoSpacingPaneScaffoldDirective()
     val scaffoldNavigator = rememberListDetailPaneScaffoldNavigator(
@@ -79,7 +76,6 @@ private fun ChatListDetailsSceneContent(
                             )
                         }
                     },
-                    onConfirmLogoutClick = onLogout,
                     onCreateChatClick = { action(SharedChatListDetailsAction.CreateChat) },
                     onProfileSettingsClick = { action(SharedChatListDetailsAction.OpenProfileSettings) },
                 )

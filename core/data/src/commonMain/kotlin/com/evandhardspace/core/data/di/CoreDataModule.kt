@@ -4,10 +4,12 @@ import com.evandhardspace.core.data.auth.DataStoreSessionRepository
 import com.evandhardspace.core.data.auth.KtorAuthRepository
 import com.evandhardspace.core.data.logging.KermitLogger
 import com.evandhardspace.core.data.networking.HttpClientFactory
+import com.evandhardspace.core.data.notification.DefaultDeviceTokenRepository
 import com.evandhardspace.core.domain.auth.AuthRepository
 import com.evandhardspace.core.domain.auth.MutableSessionRepository
 import com.evandhardspace.core.domain.auth.SessionRepository
 import com.evandhardspace.core.domain.logging.ChatAppLogger
+import com.evandhardspace.core.domain.notification.DeviceTokenRepository
 import io.ktor.client.HttpClient
 import kotlinx.serialization.json.Json
 import org.koin.core.module.dsl.singleOf
@@ -44,4 +46,10 @@ val coreDataModule = module {
         SessionRepository::class,
         MutableSessionRepository::class,
     )
+
+    single {
+        DefaultDeviceTokenRepository(
+            httpClient = get(),
+        )
+    } bind DeviceTokenRepository::class
 }

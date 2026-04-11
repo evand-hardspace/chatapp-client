@@ -36,4 +36,6 @@ interface AuthRepository {
         currentPassword: String,
         newPassword: String,
     ): EmptyEither<DataError.Remote>
+
+    suspend fun logout(refreshToken: String): EmptyEither<DataError.Remote>
 }
