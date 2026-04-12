@@ -10,11 +10,10 @@ import com.evandhardspace.url_util.asUrl
 import kotlinx.coroutines.flow.first
 import org.koin.core.annotation.Factory
 
-// TODO(5): Change deeplink
 private const val emailVerificationDeeplinkPatternHttpsScheme =
-    "https://chirp.pl-coding.com/api/auth/verify"
+    "https://chatapp.evandhardspace.com/api/auth/verify"
 private const val emailVerificationDeeplinkPatternChatappScheme =
-    "chirp://chirp.pl-coding.com/api/auth/verify"
+    "chatapp://chatapp.evandhardspace.com/api/auth/verify"
 
 @Factory
 internal class EmailVerificationDeeplinkInterceptor(

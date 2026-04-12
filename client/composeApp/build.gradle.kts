@@ -64,6 +64,8 @@ android {
     defaultConfig {
         applicationId = "com.evandhardspace.chatapp"
     }
+
+    sourceSets["debug"].manifest.srcFile("src/androidDebug/AndroidManifest.xml")
 }
 
 compose.desktop {

@@ -1,19 +1,47 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+    "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
-<dict>
-	<key>CADisableMinimumFrameDurationOnPhone</key>
-	<true/>
-	<key>CFBundleURLTypes</key>
-	<array>
-		<dict>
-			<key>CFBundleURLName</key>
-			<string>chirp.pl-coding.com</string>
-			<key>CFBundleURLSchemes</key>
-			<array>
-				<string>chirp</string>
-			</array>
-		</dict>
-	</array>
-</dict>
+    <dict>
+        <key>CADisableMinimumFrameDurationOnPhone</key>
+        <true />
+        #if RELEASE
+        <key>CFBundleURLTypes</key>
+        <array>
+            <dict>
+                <key>CFBundleURLName</key>
+                <string>chatapp.evandhardspace.com</string>
+                <key>CFBundleURLSchemes</key>
+                <array>
+                    <string>https</string>
+                </array>
+            </dict>
+        </array>
+        #endif
+        #if DEBUG
+        <key>CFBundleURLTypes</key>
+        <array>
+            <dict>
+                <key>CFBundleURLName</key>
+                <string>chatapp.evandhardspace.com</string>
+                <key>CFBundleURLSchemes</key>
+                <array>
+                    <string>chatapp</string>
+                </array>
+            </dict>
+        </array>
+        <key>NSAppTransportSecurity</key>
+        <dict>
+            <key>NSExceptionDomains</key>
+            <dict>
+                <key>localhost</key>
+                <dict>
+                    <key>NSIncludesSubdomains</key>
+                    <true />
+                    <key>NSExceptionAllowsInsecureHTTPLoads</key>
+                    <true />
+                </dict>
+            </dict>
+        </dict>
+        #endif
+    </dict>
 </plist>

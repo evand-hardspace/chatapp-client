@@ -17,27 +17,69 @@ class BuildConfigConventionPlugin : Plugin<Project> {
 
             extensions.configure<BuildKonfigExtension> {
                 packageName = target.pathToPackageName()
-                defaultConfigs {
-                    // TODO(2)
-                    val apiKey = gradleLocalProperties(rootDir, rootProject.providers)
-                        .getProperty("API_KEY")
-                        ?: error("Missing API_KEY property in local.properties")
 
-                    buildConfigField(
-                        type = FieldSpec.Type.STRING,
-                        name = "API_KEY",
-                        value = apiKey,
-                    )
-                    buildConfigField(
-                        type = FieldSpec.Type.STRING,
-                        name = "BASE_URL",
-                        value = project.flavorStringProperty("baseUrl"),
-                    )
-                    buildConfigField(
-                        type = FieldSpec.Type.STRING,
-                        name = "BASE_URL_WEB_SOCKET",
-                        value = project.flavorStringProperty("baseUrlWebSocket"),
-                    )
+                val platformBaseUrl = project.flavorStringProperty("baseUrl")
+                val platformBaseUrlWebSocket = project.flavorStringProperty("baseUrlWebSocket")
+
+                targetConfigs {
+                    create("android") {
+                        buildConfigField(
+                            type = FieldSpec.Type.STRING,
+                            name = "BASE_URL",
+                            value = platformBaseUrl.android,
+                        )
+                        buildConfigField(
+                            type = FieldSpec.Type.STRING,
+                            name = "BASE_URL_WEB_SOCKET",
+                            value = platformBaseUrlWebSocket.android,
+                        )
+                    }
+                    create("iosX64") {
+                        buildConfigField(
+                            type = FieldSpec.Type.STRING,
+                            name = "BASE_URL",
+                            value = platformBaseUrl.ios,
+                        )
+                        buildConfigField(
+                            type = FieldSpec.Type.STRING,
+                            name = "BASE_URL_WEB_SOCKET",
+                            value = platformBaseUrlWebSocket.ios,
+                        )
+                    }
+                    create("iosArm64") {
+                        buildConfigField(
+                            type = FieldSpec.Type.STRING,
+                            name = "BASE_URL",
+                            value = platformBaseUrl.ios,
+                        )
+                        buildConfigField(
+                            type = FieldSpec.Type.STRING,
+                            name = "BASE_URL_WEB_SOCKET",
+                            value = platformBaseUrlWebSocket.ios,
+                        )
+                    }
+                    create("iosSimulatorArm64") {
+                        buildConfigField(
+                            type = FieldSpec.Type.STRING,
+                            name = "BASE_URL",
+                            value = platformBaseUrl.ios,
+                        )
+                        buildConfigField(
+                            type = FieldSpec.Type.STRING,
+                            name = "BASE_URL_WEB_SOCKET",
+                            value = platformBaseUrlWebSocket.ios,
+                        )
+                    }
+                    defaultConfigs {
+                        val apiKey = gradleLocalProperties(rootDir, rootProject.providers)
+                            .getProperty("API_KEY").orEmpty() // TODO: replace orEmpty with add api key support
+
+                        buildConfigField(
+                            type = FieldSpec.Type.STRING,
+                            name = "API_KEY",
+                            value = apiKey,
+                        )
+                    }
                 }
             }
         }

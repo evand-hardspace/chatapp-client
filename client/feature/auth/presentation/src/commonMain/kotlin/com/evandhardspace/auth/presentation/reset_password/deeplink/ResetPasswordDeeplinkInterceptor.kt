@@ -10,11 +10,10 @@ import com.evandhardspace.url_util.asUrl
 import kotlinx.coroutines.flow.first
 import org.koin.core.annotation.Factory
 
-// TODO(5): Change deeplink
 internal const val resetPasswordDeeplinkPatternHttpsScheme =
-    "https://chirp.pl-coding.com/api/auth/reset-password"
+    "https://chatapp.evandhardspace.com/api/auth/reset-password"
 internal const val resetPasswordDeeplinkPatternChatappScheme =
-    "chirp://chirp.pl-coding.com/api/auth/reset-password"
+    "chatapp://chatapp.evandhardspace.com/api/auth/reset-password"
 
 @Factory
 class ResetPasswordDeeplinkInterceptor(

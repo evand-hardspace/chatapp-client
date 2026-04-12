@@ -12,8 +12,8 @@
         android:theme="@style/Theme.App.Splash">
         <activity
             android:name=".MainActivity"
-            android:launchMode="singleInstance"
-            android:exported="true">
+            android:exported="true"
+            android:launchMode="singleInstance">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -27,7 +27,7 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data android:scheme="https" />
-                <data android:host="chirp.pl-coding.com" />
+                <data android:host="chatapp.evandhardspace.com" />
                 <data android:pathPrefix="/api/auth/verify" />
                 <data android:pathPrefix="/api/auth/reset-password" />
             </intent-filter>
@@ -38,8 +38,8 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <data android:scheme="chirp" />
-                <data android:host="chirp.pl-coding.com" />
+                <data android:scheme="chatapp" />
+                <data android:host="chatapp.evandhardspace.com" />
                 <data android:pathPrefix="/api/auth/verify" />
                 <data android:pathPrefix="/api/auth/reset-password" />
             </intent-filter>

@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.convention.cmpFeature)
+    alias(libs.plugins.convention.buildConfig)
 }
 
 kotlin {
