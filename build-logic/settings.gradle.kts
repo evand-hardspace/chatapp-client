@@ -13,4 +13,5 @@ dependencyResolutionManagement {
     }
 }
 
-include(":convention")
+include(":client:convention")
+include(":server:convention")

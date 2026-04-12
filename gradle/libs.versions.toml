@@ -177,13 +177,13 @@ androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "j
 
 [plugins]
 # Conventions
-convention-androidApplication = { id = "com.evandhardspace.convention.android.application", version = "unspecified" }
-convention-androidApplicationCompose = { id = "com.evandhardspace.convention.androidApplicationCompose", version = "unspecified" }
-convention-cmpApplication = { id = "com.evandhardspace.convention.cmpApplication", version = "unspecified" }
-convention-kmpLibrary = { id = "com.evandhardspace.convention.kmpLibrary", version = "unspecified" }
-convention-cmpLibrary = { id = "com.evandhardspace.convention.cmpLibrary", version = "unspecified" }
-convention-cmpFeature = { id = "com.evandhardspace.convention.cmpFeature", version = "unspecified" }
-convention-buildConfig = { id = "com.evandhardspace.convention.buildConfig", version = "unspecified" }
+convention-androidApplication = { id = "com.evandhardspace.client.convention.android.application", version = "unspecified" }
+convention-androidApplicationCompose = { id = "com.evandhardspace.client.convention.androidApplicationCompose", version = "unspecified" }
+convention-cmpApplication = { id = "com.evandhardspace.client.convention.cmpApplication", version = "unspecified" }
+convention-kmpLibrary = { id = "com.evandhardspace.client.convention.kmpLibrary", version = "unspecified" }
+convention-cmpLibrary = { id = "com.evandhardspace.client.convention.cmpLibrary", version = "unspecified" }
+convention-cmpFeature = { id = "com.evandhardspace.client.convention.cmpFeature", version = "unspecified" }
+convention-buildConfig = { id = "com.evandhardspace.client.convention.buildConfig", version = "unspecified" }
 convention-room = { id = "com.evandhardspace.convention.room", version = "unspecified" }
 
 # Android

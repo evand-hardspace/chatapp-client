@@ -1,4 +1,5 @@
 rootProject.name = "Chatapp"
+
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 pluginManagement {

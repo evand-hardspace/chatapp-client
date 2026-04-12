@@ -4,7 +4,7 @@ plugins {
     `kotlin-dsl`
 }
 
-group = "com.evandhardspace.buildlogic"
+group = "com.evandhardspace.client.buildlogic"
 
 dependencies {
     compileOnly(libs.android.gradlePlugin)
