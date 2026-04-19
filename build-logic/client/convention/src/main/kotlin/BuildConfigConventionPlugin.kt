@@ -1,6 +1,7 @@
 import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 import com.codingfeline.buildkonfig.compiler.FieldSpec
 import com.codingfeline.buildkonfig.gradle.BuildKonfigExtension
+import com.evandhardspace.chatapp.convention.extension.flavor
 import com.evandhardspace.chatapp.convention.extension.flavorStringProperty
 import com.evandhardspace.chatapp.convention.pathToPackageName
 import org.gradle.api.Plugin
@@ -18,6 +19,7 @@ class BuildConfigConventionPlugin : Plugin<Project> {
             extensions.configure<BuildKonfigExtension> {
                 packageName = target.pathToPackageName()
 
+                val currentFlavor = project.flavor.value
                 val platformBaseUrl = project.flavorStringProperty("baseUrl")
                 val platformBaseUrlWebSocket = project.flavorStringProperty("baseUrlWebSocket")
 
@@ -78,6 +80,11 @@ class BuildConfigConventionPlugin : Plugin<Project> {
                             type = FieldSpec.Type.STRING,
                             name = "API_KEY",
                             value = apiKey,
+                        )
+                        buildConfigField(
+                            type = FieldSpec.Type.STRING,
+                            name = "FLAVOR",
+                            value = currentFlavor,
                         )
                     }
                 }
