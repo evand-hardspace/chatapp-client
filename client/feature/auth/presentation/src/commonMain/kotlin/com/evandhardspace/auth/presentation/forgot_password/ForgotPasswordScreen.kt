@@ -25,13 +25,13 @@ import com.evandhardspace.core.designsystem.component.textfield.ChatAppTextField
 import com.evandhardspace.core.designsystem.theme.ChatAppPreview
 import com.evandhardspace.core.designsystem.theme.extended
 import com.evandhardspace.core.designsystem.theme.paddings
+import dev.zacsweers.metrox.viewmodel.metroViewModel
 import org.jetbrains.compose.resources.stringResource
-import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 internal fun ForgotPasswordScreen(
     modifier: Modifier = Modifier.fillMaxSize(),
-    viewModel: ForgotPasswordViewModel = koinViewModel(),
+    viewModel: ForgotPasswordViewModel = metroViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 

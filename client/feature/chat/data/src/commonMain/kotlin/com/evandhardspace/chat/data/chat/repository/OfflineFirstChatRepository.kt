@@ -17,6 +17,10 @@ import com.evandhardspace.core.domain.util.Either
 import com.evandhardspace.core.domain.util.EmptyEither
 import com.evandhardspace.core.domain.util.asEmptyEither
 import com.evandhardspace.core.domain.util.onSuccess
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.Flow
@@ -24,9 +28,10 @@ import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.supervisorScope
-import org.koin.core.annotation.Single
 
-@Single
+@ContributesBinding(AppScope::class)
+@SingleIn(AppScope::class)
+@Inject
 internal class OfflineFirstChatRepository(
     private val chatDataSource: ChatRemoteDataSource,
     private val database: ChatAppDatabase,

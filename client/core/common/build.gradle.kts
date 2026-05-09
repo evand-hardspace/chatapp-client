@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.convention.kmpLibrary)
+    alias(libs.plugins.metro)
 }
 kotlin {
     sourceSets {
@@ -26,4 +27,8 @@ kotlin {
             }
         }
     }
+}
+
+metro {
+    generateContributionProviders = true
 }

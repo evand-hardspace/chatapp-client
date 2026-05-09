@@ -15,7 +15,6 @@ kotlin {
                 implementation(libs.kotlin.stdlib)
 
                 implementation(libs.bundles.ktor.common)
-                implementation(libs.koin.core)
             }
         }
 
@@ -27,7 +26,7 @@ kotlin {
 
         androidMain {
             dependencies {
-                implementation(libs.koin.android)
+                implementation(libs.androidx.core.ktx)
                 implementation(libs.androidx.lifecycle.process)
             }
         }
@@ -37,4 +36,8 @@ kotlin {
             }
         }
     }
+}
+
+metro {
+    generateContributionProviders = true
 }

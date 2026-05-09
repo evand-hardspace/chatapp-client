@@ -5,15 +5,18 @@ import com.evandhardspace.chat.domain.repository.ChatParticipantRepository
 import com.evandhardspace.chat.domain.model.ChatParticipant
 import com.evandhardspace.core.domain.util.DataError
 import com.evandhardspace.core.domain.util.Either
-import com.evandhardspace.core.domain.auth.MutableSessionRepository
+import com.evandhardspace.core.domain.auth.SessionRepository
 import com.evandhardspace.core.domain.util.EmptyEither
 import com.evandhardspace.core.domain.util.onSuccess
-import org.koin.core.annotation.Factory
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 
-@Factory
+@ContributesBinding(AppScope::class)
+@Inject
 class DefaultChatParticipantRepository(
     private val chatParticipantDataSource: ChatParticipantDataSource,
-    private val sessionRepository: MutableSessionRepository,
+    private val sessionRepository: SessionRepository,
 ) : ChatParticipantRepository {
 
     override suspend fun searchParticipant(query: String): Either<DataError.Remote, ChatParticipant> =

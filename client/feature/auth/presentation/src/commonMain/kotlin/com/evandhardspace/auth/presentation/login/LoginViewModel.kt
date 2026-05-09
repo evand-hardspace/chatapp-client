@@ -10,11 +10,15 @@ import chatapp.client.feature.auth.presentation.generated.resources.error_invali
 import chatapp.client.feature.auth.presentation.generated.resources.error_password_should_not_be_empty
 import com.evandhardspace.auth.domain.validation.EmailValidator
 import com.evandhardspace.core.domain.auth.AuthRepository
-import com.evandhardspace.core.domain.auth.MutableSessionRepository
+import com.evandhardspace.core.domain.auth.SessionRepository
 import com.evandhardspace.core.domain.util.DataError
 import com.evandhardspace.core.domain.util.onFailure
 import com.evandhardspace.core.domain.util.onSuccess
 import com.evandhardspace.core.presentation.util.asUiText
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesIntoMap
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metrox.viewmodel.ViewModelKey
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -25,13 +29,14 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import org.koin.core.annotation.KoinViewModel
 
-@KoinViewModel
+@Inject
+@ViewModelKey
+@ContributesIntoMap(AppScope::class)
 internal class LoginViewModel(
     private val emailValidator: EmailValidator,
     private val authRepository: AuthRepository,
-    private val sessionRepository: MutableSessionRepository,
+    private val sessionRepository: SessionRepository,
 ) : ViewModel() {
 
     private val _effects = Channel<LoginEffect>()

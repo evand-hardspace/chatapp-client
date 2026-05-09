@@ -10,10 +10,13 @@ import com.evandhardspace.core.domain.util.DataError
 import com.evandhardspace.core.domain.util.Either
 import com.evandhardspace.core.domain.util.EmptyEither
 import com.evandhardspace.core.domain.util.map
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
 import io.ktor.client.HttpClient
-import org.koin.core.annotation.Single
 
-@Single
+@SingleIn(AppScope::class)
+@Inject
 internal class ChatMessageDataSource(
     private val httpClient: HttpClient,
 ) {

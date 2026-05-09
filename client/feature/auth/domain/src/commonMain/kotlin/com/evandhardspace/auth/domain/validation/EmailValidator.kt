@@ -1,12 +1,15 @@
 package com.evandhardspace.auth.domain.validation
 
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
+
 interface EmailValidator {
     fun validate(email: CharSequence): Boolean
 }
 
-fun EmailValidator(): EmailValidator =
-    DefaultEmailValidator()
-
+@ContributesBinding(AppScope::class)
+@Inject
 internal class DefaultEmailValidator : EmailValidator {
     override fun validate(email: CharSequence): Boolean =
         email matches EMAIL_PATTERN.toRegex()

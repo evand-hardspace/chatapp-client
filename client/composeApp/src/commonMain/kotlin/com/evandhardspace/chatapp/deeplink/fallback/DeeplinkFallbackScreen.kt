@@ -15,13 +15,13 @@ import com.evandhardspace.core.designsystem.component.ChatAppLoadingSpace
 import com.evandhardspace.core.designsystem.component.button.ChatAppButton
 import com.evandhardspace.core.designsystem.component.layout.ChatAppAdaptiveFormLayout
 import com.evandhardspace.core.designsystem.theme.ChatAppPreview
+import dev.zacsweers.metrox.viewmodel.metroViewModel
 import org.jetbrains.compose.resources.stringResource
-import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 internal fun DeeplinkFallbackScreen(
     modifier: Modifier = Modifier.fillMaxSize(),
-    viewModel: DeeplinkFallbackViewModel = koinViewModel(),
+    viewModel: DeeplinkFallbackViewModel = metroViewModel(),
     navigateBack: (isAuthorized: Boolean) -> Unit,
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()

@@ -47,12 +47,12 @@ import com.evandhardspace.core.designsystem.theme.ChatAppTheme
 import com.evandhardspace.core.designsystem.theme.extended
 import com.evandhardspace.core.designsystem.theme.paddings
 import com.evandhardspace.core.presentation.util.OnEffect
+import dev.zacsweers.metrox.viewmodel.metroViewModel
 import org.jetbrains.compose.resources.stringResource
-import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 internal fun ChatListScreen(
-    viewModel: ChatListViewModel = koinViewModel(),
+    viewModel: ChatListViewModel = metroViewModel(),
     chatId: String?,
     onChatClick: (ChatUi) -> Unit,
     onCreateChatClick: () -> Unit,

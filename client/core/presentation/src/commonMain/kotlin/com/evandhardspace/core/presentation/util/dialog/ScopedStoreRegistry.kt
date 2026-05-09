@@ -2,9 +2,14 @@ package com.evandhardspace.core.presentation.util.dialog
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelStore
-import org.koin.core.annotation.KoinViewModel
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesIntoMap
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metrox.viewmodel.ViewModelKey
 
-@KoinViewModel
+@Inject
+@ViewModelKey
+@ContributesIntoMap(AppScope::class)
 internal class ScopedStoreRegistry: ViewModel() {
 
     private val stores = mutableMapOf<String, ViewModelStore>()

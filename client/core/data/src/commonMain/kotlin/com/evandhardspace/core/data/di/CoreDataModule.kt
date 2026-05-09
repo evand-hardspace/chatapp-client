@@ -1,55 +1,31 @@
 package com.evandhardspace.core.data.di
 
-import com.evandhardspace.core.data.auth.DataStoreSessionRepository
-import com.evandhardspace.core.data.auth.KtorAuthRepository
 import com.evandhardspace.core.data.logging.KermitLogger
 import com.evandhardspace.core.data.networking.HttpClientFactory
-import com.evandhardspace.core.data.notification.DefaultDeviceTokenRepository
-import com.evandhardspace.core.domain.auth.AuthRepository
-import com.evandhardspace.core.domain.auth.MutableSessionRepository
-import com.evandhardspace.core.domain.auth.SessionRepository
 import com.evandhardspace.core.domain.logging.ChatAppLogger
-import com.evandhardspace.core.domain.notification.DeviceTokenRepository
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Provides
+import dev.zacsweers.metro.SingleIn
 import io.ktor.client.HttpClient
+import io.ktor.client.engine.HttpClientEngine
 import kotlinx.serialization.json.Json
-import org.koin.core.module.dsl.singleOf
-import org.koin.dsl.bind
-import org.koin.dsl.binds
-import org.koin.dsl.module
-import org.koin.core.module.Module as KoinModule
 
-internal expect val platformCoreDataModule: KoinModule
+interface CoreDataProviders {
 
-val coreDataModule = module {
-    includes(platformCoreDataModule)
+    @SingleIn(AppScope::class)
+    @Provides
+    fun provideChatAppLogger(): ChatAppLogger = KermitLogger
 
-    single<ChatAppLogger> { KermitLogger }
-    single<Json> {
-        Json {
-            ignoreUnknownKeys = true
-        }
+    @SingleIn(AppScope::class)
+    @Provides
+    fun provideJson(): Json = Json {
+        ignoreUnknownKeys = true
     }
-    single<HttpClient> {
-        HttpClientFactory(
-            appLogger = get(),
-            sessionRepository = get(),
-            json = get(),
-        ).create(get())
-    }
-    singleOf(::KtorAuthRepository) bind AuthRepository::class
-    single {
-        DataStoreSessionRepository(
-            dataStore = get(),
-            json = get(),
-        )
-    } binds arrayOf(
-        SessionRepository::class,
-        MutableSessionRepository::class,
-    )
 
-    single {
-        DefaultDeviceTokenRepository(
-            httpClient = get(),
-        )
-    } bind DeviceTokenRepository::class
+    @SingleIn(AppScope::class)
+    @Provides
+    fun provideHttpClientFactory(
+        factory: HttpClientFactory,
+        engine: HttpClientEngine,
+    ): HttpClient = factory.create(engine)
 }

@@ -1,6 +1,6 @@
 package com.evandhardspace.core.common.di
 
-import org.koin.core.annotation.Qualifier
+import dev.zacsweers.metro.Qualifier
 
 @Qualifier
 @Retention(AnnotationRetention.RUNTIME)

@@ -13,6 +13,6 @@ plugins {
     alias(libs.plugins.ksp) apply false
     alias(libs.plugins.android.lint) apply false
     alias(libs.plugins.kotlin.android) apply false
-    alias(libs.plugins.koin) apply false
+    alias(libs.plugins.metro) apply false
     alias(libs.plugins.kotlin.jvm) apply false
 }

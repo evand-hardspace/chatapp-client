@@ -15,7 +15,6 @@ import com.evandhardspace.auth.presentation.navigation.AuthNavGraphRoute
 import com.evandhardspace.chat.presentation.navigation.ChatNavGraphRoute
 import com.evandhardspace.chatapp.deeplink.DeeplinkListener
 import com.evandhardspace.chatapp.navigation.NavigationRoot
-import com.evandhardspace.core.designsystem.annotations.ThemedPreview
 import com.evandhardspace.core.designsystem.component.ChatAppLoadingSpace
 import com.evandhardspace.core.designsystem.component.layout.ChatAppSnackbarScaffold
 import com.evandhardspace.core.designsystem.component.snackbar.ChatAppSnackbarHostState
@@ -23,68 +22,72 @@ import com.evandhardspace.core.designsystem.component.snackbar.LocalSnackbarHost
 import com.evandhardspace.core.designsystem.theme.ChatAppTheme
 import com.evandhardspace.core.navigation.deeplink.DeeplinkProcessor
 import com.evandhardspace.core.presentation.util.OnEffect
-import org.koin.compose.koinInject
-import org.koin.compose.viewmodel.koinViewModel
+import dev.zacsweers.metrox.viewmodel.LocalMetroViewModelFactory
+import dev.zacsweers.metrox.viewmodel.MetroViewModelFactory
+import dev.zacsweers.metrox.viewmodel.metroViewModel
 
-@ThemedPreview
 @Composable
 fun App(
     onAuthenticationChecked: () -> Unit = {},
-    viewModel: MainViewModel = koinViewModel(),
-    deeplinkManager: DeeplinkProcessor = koinInject(),
-): Unit = ChatAppTheme {
-    val coroutineScope = rememberCoroutineScope()
-    val snackbarHostState = remember {
-        ChatAppSnackbarHostState(
-            snackbarHostState = SnackbarHostState(),
-            scope = coroutineScope,
-        )
-    }
-    val navController = rememberNavController()
-    val state by viewModel.state.collectAsStateWithLifecycle()
-
-    LaunchedEffect(state) {
-        val currentState = state
-        if (currentState !is MainState.Loading) {
-            onAuthenticationChecked()
+    metroViewModelFactory: MetroViewModelFactory,
+    deeplinkManager: DeeplinkProcessor,
+): Unit = CompositionLocalProvider(
+    LocalMetroViewModelFactory provides metroViewModelFactory,
+) {
+    ChatAppTheme {
+        val viewModel: MainViewModel = metroViewModel()
+        val coroutineScope = rememberCoroutineScope()
+        val snackbarHostState = remember {
+            ChatAppSnackbarHostState(
+                snackbarHostState = SnackbarHostState(),
+                scope = coroutineScope,
+            )
         }
-    }
+        val navController = rememberNavController()
+        val state by viewModel.state.collectAsStateWithLifecycle()
 
-    OnEffect(viewModel.effects) { effect ->
-        when (effect) {
-            is MainEffect.LoggedOut -> {
-                navController.navigate(AuthNavGraphRoute.Root) {
-                    popUpTo(AuthNavGraphRoute.Root) {
-                        inclusive = false
+        LaunchedEffect(state) {
+            val currentState = state
+            if (currentState !is MainState.Loading) {
+                onAuthenticationChecked()
+            }
+        }
+
+        OnEffect(viewModel.effects) { effect ->
+            when (effect) {
+                is MainEffect.LoggedOut -> {
+                    navController.navigate(AuthNavGraphRoute.Root) {
+                        popUpTo(AuthNavGraphRoute.Root) {
+                            inclusive = false
+                        }
                     }
                 }
             }
         }
-    }
 
-    CompositionLocalProvider(
-        LocalSnackbarHostState provides snackbarHostState,
-    ) {
-        ChatAppSnackbarScaffold(
-            snackbarHostState = snackbarHostState,
+        CompositionLocalProvider(
+            LocalSnackbarHostState provides snackbarHostState,
         ) {
-            when (val currentState = state) {
-                is MainState.Loaded -> {
-                    if (deeplinkManager.isProcessing.collectAsStateWithLifecycle().value) {
-                        ChatAppLoadingSpace(Modifier.fillMaxSize())
-                    } else {
-                        NavigationRoot(
-                            navController = navController,
-                            startDestination = if (currentState.isAuthorized) ChatNavGraphRoute.Root
-                            else AuthNavGraphRoute.Root,
-                        )
+            ChatAppSnackbarScaffold(
+                snackbarHostState = snackbarHostState,
+            ) {
+                when (val currentState = state) {
+                    is MainState.Loaded -> {
+                        if (deeplinkManager.isProcessing.collectAsStateWithLifecycle().value) {
+                            ChatAppLoadingSpace(Modifier.fillMaxSize())
+                        } else {
+                            NavigationRoot(
+                                navController = navController,
+                                startDestination = if (currentState.isAuthorized) ChatNavGraphRoute.Root
+                                else AuthNavGraphRoute.Root,
+                            )
+                        }
+                        DeeplinkListener(deeplinkManager, navController)
                     }
-                    DeeplinkListener(deeplinkManager, navController)
-                }
 
-                is MainState.Loading -> ChatAppLoadingSpace(Modifier.fillMaxSize())
+                    is MainState.Loading -> ChatAppLoadingSpace(Modifier.fillMaxSize())
+                }
             }
         }
     }
 }
-

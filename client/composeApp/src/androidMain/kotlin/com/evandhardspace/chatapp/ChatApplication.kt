@@ -1,16 +1,14 @@
 package com.evandhardspace.chatapp
 
 import android.app.Application
-import com.evandhardspace.chatapp.di.initKoin
-import org.koin.android.ext.koin.androidContext
-import org.koin.android.ext.koin.androidLogger
+import dev.zacsweers.metro.createGraphFactory
+import dev.zacsweers.metrox.android.MetroAppComponentProviders
+import dev.zacsweers.metrox.android.MetroApplication
 
-class ChatApplication : Application() {
-    override fun onCreate() {
-        super.onCreate()
-        initKoin {
-            androidContext(this@ChatApplication)
-            androidLogger()
-        }
+class ChatApplication : Application(), MetroApplication {
+    internal val appGraph by lazy {
+        createGraphFactory<AndroidAppGraph.Factory>().create(this)
     }
+    override val appComponentProviders: MetroAppComponentProviders
+        get() = appGraph
 }

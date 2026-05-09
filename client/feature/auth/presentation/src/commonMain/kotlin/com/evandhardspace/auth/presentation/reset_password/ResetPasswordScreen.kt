@@ -26,14 +26,15 @@ import com.evandhardspace.core.designsystem.component.layout.ChatAppAdaptiveForm
 import com.evandhardspace.core.designsystem.component.textfield.ChatAppPasswordTextField
 import com.evandhardspace.core.designsystem.theme.ChatAppPreview
 import com.evandhardspace.core.designsystem.theme.paddings
+import dev.zacsweers.metrox.viewmodel.assistedMetroViewModel
+import dev.zacsweers.metrox.viewmodel.metroViewModel
 import org.jetbrains.compose.resources.stringResource
-import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 internal fun ResetPasswordScreen(
     navigateToLogin: () -> Unit,
     modifier: Modifier = Modifier.fillMaxSize(),
-    viewModel: ResetPasswordViewModel = koinViewModel(),
+    viewModel: ResetPasswordViewModel = assistedMetroViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 

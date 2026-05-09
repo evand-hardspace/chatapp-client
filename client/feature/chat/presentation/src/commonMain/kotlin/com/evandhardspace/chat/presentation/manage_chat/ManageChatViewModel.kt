@@ -25,6 +25,10 @@ import com.evandhardspace.core.domain.util.DataError
 import com.evandhardspace.core.domain.util.onFailure
 import com.evandhardspace.core.domain.util.onSuccess
 import com.evandhardspace.core.presentation.util.asUiText
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesIntoMap
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metrox.viewmodel.ViewModelKey
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
@@ -37,12 +41,13 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import org.koin.core.annotation.KoinViewModel
 import kotlin.time.Duration.Companion.seconds
 
 internal const val DEFAULT_SEARCH_DEBOUNCE_SECONDS = 1
 
-@KoinViewModel
+@Inject
+@ViewModelKey
+@ContributesIntoMap(AppScope::class)
 class ManageChatViewModel(
     private val chatRepository: ChatRepository,
     private val chatParticipantRepository: ChatParticipantRepository,

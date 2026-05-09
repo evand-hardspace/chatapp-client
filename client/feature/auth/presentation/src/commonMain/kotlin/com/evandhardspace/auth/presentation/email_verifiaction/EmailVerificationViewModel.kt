@@ -10,18 +10,24 @@ import com.evandhardspace.core.domain.auth.AuthState
 import com.evandhardspace.core.domain.auth.SessionRepository
 import com.evandhardspace.core.domain.util.onFailure
 import com.evandhardspace.core.domain.util.onSuccess
+import com.evandhardspace.core.presentation.util.SavedStateHandleAssistedFactory
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Assisted
+import dev.zacsweers.metro.AssistedFactory
+import dev.zacsweers.metro.AssistedInject
+import dev.zacsweers.metro.ContributesIntoMap
+import dev.zacsweers.metrox.viewmodel.ViewModelAssistedFactoryKey
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import org.koin.core.annotation.KoinViewModel
 
-@KoinViewModel
+@AssistedInject
 internal class EmailVerificationViewModel(
     private val authRepository: AuthRepository,
     private val sessionRepository: SessionRepository,
-    savedStateHandle: SavedStateHandle,
+    @Assisted savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
     private val token: String? = savedStateHandle[EmailVerification.TOKEN_ARG_KEY]
@@ -66,4 +72,9 @@ internal class EmailVerificationViewModel(
                 }
         }
     }
+
+    @AssistedFactory
+    @ViewModelAssistedFactoryKey(EmailVerificationViewModel::class)
+    @ContributesIntoMap(AppScope::class)
+    interface Factory : SavedStateHandleAssistedFactory<EmailVerificationViewModel>
 }

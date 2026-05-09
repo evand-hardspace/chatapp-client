@@ -3,17 +3,20 @@ package com.evandhardspace.core.navigation.deeplink
 import androidx.navigation.NavController
 import com.evandhardspace.core.common.coroutines.DispatcherProvider
 import com.evandhardspace.core.common.di.ApplicationScope
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import org.koin.core.annotation.Single
 
-@Single
+@SingleIn(AppScope::class)
+@Inject
 class DeeplinkProcessor(
     @param:ApplicationScope private val applicationScope: CoroutineScope,
-    private val interceptors: List<DeeplinkInterceptor>,
+    private val interceptors: Set<DeeplinkInterceptor>,
     private val dispatchers: DispatcherProvider,
 ) {
 

@@ -24,16 +24,21 @@ import com.evandhardspace.core.domain.util.EmptyEither
 import com.evandhardspace.core.domain.util.asFailure
 import com.evandhardspace.core.domain.util.onFailure
 import com.evandhardspace.core.domain.util.onSuccess
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
-import org.koin.core.annotation.Single
 import kotlin.time.Clock
 
-@Single
+@ContributesBinding(AppScope::class)
+@SingleIn(AppScope::class)
+@Inject
 internal class OfflineFirstMessageRepository(
     private val database: ChatAppDatabase,
     private val chatMessageDataSource: ChatMessageDataSource,

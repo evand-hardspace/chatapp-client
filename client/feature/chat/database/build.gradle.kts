@@ -29,3 +29,7 @@ kotlin {
         }
     }
 }
+
+metro {
+    generateContributionProviders = true
+}

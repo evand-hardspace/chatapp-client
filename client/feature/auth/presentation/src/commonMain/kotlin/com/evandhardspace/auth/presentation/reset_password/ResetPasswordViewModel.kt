@@ -13,7 +13,14 @@ import com.evandhardspace.core.domain.util.DataError
 import com.evandhardspace.core.domain.util.onFailure
 import com.evandhardspace.core.domain.util.onSuccess
 import com.evandhardspace.core.domain.validation.rule.password.PasswordValidator
+import com.evandhardspace.core.presentation.util.SavedStateHandleAssistedFactory
 import com.evandhardspace.core.presentation.util.asUiText
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Assisted
+import dev.zacsweers.metro.AssistedFactory
+import dev.zacsweers.metro.AssistedInject
+import dev.zacsweers.metro.ContributesIntoMap
+import dev.zacsweers.metrox.viewmodel.ViewModelAssistedFactoryKey
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -22,13 +29,12 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import org.koin.core.annotation.KoinViewModel
 
-@KoinViewModel
+@AssistedInject
 internal class ResetPasswordViewModel(
     private val authRepository: AuthRepository,
     private val passwordValidator: PasswordValidator,
-    savedStateHandle: SavedStateHandle,
+    @Assisted savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
     private val token =
@@ -110,4 +116,9 @@ internal class ResetPasswordViewModel(
                 }
         }
     }
+
+    @AssistedFactory
+    @ViewModelAssistedFactoryKey(ResetPasswordViewModel::class)
+    @ContributesIntoMap(AppScope::class)
+    interface Factory : SavedStateHandleAssistedFactory<ResetPasswordViewModel>
 }

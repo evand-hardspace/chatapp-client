@@ -14,6 +14,9 @@ import com.evandhardspace.core.domain.util.EmptyEither
 import com.evandhardspace.core.domain.util.asSuccess
 import com.evandhardspace.core.domain.util.either
 import com.evandhardspace.core.domain.util.raise
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.websocket.webSocketSession
 import io.ktor.client.request.header
@@ -45,12 +48,12 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
-import org.koin.core.annotation.Single
 import kotlin.time.Duration.Companion.seconds
 
 private const val DefaultConnectionDebounceSeconds = 1
 
-@Single
+@SingleIn(AppScope::class)
+@Inject
 internal class WebSocketConnector(
     private val httpClient: HttpClient,
     @param:ApplicationScope private val applicationScope: CoroutineScope,

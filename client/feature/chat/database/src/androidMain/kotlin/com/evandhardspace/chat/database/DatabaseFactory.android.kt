@@ -3,7 +3,12 @@ package com.evandhardspace.chat.database
 import android.content.Context
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
 
+@SingleIn(AppScope::class)
+@Inject
 actual class DatabaseFactory(
     private val context: Context,
 ) {

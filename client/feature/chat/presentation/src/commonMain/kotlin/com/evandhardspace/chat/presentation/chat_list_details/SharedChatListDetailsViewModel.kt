@@ -3,13 +3,18 @@ package com.evandhardspace.chat.presentation.chat_list_details
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.evandhardspace.chat.domain.repository.ChatConnectionRepository
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesIntoMap
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metrox.viewmodel.ViewModelKey
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.update
-import org.koin.core.annotation.KoinViewModel
 
-@KoinViewModel
+@Inject
+@ViewModelKey
+@ContributesIntoMap(AppScope::class)
 class SharedChatListDetailsViewModel(
     private val connectionRepository: ChatConnectionRepository,
 ) : ViewModel() {
