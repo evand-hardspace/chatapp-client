@@ -1,16 +1,19 @@
 package com.evandhardspace.chat.data.network
 
 import com.evandhardspace.chat.domain.model.ConnectionState
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
 import io.ktor.client.plugins.ClientRequestException
 import io.ktor.client.plugins.websocket.WebSocketException
 import io.ktor.network.sockets.SocketTimeoutException
 import kotlinx.io.EOFException
-import org.koin.core.annotation.Single
 import java.net.SocketException
 import java.net.UnknownHostException
 import javax.net.ssl.SSLException
 
-@Single
+@SingleIn(AppScope::class)
+@Inject
 actual class ConnectionErrorHandler {
     actual fun getConnectionStateForError(cause: Throwable): ConnectionState = when (cause) {
         is ClientRequestException,

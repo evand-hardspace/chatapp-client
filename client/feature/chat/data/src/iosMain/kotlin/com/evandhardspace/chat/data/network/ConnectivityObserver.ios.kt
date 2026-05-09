@@ -1,10 +1,12 @@
 package com.evandhardspace.chat.data.network
 
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
-import org.koin.core.annotation.Single
 import platform.Network.nw_path_get_status
 import platform.Network.nw_path_monitor_cancel
 import platform.Network.nw_path_monitor_create
@@ -15,7 +17,8 @@ import platform.Network.nw_path_status_satisfiable
 import platform.Network.nw_path_status_satisfied
 import platform.darwin.dispatch_queue_create
 
-@Single
+@SingleIn(AppScope::class)
+@Inject
 actual class ConnectivityObserver {
     actual val isConnected: Flow<Boolean> = callbackFlow {
         val pathMonitor = nw_path_monitor_create()

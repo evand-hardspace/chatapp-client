@@ -8,9 +8,14 @@ import com.evandhardspace.core.data.mapper.toDomain
 import com.evandhardspace.core.data.mapper.toPreferences
 import com.evandhardspace.core.data.preferences.AuthInfoPreferences
 import com.evandhardspace.core.domain.auth.AuthState
-import com.evandhardspace.core.domain.auth.MutableSessionRepository
+import com.evandhardspace.core.domain.auth.SessionRepository
 import com.evandhardspace.core.domain.auth.SessionEvents
 import com.evandhardspace.core.domain.auth.User
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
+import dev.zacsweers.metro.binding
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -24,11 +29,17 @@ import kotlinx.serialization.json.Json
 
 private val AuthInfoKey = stringPreferencesKey("AUTH_INFO_KEY")
 
+@ContributesBinding(
+    scope = AppScope::class,
+    binding<SessionRepository>(),
+)
+@SingleIn(AppScope::class)
+@Inject
 class DataStoreSessionRepository(
     private val dataStore: DataStore<Preferences>,
     // TODO(6)
     private val json: Json,
-) : MutableSessionRepository {
+) : SessionRepository {
 
     private val mutex = Mutex()
 

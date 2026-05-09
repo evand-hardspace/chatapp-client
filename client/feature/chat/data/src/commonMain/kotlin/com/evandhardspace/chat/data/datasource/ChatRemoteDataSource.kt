@@ -13,10 +13,10 @@ import com.evandhardspace.core.domain.util.Either
 import com.evandhardspace.core.domain.util.EmptyEither
 import com.evandhardspace.core.domain.util.asEmptyEither
 import com.evandhardspace.core.domain.util.map
+import dev.zacsweers.metro.Inject
 import io.ktor.client.HttpClient
-import org.koin.core.annotation.Factory
 
-@Factory
+@Inject
 internal class ChatRemoteDataSource(
     private val httpClient: HttpClient,
 ) {

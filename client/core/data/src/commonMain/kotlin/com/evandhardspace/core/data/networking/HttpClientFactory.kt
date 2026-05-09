@@ -5,9 +5,12 @@ import com.evandhardspace.core.data.dto.AuthInfoDto
 import com.evandhardspace.core.data.dto.request.RefreshRequest
 import com.evandhardspace.core.data.mapper.toDomain
 import com.evandhardspace.core.domain.auth.AuthState
-import com.evandhardspace.core.domain.auth.MutableSessionRepository
+import com.evandhardspace.core.domain.auth.SessionRepository
 import com.evandhardspace.core.domain.logging.ChatAppLogger
 import com.evandhardspace.core.domain.util.fold
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.HttpClientEngine
 import io.ktor.client.plugins.HttpTimeout
@@ -29,9 +32,11 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.serialization.json.Json
 
+@SingleIn(AppScope::class)
+@Inject
 class HttpClientFactory(
     private val appLogger: ChatAppLogger,
-    private val sessionRepository: MutableSessionRepository,
+    private val sessionRepository: SessionRepository,
     private val json: Json,
 ) {
     fun create(engine: HttpClientEngine): HttpClient = HttpClient(engine) {

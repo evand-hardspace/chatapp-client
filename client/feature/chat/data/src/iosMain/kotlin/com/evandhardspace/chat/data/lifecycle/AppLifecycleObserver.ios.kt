@@ -1,10 +1,12 @@
 package com.evandhardspace.chat.data.lifecycle
 
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
-import org.koin.core.annotation.Single
 import platform.Foundation.NSNotificationCenter
 import platform.Foundation.NSOperationQueue
 import platform.UIKit.UIApplication
@@ -14,7 +16,8 @@ import platform.UIKit.UIApplicationState
 import platform.UIKit.UIApplicationWillEnterForegroundNotification
 import platform.UIKit.UIApplicationWillResignActiveNotification
 
-@Single
+@SingleIn(AppScope::class)
+@Inject
 actual class AppLifecycleObserver {
     actual val isForeground: Flow<Boolean>
         get() = callbackFlow {

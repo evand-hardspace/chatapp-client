@@ -10,14 +10,12 @@ interface SessionRepository {
     val user: Flow<User>
 
     val events: SharedFlow<SessionEvents>
-}
 
-interface MutableSessionRepository: SessionRepository {
     suspend fun saveAuthState(info: AuthState.Authenticated): AuthState.Authenticated
     suspend fun updateAuthState(action: (AuthState.Authenticated) -> AuthState)
     suspend fun logout()
 }
 
 sealed interface SessionEvents {
-    data object LoggedOut: SessionEvents
+    data object LoggedOut : SessionEvents
 }

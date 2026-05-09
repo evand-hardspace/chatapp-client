@@ -12,7 +12,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModelStore
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
-import org.koin.compose.viewmodel.koinViewModel
+import dev.zacsweers.metrox.viewmodel.metroViewModel
 import kotlin.uuid.Uuid
 
 @Composable
@@ -23,7 +23,7 @@ fun DialogViewModelScope(
 ) {
     val parentOwner = LocalViewModelStoreOwner.current ?: error("No parent owner found")
 
-    val registry = koinViewModel<ScopedStoreRegistry>(
+    val registry = metroViewModel<ScopedStoreRegistry>(
         viewModelStoreOwner = parentOwner,
     )
 

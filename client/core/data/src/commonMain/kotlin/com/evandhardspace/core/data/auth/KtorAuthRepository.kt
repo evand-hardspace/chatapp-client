@@ -17,10 +17,17 @@ import com.evandhardspace.core.domain.util.EmptyEither
 import com.evandhardspace.core.domain.util.Either
 import com.evandhardspace.core.domain.util.map
 import com.evandhardspace.core.domain.util.onSuccess
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.auth.authProvider
 import io.ktor.client.plugins.auth.providers.BearerAuthProvider
 
+@ContributesBinding(AppScope::class)
+@SingleIn(AppScope::class)
+@Inject
 internal class KtorAuthRepository(
     private val httpClient: HttpClient,
 ) : AuthRepository {

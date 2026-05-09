@@ -3,15 +3,18 @@ package com.evandhardspace.chat.data.lifecycle
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.ProcessLifecycleOwner
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOn
-import org.koin.core.annotation.Single
 
-@Single
+@SingleIn(AppScope::class)
+@Inject
 actual class AppLifecycleObserver {
     actual val isForeground: Flow<Boolean>
         get() = callbackFlow {

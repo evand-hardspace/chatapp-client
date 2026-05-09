@@ -35,12 +35,12 @@ import com.evandhardspace.core.designsystem.component.textfield.ChatAppTextField
 import com.evandhardspace.core.designsystem.theme.ChatAppPreview
 import com.evandhardspace.core.designsystem.theme.paddings
 import com.evandhardspace.core.presentation.util.OnEffect
+import dev.zacsweers.metrox.viewmodel.metroViewModel
 import org.jetbrains.compose.resources.stringResource
-import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 internal fun LoginScreen(
-    viewModel: LoginViewModel = koinViewModel(),
+    viewModel: LoginViewModel = metroViewModel(),
     onLoginSuccess: () -> Unit,
     onForgotPasswordClick: () -> Unit,
     onCreateAccountClick: () -> Unit

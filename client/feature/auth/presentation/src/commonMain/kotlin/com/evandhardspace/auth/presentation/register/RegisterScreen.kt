@@ -21,7 +21,6 @@ import chatapp.client.feature.auth.presentation.generated.resources.username_hin
 import chatapp.client.feature.auth.presentation.generated.resources.username_placeholder
 import chatapp.client.feature.auth.presentation.generated.resources.welcome_to_chatapp
 import com.evandhardspace.core.designsystem.annotations.ThemedPreview
-import com.evandhardspace.core.designsystem.component.brand.ChatAppBrandLogo
 import com.evandhardspace.core.designsystem.component.button.ChatAppButton
 import com.evandhardspace.core.designsystem.component.button.ChatAppButtonStyle
 import com.evandhardspace.core.designsystem.component.layout.ChatAppAdaptiveFormLayout
@@ -31,15 +30,15 @@ import com.evandhardspace.core.designsystem.component.textfield.ChatAppTextField
 import com.evandhardspace.core.designsystem.theme.ChatAppPreview
 import com.evandhardspace.core.designsystem.theme.paddings
 import com.evandhardspace.core.presentation.util.OnEffect
+import dev.zacsweers.metrox.viewmodel.metroViewModel
 import org.jetbrains.compose.resources.stringResource
-import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 internal fun RegisterScreen(
     onRegisterSuccess: (String) -> Unit,
     onLogin: () -> Unit,
     modifier: Modifier = Modifier.fillMaxSize(),
-    viewModel: RegisterViewModel = koinViewModel(),
+    viewModel: RegisterViewModel = metroViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val snackbarHostState = LocalSnackbarHostState.current

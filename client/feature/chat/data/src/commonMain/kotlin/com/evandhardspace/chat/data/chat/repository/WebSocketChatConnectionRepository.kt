@@ -15,28 +15,32 @@ import com.evandhardspace.chat.domain.repository.ChatConnectionRepository
 import com.evandhardspace.chat.domain.repository.ChatRepository
 import com.evandhardspace.chat.domain.repository.MessageRepository
 import com.evandhardspace.core.common.di.ApplicationScope
-import com.evandhardspace.core.domain.auth.MutableSessionRepository
+import com.evandhardspace.core.domain.auth.SessionRepository
 import com.evandhardspace.core.domain.util.DataError
 import com.evandhardspace.core.domain.util.EmptyEither
 import com.evandhardspace.core.domain.util.onFailure
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filterIsInstance
-import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.serialization.json.Json
-import org.koin.core.annotation.Single
 
-@Single
+@ContributesBinding(AppScope::class)
+@SingleIn(AppScope::class)
+@Inject
 internal class WebSocketChatConnectionRepository(
     private val webSocketConnector: WebSocketConnector,
     private val chatRepository: ChatRepository,
     private val database: ChatAppDatabase,
-    private val sessionRepository: MutableSessionRepository,
+    private val sessionRepository: SessionRepository,
     private val json: Json,
     private val messageRepository: MessageRepository,
     @param:ApplicationScope private val applicationScope: CoroutineScope,

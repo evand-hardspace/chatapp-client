@@ -7,15 +7,18 @@ import com.evandhardspace.core.domain.auth.SessionRepository
 import com.evandhardspace.core.navigation.deeplink.DeeplinkInterceptor
 import com.evandhardspace.core.navigation.fullClearBackStack
 import com.evandhardspace.url_util.asUrl
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesIntoSet
+import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.flow.first
-import org.koin.core.annotation.Factory
 
 private const val emailVerificationDeeplinkPatternHttpsScheme =
     "https://chatapp.evandhardspace.com/api/auth/verify"
 private const val emailVerificationDeeplinkPatternChatappScheme =
     "chatapp://chatapp.evandhardspace.com/api/auth/verify"
 
-@Factory
+@ContributesIntoSet(AppScope::class)
+@Inject
 internal class EmailVerificationDeeplinkInterceptor(
     private val sessionRepository: SessionRepository,
 ) : DeeplinkInterceptor {

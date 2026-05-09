@@ -24,12 +24,12 @@ import com.evandhardspace.core.designsystem.component.layout.NavigableListDetail
 import com.evandhardspace.core.designsystem.component.modifier.clipOnTransition
 import com.evandhardspace.core.designsystem.theme.extended
 import com.evandhardspace.core.presentation.util.dialog.DialogViewModelScope
+import dev.zacsweers.metrox.viewmodel.metroViewModel
 import kotlinx.coroutines.launch
-import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 internal fun ChatListDetailsScene(
-    chatListDetailViewModel: SharedChatListDetailsViewModel = koinViewModel(),
+    chatListDetailViewModel: SharedChatListDetailsViewModel = metroViewModel(),
 ) {
     val state by chatListDetailViewModel.state.collectAsStateWithLifecycle()
     ChatListDetailsSceneContent(
@@ -51,7 +51,7 @@ private fun ChatListDetailsSceneContent(
     val listPaneValue = scaffoldNavigator.scaffoldValue[ListDetailPaneScaffoldRole.List]
 
     val scope = rememberCoroutineScope()
-    val chatDetailViewModel = koinViewModel<ChatDetailsViewModel>()
+    val chatDetailViewModel = metroViewModel<ChatDetailsViewModel>()
 
     LaunchedEffect(detailPaneValue, state.selectedChatId) {
         if (detailPaneValue == PaneAdaptedValue.Hidden && state.selectedChatId != null) {

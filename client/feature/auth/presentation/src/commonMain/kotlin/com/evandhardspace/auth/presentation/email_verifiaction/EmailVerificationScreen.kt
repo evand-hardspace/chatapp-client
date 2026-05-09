@@ -37,12 +37,13 @@ import com.evandhardspace.core.designsystem.component.layout.ChatAppSimpleResult
 import com.evandhardspace.core.designsystem.theme.ChatAppPreview
 import com.evandhardspace.core.designsystem.theme.extended
 import com.evandhardspace.core.designsystem.theme.paddings
+import dev.zacsweers.metrox.viewmodel.assistedMetroViewModel
+import dev.zacsweers.metrox.viewmodel.metroViewModel
 import org.jetbrains.compose.resources.stringResource
-import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 internal fun EmailVerificationScreen(
-    viewModel: EmailVerificationViewModel = koinViewModel(),
+    viewModel: EmailVerificationViewModel = assistedMetroViewModel(),
     navigateBack: () -> Unit,
     navigateToLogin: () -> Unit,
 ) {

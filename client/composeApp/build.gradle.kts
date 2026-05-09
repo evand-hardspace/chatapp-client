@@ -4,7 +4,7 @@ import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 plugins {
     alias(libs.plugins.convention.cmpApplication)
     alias(libs.plugins.compose.hotReload)
-    alias(libs.plugins.koin)
+    alias(libs.plugins.metro)
 }
 
 kotlin {
@@ -17,7 +17,7 @@ kotlin {
             implementation(libs.jetbrains.compose.uiToolingPreview)
             implementation(libs.androidx.activity.compose)
             implementation(libs.core.splashscreen)
-            implementation(libs.koin.android)
+            implementation(libs.metrox.android)
         }
         commonMain.dependencies {
             implementation(projects.client.core.data)
@@ -36,7 +36,7 @@ kotlin {
             implementation(projects.client.feature.chat.domain)
             implementation(projects.client.feature.chat.presentation)
 
-            implementation(libs.bundles.koin.common)
+            implementation(libs.metrox.viewmodel.compose)
 
             implementation(libs.jetbrains.compose.runtime)
             implementation(libs.jetbrains.compose.foundation)

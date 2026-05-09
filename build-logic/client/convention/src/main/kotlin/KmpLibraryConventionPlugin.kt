@@ -18,7 +18,7 @@ class KmpLibraryConventionPlugin: Plugin<Project> {
                 apply("com.android.library")
                 apply("org.jetbrains.kotlin.multiplatform")
                 apply("org.jetbrains.kotlin.plugin.serialization")
-                apply("io.insert-koin.compiler.plugin")
+                apply("dev.zacsweers.metro")
             }
 
             configureKotlinMultiplatform()
@@ -34,8 +34,6 @@ class KmpLibraryConventionPlugin: Plugin<Project> {
             }
 
             dependencies {
-                commonMainImplementation(libs.findLibrary("koin-annotations").get())
-                commonMainImplementation(libs.findLibrary("koin-core").get())
                 commonMainImplementation(libs.findLibrary("kotlinx-serialization-json").get())
                 commonTestImplementation(libs.findLibrary("kotlin-test").get())
             }

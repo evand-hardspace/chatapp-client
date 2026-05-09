@@ -61,15 +61,15 @@ import com.evandhardspace.core.presentation.util.DeviceConfiguration
 import com.evandhardspace.core.presentation.util.OnEffect
 import com.evandhardspace.core.presentation.util.compose.clearFocusOnTap
 import com.evandhardspace.core.presentation.util.currentDeviceConfiguration
+import dev.zacsweers.metrox.viewmodel.metroViewModel
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
-import org.koin.compose.viewmodel.koinViewModel
 import chatapp.client.core.design_system.generated.resources.Res as DesignRes
 
 @Composable
 internal fun ProfileScreen(
     onDismiss: () -> Unit,
-    viewModel: ProfileViewModel = koinViewModel(),
+    viewModel: ProfileViewModel = metroViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val dialogSheetController = rememberAdaptiveDialogSheetController(onDismiss)

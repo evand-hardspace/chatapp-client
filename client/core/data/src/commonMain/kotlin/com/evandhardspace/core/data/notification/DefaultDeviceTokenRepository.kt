@@ -6,8 +6,15 @@ import com.evandhardspace.core.data.networking.post
 import com.evandhardspace.core.domain.notification.DeviceTokenRepository
 import com.evandhardspace.core.domain.util.DataError
 import com.evandhardspace.core.domain.util.EmptyEither
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
 import io.ktor.client.HttpClient
 
+@ContributesBinding(AppScope::class)
+@SingleIn(AppScope::class)
+@Inject
 class DefaultDeviceTokenRepository(
     private val httpClient: HttpClient,
 ) : DeviceTokenRepository {

@@ -1,10 +1,13 @@
 package com.evandhardspace.chat.data.network
 
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.delay
-import org.koin.core.annotation.Single
 import kotlin.math.pow
 
-@Single
+@SingleIn(AppScope::class)
+@Inject
 class ConnectionRetryHandler(
     private val connectionErrorHandler: ConnectionErrorHandler,
 ) {
@@ -14,7 +17,7 @@ class ConnectionRetryHandler(
         connectionErrorHandler.isRetriable(cause)
 
     suspend fun applyRetryDelay(attempt: Int) {
-        if(shouldSkipBackoff.not()) {
+        if (shouldSkipBackoff.not()) {
             val delay = createBackoffDelay(attempt)
             delay(delay)
         } else {
@@ -31,5 +34,6 @@ class ConnectionRetryHandler(
         return minOf(delayTime, MaxDelayMs)
     }
 }
+
 private const val MinDelayMs = 2_000L
 private const val MaxDelayMs = 30_000L

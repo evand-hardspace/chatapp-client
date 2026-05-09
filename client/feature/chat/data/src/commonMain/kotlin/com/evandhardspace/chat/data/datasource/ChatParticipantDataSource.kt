@@ -14,14 +14,14 @@ import com.evandhardspace.core.domain.util.DataError
 import com.evandhardspace.core.domain.util.Either
 import com.evandhardspace.core.domain.util.EmptyEither
 import com.evandhardspace.core.domain.util.map
+import dev.zacsweers.metro.Inject
 import io.ktor.client.HttpClient
 import io.ktor.client.request.header
 import io.ktor.client.request.put
 import io.ktor.client.request.setBody
 import io.ktor.client.request.url
-import org.koin.core.annotation.Factory
 
-@Factory
+@Inject
 class ChatParticipantDataSource(
     private val httpClient: HttpClient,
 ) {

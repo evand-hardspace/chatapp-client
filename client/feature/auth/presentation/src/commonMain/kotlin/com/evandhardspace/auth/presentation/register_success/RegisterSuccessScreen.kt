@@ -21,15 +21,16 @@ import com.evandhardspace.core.designsystem.component.layout.ChatAppSimpleResult
 import com.evandhardspace.core.designsystem.component.snackbar.LocalSnackbarHostState
 import com.evandhardspace.core.designsystem.theme.ChatAppPreview
 import com.evandhardspace.core.presentation.util.OnEffect
+import dev.zacsweers.metrox.viewmodel.assistedMetroViewModel
+import dev.zacsweers.metrox.viewmodel.metroViewModel
 import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
-import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 internal fun RegisterSuccessScreen(
     navigateToLogin: () -> Unit,
     modifier: Modifier = Modifier.fillMaxSize(),
-    viewModel: RegisterSuccessViewModel = koinViewModel(),
+    viewModel: RegisterSuccessViewModel = assistedMetroViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val snackbarHostState = LocalSnackbarHostState.current

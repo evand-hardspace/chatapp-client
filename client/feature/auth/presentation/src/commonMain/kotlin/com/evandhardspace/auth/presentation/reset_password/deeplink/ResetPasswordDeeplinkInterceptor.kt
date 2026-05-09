@@ -7,15 +7,18 @@ import com.evandhardspace.core.domain.auth.SessionRepository
 import com.evandhardspace.core.navigation.deeplink.DeeplinkInterceptor
 import com.evandhardspace.core.navigation.fullClearBackStack
 import com.evandhardspace.url_util.asUrl
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesIntoSet
+import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.flow.first
-import org.koin.core.annotation.Factory
 
 internal const val resetPasswordDeeplinkPatternHttpsScheme =
     "https://chatapp.evandhardspace.com/api/auth/reset-password"
 internal const val resetPasswordDeeplinkPatternChatappScheme =
     "chatapp://chatapp.evandhardspace.com/api/auth/reset-password"
 
-@Factory
+@ContributesIntoSet(AppScope::class)
+@Inject
 class ResetPasswordDeeplinkInterceptor(
     private val sessionRepository: SessionRepository,
 ) : DeeplinkInterceptor {

@@ -12,12 +12,12 @@ import com.evandhardspace.chat.presentation.component.manage_chat.ManageChatCont
 import com.evandhardspace.core.designsystem.component.dialog.ChatAppAdaptiveDialogSheetLayout
 import com.evandhardspace.core.designsystem.component.dialog.rememberAdaptiveDialogSheetController
 import com.evandhardspace.core.presentation.util.OnEffect
+import dev.zacsweers.metrox.viewmodel.metroViewModel
 import org.jetbrains.compose.resources.stringResource
-import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 internal fun ManageChatScreen(
-    viewModel: ManageChatViewModel = koinViewModel(),
+    viewModel: ManageChatViewModel = metroViewModel(),
     chatId: String?,
     onDismiss: () -> Unit,
 ) {

@@ -7,19 +7,25 @@ import com.evandhardspace.auth.presentation.navigation.AuthNavGraphRoute.Registe
 import com.evandhardspace.core.domain.auth.AuthRepository
 import com.evandhardspace.core.domain.util.onFailure
 import com.evandhardspace.core.domain.util.onSuccess
+import com.evandhardspace.core.presentation.util.SavedStateHandleAssistedFactory
 import com.evandhardspace.core.presentation.util.asUiText
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Assisted
+import dev.zacsweers.metro.AssistedFactory
+import dev.zacsweers.metro.AssistedInject
+import dev.zacsweers.metro.ContributesIntoMap
+import dev.zacsweers.metrox.viewmodel.ViewModelAssistedFactoryKey
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import org.koin.core.annotation.KoinViewModel
 
-@KoinViewModel
+@AssistedInject
 internal class RegisterSuccessViewModel(
     private val authRepository: AuthRepository,
-    savedStateHandle: SavedStateHandle,
+    @Assisted savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
     private val email: String = requireNotNull(savedStateHandle[EMAIL_ARG_KEY])
@@ -70,4 +76,9 @@ internal class RegisterSuccessViewModel(
                 }
         }
     }
+
+    @AssistedFactory
+    @ViewModelAssistedFactoryKey(RegisterSuccessViewModel::class)
+    @ContributesIntoMap(AppScope::class)
+    interface Factory : SavedStateHandleAssistedFactory<RegisterSuccessViewModel>
 }

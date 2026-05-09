@@ -18,11 +18,7 @@ class CmpFeatureConventionPlugin: Plugin<Project> {
                 commonMainImplementation(project(":client:core:design-system"))
                 commonMainImplementation(project(":client:core:navigation"))
 
-                commonMainImplementation(platform(libs.findLibrary("koin-bom").get()))
-                androidMainImplementation(platform(libs.findLibrary("koin-bom").get()))
-
-                commonMainImplementation(libs.findLibrary("koin-compose").get())
-                commonMainImplementation(libs.findLibrary("koin-compose-viewmodel").get())
+                commonMainImplementation(libs.findLibrary("metrox-viewmodel-compose").get())
 
                 commonMainImplementation(libs.findLibrary("jetbrains-compose-runtime").get())
                 commonMainImplementation(libs.findLibrary("jetbrains-lifecycle-viewmodel-compose").get())
@@ -36,10 +32,8 @@ class CmpFeatureConventionPlugin: Plugin<Project> {
 
                 commonMainImplementation(libs.findLibrary("jetbrains-compose-components-resources").get())
 
-                androidMainImplementation(libs.findLibrary("koin-android").get())
-                androidMainImplementation(libs.findLibrary("koin-androidx-compose").get())
-                androidMainImplementation(libs.findLibrary("koin-androidx-navigation").get())
-                androidMainImplementation(libs.findLibrary("koin-core-viewmodel").get())
+                androidMainImplementation(libs.findLibrary("metrox-android").get())
+
             }
         }
     }
